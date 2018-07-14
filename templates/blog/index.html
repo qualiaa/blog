@@ -1,0 +1,12 @@
+{% load static %}
+{% include "blog/header.html" %}
+{% for article in article_list %}
+    <article>
+    {% include "blog/article.html" %}
+    {% if not article.finished %}
+        <a href="{% url "blog:article" slug=article.slug %}">Read more...</a>
+    {% endif %}
+    </article>
+{% endfor %}
+{% include "blog/next_prev.html" %}
+{% include "blog/footer.html" %}

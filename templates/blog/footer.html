@@ -1,0 +1,26 @@
+{% load static %}
+    <!-- Google fonts -->
+    <!-- Serif -->
+    <link href="https://fonts.googleapis.com/css?family=Markazi+Text|Bitter"
+          rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif|Crimson+Text"
+          rel="stylesheet"> 
+    <!-- Monospace -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Ubuntu+Mono"
+          rel="stylesheet"> 
+
+
+    <!-- Syntax highlighting with highlight.js -->
+    <link rel="stylesheet" type="text/css" href="{% static "blog/styles/highlight/github-gist.css" %}" />
+    <script src="{% static "blog/js/highlight.js" %}"></script>
+    <script>
+        hljs.configure({tabReplace: '<span class="indent">    </span>'});
+        hljs.initHighlightingOnLoad();
+    </script>
+
+
+    <!-- Maths formatting with MathJax.js -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+</body>
+</html>

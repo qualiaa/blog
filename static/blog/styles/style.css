@@ -1,0 +1,24 @@
+@font-face {
+    font-family: "Palatino";
+    src:url('../fonts/palatino-regular.ttf') format("truetype");
+}
+
+/*
+@font-face {
+    font-family: "Ubuntu Mono";
+    src:url('fonts/UbuntuMono-Regular.ttf') format("truetype");
+}
+*/
+
+body {
+    font-family: "Palatino", serif;
+}
+
+article {
+    font-size: 18px;
+}
+
+pre code {
+    font-size: 14px;
+    font-family: "Source Code Pro", "Ubuntu Mono", monospace;
+}

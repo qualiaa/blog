@@ -1,0 +1,48 @@
+/* Code Styles */
+code.showtabs span.indent::before,
+pre.python code span.indent::before
+{
+    position: absolute;
+    content: "--->";
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    color: #ccc;
+}
+
+code, pre code {
+    font-family: "Source Code Pro";
+    font-size: 0.98em;
+    text-align: left;
+}
+
+code::before {
+    content: attr(rel);
+    position: absolute;
+    display: block;
+    left: 2%;
+    padding: 0;
+    clear: none;
+    font-family: 'Oleo Script';
+    font-size: 32px;
+    color: #ddd;
+}
+
+pre::before {
+    content: attr(rel);
+    position: relative;
+    font-family: 'Pathway Gothic One';
+    font-size: 1.2em;
+    padding-left: 13%;
+    color: #aaa;
+}
+
+pre {
+    margin-top: -10px;
+}
+
+code {
+    padding-left: 13% !important;
+    padding-right: 13% !important;
+    word-break: normal;
+}
