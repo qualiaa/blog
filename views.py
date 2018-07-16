@@ -9,6 +9,7 @@ from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResp
 from django.shortcuts import render
 from django.urls import reverse
 
+from . import archive
 from . import article
 from .article import ArticleError
 from . import tag
@@ -70,6 +71,7 @@ def _show_article_list(request, article_paths, page=1):
 
         article_contexts.append(article_context)
 
+    context.update(archive.context())
     context.update({
         "article_list": article_contexts,
     })
@@ -125,5 +127,8 @@ def article_view(request, slug):
         "article": article_context,
         "title": article_context["title"],
     }
+    context.update(archive.context())
 
     return render(request, "blog/article_view.html", context)
+
+

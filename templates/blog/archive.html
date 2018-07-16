@@ -1,0 +1,15 @@
+{% if not archive %}
+No archive
+{% else %}
+{% for year, months in archive.items %}
+    <h4>{{ year }}</h4>
+    {% for month, articles in months.items %}
+        <h5>{{ month }}</h5>
+        <ul>
+            {% for article_url, article_title in articles %}
+                <li><a href="{{ article_url }}">{{ article_title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% endfor %}
+{% endif %}
