@@ -15,8 +15,13 @@ class ArticleError(Exception):
         self.article_context = context
         self.exception = e
 
+
 def get_article_paths():
-    return ARTICLE_PATH.glob(date_glob_string + "_*/")
+    if get_article_paths.paths is None:
+        get_article_paths.paths = list(ARTICLE_PATH.glob(date_glob_string + "_*/"))
+        get_article_paths.paths.sort(reverse=True)
+    return get_article_paths.paths
+get_article_paths.paths = None
 
 def post_processing(html,slug):
     return re.sub(
