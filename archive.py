@@ -13,9 +13,8 @@ def context():
     paths = article.get_article_paths()
     date_and_slug = [article.extract_date_and_slug_from_path(x) for x in paths]
     dates = set(datetime.date(x.year,x.month, 1) for x, _ in date_and_slug)
-    years = set(x.year for x in dates)
-
-    context = dict(zip(years,repeat({})))
+    dates = sorted(list(dates),reverse=True)
+    context = dict(zip((x.year for x in dates), repeat({})))
 
     for date in dates:
         context[date.year][date.strftime("%B")] = []
