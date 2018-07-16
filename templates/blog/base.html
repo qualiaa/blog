@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}{% if title %} | {% endif %}Jamie's Blog</title>
+
+    <!-- Custom style-->
+    <link rel="stylesheet" type="text/css" href="{% static "blog/styles/style.css" %}" />
+</head>
+<body>
+    <div style="margin: 0 auto; width: 90%; max-width: 60em;">
+        <header><h1><a href="{% url "blog:article-index" %}">Jamie's Blog</a></h1></header>
+        <div style="margin: 0 auto; width: 60%; max-width:40em; float: left; clear: left;">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div style="margin: 0 auto; width: 35%; max-width: 20em; padding-left: 2%; float: right; clear: right;">
+            {% block sidebar %}
+                {% include "blog/archive.html" %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Google fonts -->
+    <!-- Serif -->
+    <link href="https://fonts.googleapis.com/css?family=Markazi+Text|Bitter"
+          rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif|Crimson+Text"
+          rel="stylesheet"> 
+    <!-- Monospace -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Ubuntu+Mono"
+          rel="stylesheet"> 
+
+
+    <!-- Syntax highlighting with highlight.js -->
+    <link rel="stylesheet" type="text/css" href="{% static "blog/styles/highlight/github-gist.css" %}" />
+    <script src="{% static "blog/js/highlight.js" %}"></script>
+    <script>
+        hljs.configure({tabReplace: '<span class="indent">    </span>'});
+        hljs.initHighlightingOnLoad();
+    </script>
+
+
+    <!-- Maths formatting with MathJax.js -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+</body>
+</html>
