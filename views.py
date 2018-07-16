@@ -16,18 +16,22 @@ from . import tag
 
 ARTICLES_PER_PAGE = 5
 
-def media(request, slug, url):
+def _return_file(request, path, url):
     if url.find("../") >= 0:
         return HttpResponseBadRequest("Invalid URL")
+    if not path.exists():
+        raise Http404
+    return HttpResponse(path.read_bytes(), content_type=mimetypes.guess_type(url))
 
+def article_media(request, slug, url):
     try:
         path = article.path_from_slug(slug)/url
     except FileNotFoundError:
         raise Http404
 
-    if not path.exists():
-        raise Http404
-    return HttpResponse(path.read_bytes(), content_type=mimetypes.guess_type(url))
+    return _return_file(request, path, url)
+
+
 
 def _show_article_list(request, article_paths, page=1):
     context = {"page": {}} 
@@ -147,3 +151,8 @@ def wip_article(request, slug):
     }
 
     return render(request, "blog/wip/article.html", context)
+
+def wip_media(request, slug, url):
+    path = article.WIP_PATH/slug/url
+
+    return _return_file(request, path, url)
