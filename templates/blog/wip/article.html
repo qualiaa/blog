@@ -1,0 +1,11 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    <article>
+        <h1>{{ article.title }}</h1>
+
+        {{ article.html|safe }}
+
+        <a href="{% url "blog:wip-index" %}">Back to WIP index</a>
+    </article>
+{% endblock %}

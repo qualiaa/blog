@@ -8,6 +8,7 @@ import yaml
 from . import pandoc
 
 ARTICLE_PATH=pathlib.Path("blog/articles/")
+WIP_PATH = ARTICLE_PATH/"wip"
 date_glob_string = "{}-{}-{}".format("[0-9]" * 4,"[0-9]" * 2, "[0-9]" * 2)
 
 class ArticleError(Exception):
@@ -122,4 +123,24 @@ def get_context(slug=None, path=None, generate_stub=False):
     })
     article_context.update(metadata)
 
+    return article_context
+
+def get_wip_context(slug):
+    path = WIP_PATH/slug
+    markdown_path = markdown_path_from_folder_path(path, slug)
+
+    try:
+        metadata = extract_metadata(markdown_path)
+    except (YAMLError, IOError):
+        metadata = {}
+
+    html = pandoc.md2html(markdown_path)
+    html = post_processing(html, slug)
+    article_context = {
+        "html": html,
+        "path": path,
+        "slug": slug,
+        "title": slug_to_title(slug)
+    }
+    article_context.update(metadata)
     return article_context

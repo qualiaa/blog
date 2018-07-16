@@ -131,4 +131,19 @@ def article_view(request, slug):
 
     return render(request, "blog/article_view.html", context)
 
+def wip_index(request):
+    article_names = [x.name for x in article.WIP_PATH.iterdir()
+            if x.is_dir() and
+            (x/x.with_suffix(".md").name).exists()]
 
+    return render(request, "blog/wip/index.html",
+            {"article_names": article_names})
+
+def wip_article(request, slug):
+    article_context = article.get_wip_context(slug)
+    context = {
+        "article": article_context,
+        "title": article_context["title"],
+    }
+
+    return render(request, "blog/wip/article.html", context)
