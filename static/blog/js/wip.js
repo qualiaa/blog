@@ -13,6 +13,10 @@ $(function() {
                 console.log(article_html)
 
                 $("#article-html").html(article_html)
+                $("#article-html pre code").each(function(i, block) {
+                    hljs.highlightBlock(block)
+                })
+                // MathJax.Hub.Queue(["Typeset",MathJax.Hub])
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.log("Failure\n"+textStatus + "\n" + errorThrown)
                 console.log(jqXHR.responseText)
