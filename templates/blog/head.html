@@ -1,0 +1,8 @@
+{% load static %}
+{% block head %}
+<meta charset="UTF-8">
+<title>{{ title }}{% if title %} | {% endif %}Jamie's Blog</title>
+
+<!-- Custom style-->
+<link rel="stylesheet" type="text/css" href="{% static "blog/styles/style.css" %}" />
+{% endblock head %}

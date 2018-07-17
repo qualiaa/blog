@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from . import json
 
 app_name = "blog"
 urlpatterns = [
@@ -11,6 +12,7 @@ urlpatterns = [
     path("page/<int:page>", views.index, name="article-index-page"),
     path("tags/<str:tag_string>", views.tags_view, name="tags"),
     path("tags/<str:tag_string>/page/<int:page>", views.tags_view, name="tags-page"),
+    path("json/wip/<slug:slug>", json.wip),
     path("<slug:slug>", views.article_view, name="article"),
     path("<slug:slug>/<path:url>", views.article_media),
     path("<slug:slug>.md", views.md),
