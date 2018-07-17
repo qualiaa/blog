@@ -4,9 +4,11 @@ import re
 from itertools import takewhile
 
 import yaml
+from yaml import YAMLError
 
 from . import pandoc
 
+MARKDOWN_FILENAME = "article.md"
 ARTICLE_PATH=pathlib.Path("blog/articles/")
 WIP_PATH = ARTICLE_PATH/"wip"
 date_glob_string = "{}-{}-{}".format("[0-9]" * 4,"[0-9]" * 2, "[0-9]" * 2)
@@ -73,11 +75,6 @@ def path_from_slug(slug):
     except StopIteration:
         raise FileNotFoundError("No articles found")
 
-def markdown_path_from_folder_path(path, slug=None):
-    if slug is None:
-        _, slug = extract_date_and_slug_from_path(path)
-    return (path/slug).with_suffix(".md")
-
 def get_context(slug=None, path=None, generate_stub=False):
     if path is None and slug is None:
         raise ValueError("Must provide one of slug or path")
@@ -95,7 +92,7 @@ def get_context(slug=None, path=None, generate_stub=False):
         "date": date,
     }
 
-    markdown_path = markdown_path_from_folder_path(path, slug)
+    markdown_path = path/MARKDOWN_FILENAME
 
     if not markdown_path.exists():
         raise ArticleError(article_context,
@@ -127,7 +124,7 @@ def get_context(slug=None, path=None, generate_stub=False):
 
 def get_wip_context(slug):
     path = WIP_PATH/slug
-    markdown_path = markdown_path_from_folder_path(path, slug)
+    markdown_path = path/MARKDOWN_FILENAME
 
     try:
         metadata = extract_metadata(markdown_path)

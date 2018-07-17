@@ -29,7 +29,7 @@ def add_article_to_tag(article_folder, tag):
         raise FileNotFoundError
 
 def tag_article(folder_path):
-    markdown_path = article.markdown_path_from_folder_path(folder_path)
+    markdown_path = folder_path/article.MARKDOWN_FILENAME
     metadata = article.extract_metadata(markdown_path)
     for tag in metadata.get("tags"):
         add_article_to_tag(folder_path, tag)

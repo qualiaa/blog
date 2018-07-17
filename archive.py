@@ -21,7 +21,7 @@ def context():
 
     for date, slug, path in zip(*list(zip(*date_and_slug)),paths):
         title = article.slug_to_title(slug)
-        markdown_path = article.markdown_path_from_folder_path(path)
+        markdown_path = path/article.MARKDOWN_FILENAME
         try:
             metadata = article.extract_metadata(markdown_path)
             title = metadata.get("title", title)

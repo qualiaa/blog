@@ -3,7 +3,6 @@ import re
 from subprocess import CalledProcessError
 from itertools import takewhile, chain
 
-from yaml import YAMLError
 from django.conf import settings
 from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResponseBadRequest
 from django.shortcuts import render
@@ -103,7 +102,7 @@ def tags_view(request, tag_string, *args, **kargs):
 
 def md(request, slug):
     path = article.path_from_slug(slug)
-    markdown_path = article.markdown_path_from_folder_path(path, slug)
+    markdown_path = path/article.MARKDOWN_FILENAME
     with markdown_path.open() as f:
         return HttpResponse(f.read(),content_type="text/markdown")
 
@@ -138,7 +137,7 @@ def article_view(request, slug):
 def wip_index(request):
     article_names = [x.name for x in article.WIP_PATH.iterdir()
             if x.is_dir() and
-            (x/x.with_suffix(".md").name).exists()]
+            (x/article.MARKDOWN_FILENAME).exists()]
 
     return render(request, "blog/wip/index.html",
             {"article_names": article_names})
