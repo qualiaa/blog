@@ -11,6 +11,6 @@
 <time datetime="{{ article.date|date:"Y-m-d" }}">
     {{ article.date|date:"l jS F, Y" }}
 </time>
-<p>Tags: {{ article.tags|join:", "|title|default:"None" }}
+<p class="tags">Tags: {{ article.tags|join:", "|title|default:"None" }}</p>
 
 {{ article.html|safe }}

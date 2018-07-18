@@ -12,8 +12,9 @@
 
 {% block content %}
     <article>
-        <h1>{{ article.title }}</h1>
+        <h1 id="title">{{ article.title }}</h1>
 
+        <p class="tags">Tags: {{ article.tags|join:", "|title|default:"None" }}</p>
         <div id="article-html">
             {{ article.html|safe }}
         </div>
