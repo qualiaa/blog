@@ -6,6 +6,7 @@ from itertools import takewhile
 import yaml
 from yaml import YAMLError
 
+from . import emoji
 from . import pandoc
 
 MARKDOWN_FILENAME = "article.md"
@@ -28,12 +29,7 @@ get_article_paths.paths = None
 
 def post_processing(html,slug):
     html = re.sub("STATIC", slug, html)
-    html = re.sub("<span class=\"math inline\">"+re.escape(r"\(")+
-                   "(.*)" + re.escape(r"\)") + "</span>",
-            "<script type=\"math/tex\">\g<1></script>", html)
-    html = re.sub("<span class=\"math display\">"+re.escape(r"\[")+
-                   "(.*)" + re.escape(r"\]") + "</span>",
-            "<script type=\"math/tex; mode=display\">\g<1></script>", html)
+    html = pandoc.pandoc2mathjax(html)
     return html
         #str(pathlib.Path(settings.STATIC_URL)/"blog"/slug),html)
 
