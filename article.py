@@ -27,9 +27,14 @@ def get_article_paths():
 get_article_paths.paths = None
 
 def post_processing(html,slug):
-    return re.sub(
-        "STATIC",
-        slug,html)
+    html = re.sub("STATIC", slug, html)
+    html = re.sub("<span class=\"math inline\">"+re.escape(r"\(")+
+                   "(.*)" + re.escape(r"\)") + "</span>",
+            "<script type=\"math/tex\">\g<1></script>", html)
+    html = re.sub("<span class=\"math display\">"+re.escape(r"\[")+
+                   "(.*)" + re.escape(r"\]") + "</span>",
+            "<script type=\"math/tex; mode=display\">\g<1></script>", html)
+    return html
         #str(pathlib.Path(settings.STATIC_URL)/"blog"/slug),html)
 
 def slug_to_title(slug):
@@ -98,10 +103,8 @@ def get_context(slug=None, path=None, generate_stub=False):
         raise ArticleError(article_context,
                 FileNotFoundError("Markdown file not found"))
 
-    try:
-        metadata = extract_metadata(markdown_path)
-    except (YAMLError, IOError):
-        metadata = {}
+    try: metadata = extract_metadata(markdown_path)
+    except (YAMLError, IOError): metadata = {}
 
     try:
         if generate_stub:
