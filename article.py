@@ -30,6 +30,7 @@ get_article_paths.paths = None
 def post_processing(html,slug):
     html = re.sub("STATIC", slug, html)
     html = pandoc.pandoc2mathjax(html)
+    html = emoji.slack2unicode(html)
     return html
         #str(pathlib.Path(settings.STATIC_URL)/"blog"/slug),html)
 
