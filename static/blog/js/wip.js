@@ -35,18 +35,15 @@ $(function() {
                 var article_html = data["html"]
                 
                 function swapBuffers() {
+                    var temp=$("div#article-html")
+                    $("div#buffer").attr("id","article-html")
+                    temp.attr("id","buffer")
                     jaxFinishedRendering = true
-                    var o=$("div#article-html")
-                    var n=$("div#buffer")
-                    o.attr("id","buffer")
-                    o.css("display","none")
-                    n.attr("id","article-html")
-                    n.css("display","inherit")
                 }
 
                 var buffer = $("#buffer")
                 if (buffer.length == 0) {
-                    buffer = $("<div id='buffer' style='display:none;'></div>")
+                    buffer = $("<div id='buffer'></div>")
                     buffer.insertAfter("#article-html")
                     
                 }

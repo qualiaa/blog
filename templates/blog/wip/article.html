@@ -3,6 +3,7 @@
 
 {% block head %}
 {{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "blog/styles/wip.css" %}" />
 <script type="text/javascript">
     {% if article.slug %}var slug="{{article.slug}}"{% endif %}
 </script>
