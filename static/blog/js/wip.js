@@ -17,6 +17,7 @@ $(function() {
     setInterval(function() {
         $.get(requestUrl,
             function(data) {
+                /* Update the page metadata first */
                 if (data.hasOwnProperty("title")) {
                     var title = data["title"]
                     $("h1#title").text(title)
@@ -29,9 +30,12 @@ $(function() {
                     $("p.tags").text("Tags: None")
                 }
 
+                /* If we're still rendering the previous MathJax then skip */
                 if (!jaxFinishedRendering) {
                     return
                 }
+
+                /* Update the article HTML */
                 var article_html = data["html"]
                 
                 function swapBuffers() {
@@ -41,20 +45,23 @@ $(function() {
                     jaxFinishedRendering = true
                 }
 
+                /* If a buffer element doesn't exist, create it */
                 var buffer = $("#buffer")
                 if (buffer.length == 0) {
                     buffer = $("<div id='buffer'></div>")
                     buffer.insertAfter("#article-html")
                     
                 }
+
+                /* Set the buffer HTML */
                 buffer.html(article_html)
-                buffer.find("pre code").each(function(i, block) {
-                    hljs.highlightBlock(block)
-                })
+
+                /* Syntax highlighting with highlight.js */
+                highlightCode(buffer)
+
+                /* Queue a MathJax typeset job */
                 jaxFinishedRendering = false
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub,buffer[0],swapBuffers])
-
-
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.log("Failure\n"+textStatus + "\n" + errorThrown)

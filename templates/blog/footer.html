@@ -11,11 +11,12 @@
 
 
     <!-- Syntax highlighting with highlight.js -->
-    <link rel="stylesheet" type="text/css" href="{% static "blog/styles/highlight/github-gist.css" %}" />
+    <link rel="stylesheet" type="text/css" 
+        href="{% static "blog/styles/highlight/github-gist.css" %}" />
     <script src="{% static "blog/js/third_party/highlight.js" %}"></script>
     <script>
         hljs.configure({tabReplace: '<span class="indent">    </span>'});
-        hljs.initHighlightingOnLoad();
+        //hljs.initHighlightingOnLoad();
     </script>
 
 
@@ -24,9 +25,16 @@
 		MathJax.Hub.Config({
 		  jax: ["input/TeX","output/CommonHTML"],
 	 	  /* removed extension "tex2jax.js","MathZoom.js",*/
-		  extensions: ["MathMenu.js","AssistiveMML.js", "a11y/accessibility-menu.js"],
+		  extensions: [
+            "MathMenu.js",
+            "AssistiveMML.js",
+            "a11y/accessibility-menu.js"],
 		  TeX: {
-			extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+			extensions: [
+                "AMSmath.js",
+                "AMSsymbols.js",
+                "noErrors.js",
+                "noUndefined.js"]
 		  }
 		});
 	</script>
