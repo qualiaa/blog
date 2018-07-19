@@ -1,0 +1,1 @@
+$(function(){addPermalinkToSections($(".article-html"))})

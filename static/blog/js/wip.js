@@ -39,25 +39,26 @@ $(function() {
                 var article_html = data["html"]
                 
                 function swapBuffers() {
-                    var temp=$("div#article-html")
-                    $("div#buffer").attr("id","article-html")
-                    temp.attr("id","buffer")
+                    $("div.article-html").toggleClass("buffer")
                     jaxFinishedRendering = true
                 }
 
                 /* If a buffer element doesn't exist, create it */
-                var buffer = $("#buffer")
+                var buffer = $(".buffer")
                 if (buffer.length == 0) {
-                    buffer = $("<div id='buffer'></div>")
-                    buffer.insertAfter("#article-html")
+                    buffer = $("<div></div>")
+                        .addClass("article-html")
+                        .addClass("buffer")
+                    buffer.insertAfter(".article-html")
                     
                 }
 
                 /* Set the buffer HTML */
                 buffer.html(article_html)
 
-                /* Syntax highlighting with highlight.js */
+                /* Process article */
                 highlightCode(buffer)
+                addPermalinkToSections(buffer)
 
                 /* Queue a MathJax typeset job */
                 jaxFinishedRendering = false

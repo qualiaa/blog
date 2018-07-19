@@ -13,4 +13,6 @@
 </time>
 <p class="tags">Tags: {{ article.tags|join:", "|title|default:"None" }}</p>
 
-{{ article.html|safe }}
+<div class="article-html">
+    {{ article.html|safe }}
+<div class="article-html">

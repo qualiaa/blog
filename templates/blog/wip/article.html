@@ -1,22 +1,24 @@
 {% extends "blog/base.html" %}
 {% load static %}
 
+<!-- WIP specific styles and scripts -->
 {% block head %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "blog/styles/wip.css" %}" />
 <script type="text/javascript">
     {% if article.slug %}var slug="{{article.slug}}"{% endif %}
 </script>
-<script src="{% static "blog/js/third_party/jquery.js" %}"></script>
+<script src="{% static "blog/js/article.js" %}"></script>
 <script src="{% static "blog/js/wip.js" %}"></script>
 {% endblock %}
 
+<!-- Display WIP article -->
 {% block content %}
     <article>
         <h1 id="title">{{ article.title }}</h1>
 
         <p class="tags">Tags: {{ article.tags|join:", "|title|default:"None" }}</p>
-        <div id="article-html">
+        <div class="article-html">
             {{ article.html|safe }}
         </div>
 
