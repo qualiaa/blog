@@ -28,4 +28,3 @@ class ContextInput(Input):
 class PublishedPaths(ContextInput):
     def __init__(self, request):
         super().__init__(request, paths=article.get_article_paths())
-

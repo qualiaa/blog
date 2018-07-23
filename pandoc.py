@@ -68,4 +68,3 @@ def md2html(path_or_string):
         check=True)
 
     return completed_process.stdout.decode("utf-8")
-

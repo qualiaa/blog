@@ -45,18 +45,17 @@ def article_media(request, slug, url):
     return _return_file(request, path, url)
 
 def article_view(request, slug):
-    return ContextInput(request, slug=slug) >\
-            Either(a.SlugToPath(),e.BadRequestError("ServerError"))     |\
-            a.DateAndSlugFromPath()                              |\
-            a.Metadata()                                         |\
-            Either(
-                    a.GetFullText(),
-                    e.ServerError("Could not prepare document")) |\
+    return ContextInput(request, slug=slug)                     >\
+            Either(a.SlugToPath(), e.NotFound())                |\
+            a.DateAndSlugFromPath()                             |\
+            a.Metadata()                                        |\
+            Either(a.GetFullText(),
+                   e.ServerError("Could not prepare document")) |\
             Render("blog/article_view.html")
 
 def index(request, page=1):
     return PublishedPaths(request) >\
-            AddArchive()                                              |\
+            AddArchive()           |\
             _page_list(page)
 
 def md(request, slug):
@@ -70,17 +69,17 @@ def tags_view(request, tag_string, page=1):
     if not all(x.isalpha() for x in tag_list):
         raise Http404
 
-    return PublishedPaths(request)                                        >\
-            AddArchive()                                                  |\
-            Tags(tag_list)                                                |\
+    return PublishedPaths(request) >\
+            AddArchive()           |\
+            Tags(tag_list)         |\
             _page_list(page)
 
 
 def wip_article(request, slug):
     path = article.WIP_PATH/slug
     return ContextInput(request, slug=slug, path=path) >\
-            a.Metadata()    |\
-            a.GetFullText() |\
+            a.Metadata()                               |\
+            a.GetFullText()                            |\
             Render("blog/wip/article.html")
 
 def wip_index(request):

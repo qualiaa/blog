@@ -6,8 +6,6 @@ from ..tag import get_articles_for_tag
 class Tags(CheckedFilter):
     def __init__(self, tags : [str]):
         super().__init__(outputs="paths")
-        # XXX: Should this take tag string?
-        #tag_list = tag_string.lower().split("+")
         self.tags = tags
 
         # TODO raise sensible error
@@ -22,7 +20,6 @@ class Tags(CheckedFilter):
             paths = set(path.resolve() for path in context["paths"])
             article_paths = article_paths.intersection(paths)
 
-        #raise RuntimeError("{}".format(article_paths))
         context["paths"] = article_paths
 
         return request, context

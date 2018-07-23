@@ -16,20 +16,6 @@ class Filter(ABC):
 
     def __or__(self, other):
         return Composition(self, other)
-        """
-        def composition(*args, **kargs): 
-            try:
-                my_result = self(*args,**kargs)
-                if type(my_result) == tuple:
-                    return other(*my_result)
-                else:
-                    return other(my_result)
-            except TypeError as e:
-                e.args += (type(self), type(other))
-                raise RuntimeError(*e.args)
-
-        return Lambda(composition)
-        """
 
 class CheckedFilter(Filter):
     def __init__(self, inputs={}, outputs={}):
@@ -71,7 +57,6 @@ class Composition(Filter):
             try:
                 left_result = self.left(*args,**kargs)
             except FilterError as e:
-                print("DOING THE THING")
                 return e.handler()
 
             if type(left_result) == tuple:
