@@ -1,28 +1,25 @@
 from os.path import relpath
-import pathlib
 
 import yaml
 
 if __name__ == "__main__":
     import article
-    import settings
+    import settings as s
 else:
     from . import article
-    from . import settings
-
-TAG_PATH = pathlib.Path("blog/tags")
+    from . import settings as s
 
 def get_articles_for_tag(tag):
-    return [x.resolve() for x in (TAG_PATH/tag).iterdir()]
+    return [x.resolve() for x in (s.TAG_PATH/tag).iterdir()]
 
 def _clear_existing_tags():
-    for tag_folder in TAG_PATH.iterdir():
+    for tag_folder in s.TAG_PATH.iterdir():
         for tagged_article in tag_folder.iterdir():
             tagged_article.unlink()
 
 def add_article_to_tag(article_folder, tag):
     # TODO: Warn on nonexistent tags
-    tag_folder = TAG_PATH/tag
+    tag_folder = s.TAG_PATH/tag
     symlink = tag_folder/article_folder.name
     article_relative_to_tag_folder = relpath(article_folder, tag_folder)
     if tag_folder.exists():

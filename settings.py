@@ -4,6 +4,7 @@ ARTICLES_PER_PAGE = 5
 MARKDOWN_FILENAME = "article.md"
 ARTICLE_PATH=pathlib.Path("blog/articles/")
 WIP_PATH = ARTICLE_PATH/"wip"
+TAG_PATH = pathlib.Path("blog/tags")
 date_glob_string = "{}-{}-{}".format("[0-9]" * 4,"[0-9]" * 2, "[0-9]" * 2)
 
 PANDOC_EXTENSIONS = [
