@@ -5,8 +5,10 @@ import yaml
 
 if __name__ == "__main__":
     import article
+    import settings
 else:
     from . import article
+    from . import settings
 
 TAG_PATH = pathlib.Path("blog/tags")
 
@@ -29,7 +31,7 @@ def add_article_to_tag(article_folder, tag):
         raise FileNotFoundError
 
 def tag_article(folder_path):
-    markdown_path = folder_path/article.MARKDOWN_FILENAME
+    markdown_path = folder_path/s.MARKDOWN_FILENAME
     metadata = article.extract_metadata(markdown_path)
     for tag in metadata.get("tags"):
         add_article_to_tag(folder_path, tag)

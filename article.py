@@ -8,11 +8,7 @@ from yaml import YAMLError
 
 from . import emoji
 from . import pandoc
-
-MARKDOWN_FILENAME = "article.md"
-ARTICLE_PATH=pathlib.Path("blog/articles/")
-WIP_PATH = ARTICLE_PATH/"wip"
-date_glob_string = "{}-{}-{}".format("[0-9]" * 4,"[0-9]" * 2, "[0-9]" * 2)
+from . import settings as s
 
 class ArticleError(Exception):
     def __init__(self, context, e):
@@ -22,7 +18,7 @@ class ArticleError(Exception):
 
 def get_article_paths():
     if get_article_paths.paths is None:
-        get_article_paths.paths = list(ARTICLE_PATH.glob(date_glob_string + "_*/"))
+        get_article_paths.paths = list(s.ARTICLE_PATH.glob(s.date_glob_string + "_*/"))
         get_article_paths.paths.sort(reverse=True)
     return get_article_paths.paths
 get_article_paths.paths = None
@@ -71,7 +67,7 @@ def extract_stub(markdown_path):
 
 def path_from_slug(slug):
     # TODO: Handle case of multiple matches
-    paths = ARTICLE_PATH.glob(date_glob_string + "_" + slug + "/")
+    paths = s.ARTICLE_PATH.glob(s.date_glob_string + "_" + slug + "/")
     try:
         return next(paths)
     except StopIteration:
@@ -94,7 +90,7 @@ def get_context(slug=None, path=None, generate_stub=False):
         "date": date,
     }
 
-    markdown_path = path/MARKDOWN_FILENAME
+    markdown_path = path/s.MARKDOWN_FILENAME
 
     if not markdown_path.exists():
         raise ArticleError(article_context,
@@ -123,8 +119,8 @@ def get_context(slug=None, path=None, generate_stub=False):
     return article_context
 
 def get_wip_context(slug):
-    path = WIP_PATH/slug
-    markdown_path = path/MARKDOWN_FILENAME
+    path = s.WIP_PATH/slug
+    markdown_path = path/s.MARKDOWN_FILENAME
 
     try:
         metadata = extract_metadata(markdown_path)

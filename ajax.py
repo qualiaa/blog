@@ -5,9 +5,10 @@ from yaml import YAMLError
 
 from . import article
 from . import pandoc
+from . import settings as s
 
 def wip(request, slug):
-    markdown_path = article.WIP_PATH / slug / article.MARKDOWN_FILENAME
+    markdown_path = s.WIP_PATH / slug / s.MARKDOWN_FILENAME
     if not markdown_path.exists():
         raise Http404
 

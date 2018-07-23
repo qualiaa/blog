@@ -14,8 +14,7 @@ from .filters.AddArchive import AddArchive
 from .filters.Tags import Tags
 
 from . import article
-
-ARTICLES_PER_PAGE = 5
+from . import settings as s
 
 def _return_file(request, path, url):
     if url.find("../") >= 0:
@@ -27,9 +26,9 @@ def _return_file(request, path, url):
 
 def _page_list(page):
     def err(r, c):
-        c["article"]["html"] =  "Could not load article"
+        c["article"]["html"] = "Could not load article"
         return r, c
-    return Paginate(page=page, items_per_page=ARTICLES_PER_PAGE)         |\
+    return Paginate(page=page, items_per_page=s.ARTICLES_PER_PAGE)         |\
             For(over="paths",to="path",giving="article",result="article_list", f=
                         a.DateAndSlugFromPath() |
                         Alternative(
@@ -62,7 +61,7 @@ def index(request, page=1):
 
 def md(request, slug):
     path = article.path_from_slug(slug)
-    markdown_path = path/article.MARKDOWN_FILENAME
+    markdown_path = path/s.MARKDOWN_FILENAME
     with markdown_path.open() as f:
         return HttpResponse(f.read(),content_type="text/markdown")
 
@@ -78,21 +77,21 @@ def tags_view(request, tag_string, page=1):
 
 
 def wip_article(request, slug):
-    path = article.WIP_PATH/slug
+    path = s.WIP_PATH/slug
     return ContextInput(request, slug=slug, path=path) >\
             a.Metadata()                               |\
             a.GetFullText()                            |\
             Render("blog/wip/article.html")
 
 def wip_index(request):
-    article_names = [x.name for x in WIP_PATH.iterdir()
+    article_names = [x.name for x in s.WIP_PATH.iterdir()
             if x.is_dir() and
-            (x/article.MARKDOWN_FILENAME).exists()]
+            (x/s.MARKDOWN_FILENAME).exists()]
 
     return render(request, "blog/wip/index.html",
             {"article_names": article_names})
 
 def wip_media(request, slug, url):
-    path = article.WIP_PATH/slug/url
+    path = s.WIP_PATH/slug/url
 
     return _return_file(request, path, url)

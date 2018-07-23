@@ -1,10 +1,11 @@
 from .base import CheckedFilter
 
-from ..article import ARTICLE_PATH, MARKDOWN_FILENAME, ArticleError
+from ..article import ArticleError
 from ..article import extract_metadata, slug_to_title, post_processing
-from ..article import extract_date_and_slug_from_path, date_glob_string
+from ..article import extract_date_and_slug_from_path
 from ..article import extract_stub
 from .. import pandoc
+from .. import settings as s
 
 
 class SlugToPath(CheckedFilter):
@@ -13,7 +14,7 @@ class SlugToPath(CheckedFilter):
 
     def __call__(self, request, context):
         # TODO: Handle case of multiple matches
-        paths = ARTICLE_PATH.glob(date_glob_string + "_" + context["slug"] + "/")
+        paths = s.ARTICLE_PATH.glob(s.date_glob_string + "_" + context["slug"] + "/")
         try:
             context["path"] = next(paths)
         except StopIteration:
@@ -40,7 +41,7 @@ class Metadata(CheckedFilter):
         path = context["path"]
         slug = context["slug"]
 
-        markdown_path = path/MARKDOWN_FILENAME
+        markdown_path = path/s.MARKDOWN_FILENAME
 
         article_context = {
             "path": str(path),
