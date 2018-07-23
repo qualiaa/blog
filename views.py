@@ -1,17 +1,19 @@
 import mimetypes
-import re
-from subprocess import CalledProcessError
-from itertools import takewhile, chain
 
-from django.conf import settings
-from django.http import HttpResponse, Http404, HttpResponseServerError, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
-from django.urls import reverse
 
-from . import archive
+from .filters.base import Lambda
+from .filters.inputs import ContextInput, PublishedPaths
+from .filters.outputs import Render
+from .filters.flow import For, Alternative, Either
+from .filters import errors as e
+from .filters import article as a
+from .filters.Paginate import Paginate
+from .filters.AddArchive import AddArchive
+from .filters.Tags import Tags
+
 from . import article
-from .article import ArticleError
-from . import tag
 
 ARTICLES_PER_PAGE = 5
 
@@ -19,8 +21,21 @@ def _return_file(request, path, url):
     if url.find("../") >= 0:
         return HttpResponseBadRequest("Invalid URL")
     if not path.exists():
+        print(str(path))
         raise Http404
     return HttpResponse(path.read_bytes(), content_type=mimetypes.guess_type(url))
+
+def _page_list(page):
+    def err(r, c):
+        c["article"]["html"] =  "Could not load article"
+        return r, c
+    return Paginate(page=page, items_per_page=ARTICLES_PER_PAGE)         |\
+            For(over="paths",to="path",giving="article",result="article_list", f=
+                        a.DateAndSlugFromPath() |
+                        Alternative(
+                            a.Metadata() | a.GetStub(),
+                            Lambda(err))) |\
+            Render("blog/index.html")
 
 def article_media(request, slug, url):
     try:
@@ -30,75 +45,19 @@ def article_media(request, slug, url):
 
     return _return_file(request, path, url)
 
+def article_view(request, slug):
+    return ContextInput(request, slug=slug)                     >\
+            Either(a.SlugToPath(), e.NotFound())                |\
+            a.DateAndSlugFromPath()                             |\
+            a.Metadata()                                        |\
+            Either(a.GetFullText(),
+                   e.ServerError("Could not prepare document")) |\
+            Render("blog/article_view.html")
 
-
-def _show_article_list(request, article_paths, page=1):
-    context = {"page": {}} 
-    article_paths = sorted(list(article_paths), reverse=True)
-
-    num_pages = len(article_paths) // ARTICLES_PER_PAGE + 1
-    page_index = page - 1
-    if page_index < 0 or page_index >= num_pages:
-        raise Http404
-
-    url_name = request.resolver_match.url_name
-    url_name = "blog:" + url_name
-    if url_name.find("page") < 0: url_name += "-page"
-    if page > 1:
-        context["page"]["prev"] = reverse(url_name, kwargs={"page":page-1})
-    if page < num_pages:
-        context["page"]["next"] = reverse(url_name, kwargs={"page":page+1})
-
-    start_article = (page_index-1)*ARTICLES_PER_PAGE
-
-
-    article_paths = article_paths[
-        page_index*ARTICLES_PER_PAGE:(page_index+1)*ARTICLES_PER_PAGE]
-    article_contexts = []
-    for path in article_paths:
-        # TODO: rewrite this wtf
-        try:
-            try:
-                article_context = article.get_context(path=path, generate_stub=True)
-            except ArticleError as e:
-                article_context = e.article_context
-                raise e.exception
-        except FileNotFoundError as e:
-            article_context["html"] = "<p>File not found</p>"
-        except IOError:
-            article_context["html"] = "<p>Could not read content</p>"
-        except ValueError as e:
-            return HttpResponseServerError("Invalid request")
-        except CalledProcessError:
-            article_context["html"] = "<p>Error preparing content</p>"
-
-        article_contexts.append(article_context)
-
-    context.update(archive.context())
-    context.update({
-        "article_list": article_contexts,
-    })
-
-    return render(request, "blog/index.html", context)
-
-def index(request, *args, **kargs):
-    article_paths = article.get_article_paths()
-    return _show_article_list(request, article_paths, *args, **kargs)
-
-def tags_view(request, tag_string, *args, **kargs):
-    tag_list = tag_string.lower().split("+")
-    if not all(x.isalpha() for x in tag_list):
-        raise Http404
-
-    # TODO: rewrite this when it's not 4am
-    try:
-        article_paths = chain(*[tag.get_articles_for_tag(t) for t in tag_list])
-        article_paths = set(article_paths)
-    except FileNotFoundError:
-        raise Http404
-
-    return _show_article_list(request, article_paths, *args, **kargs)
-
+def index(request, page=1):
+    return PublishedPaths(request) >\
+            AddArchive()           |\
+            _page_list(page)
 
 def md(request, slug):
     path = article.path_from_slug(slug)
@@ -106,50 +65,31 @@ def md(request, slug):
     with markdown_path.open() as f:
         return HttpResponse(f.read(),content_type="text/markdown")
 
-def article_view(request, slug):
-    # TODO: rewrite this wtf
-    try:
-        try:
-            article_context = article.get_context(slug=slug)
-        except ArticleError as e:
-            article_context = e.article_context
-            raise e.exception
-    except FileNotFoundError as e:
+def tags_view(request, tag_string, page=1):
+    tag_list = tag_string.lower().split("+")
+    if not all(x.isalpha() for x in tag_list):
         raise Http404
-    except IOError as e:
-        return HttpResponseServerError("IO Error")
-    except ValueError as e:
-        return HttpResponseServerError("Invalid request")
-    except CalledProcessError as e:
-        err_msg = "Error preparing file."
-        if settings.DEBUG:
-            err_msg += "\n" + e.cmd + "\n" + e.stderr
-        return HttpResponseServerError(err_msg)
 
-    context = {
-        "article": article_context,
-        "title": article_context["title"],
-    }
-    context.update(archive.context())
+    return PublishedPaths(request) >\
+            AddArchive()           |\
+            Tags(tag_list)         |\
+            _page_list(page)
 
-    return render(request, "blog/article_view.html", context)
+
+def wip_article(request, slug):
+    path = article.WIP_PATH/slug
+    return ContextInput(request, slug=slug, path=path) >\
+            a.Metadata()                               |\
+            a.GetFullText()                            |\
+            Render("blog/wip/article.html")
 
 def wip_index(request):
-    article_names = [x.name for x in article.WIP_PATH.iterdir()
+    article_names = [x.name for x in WIP_PATH.iterdir()
             if x.is_dir() and
             (x/article.MARKDOWN_FILENAME).exists()]
 
     return render(request, "blog/wip/index.html",
             {"article_names": article_names})
-
-def wip_article(request, slug):
-    article_context = article.get_wip_context(slug)
-    context = {
-        "article": article_context,
-        "title": article_context["title"],
-    }
-
-    return render(request, "blog/wip/article.html", context)
 
 def wip_media(request, slug, url):
     path = article.WIP_PATH/slug/url
