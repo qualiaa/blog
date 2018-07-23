@@ -1,5 +1,4 @@
 import datetime
-import pathlib
 import re
 from itertools import takewhile
 
@@ -28,7 +27,6 @@ def post_processing(html,slug):
     html = pandoc.pandoc2mathjax(html)
     html = emoji.slack2unicode(html)
     return html
-        #str(pathlib.Path(settings.STATIC_URL)/"blog"/slug),html)
 
 def slug_to_title(slug):
     return slug.title().replace("_"," ")
