@@ -46,12 +46,13 @@ def article_media(request, slug, url):
     return _return_file(request, path, url)
 
 def article_view(request, slug):
-    return ContextInput(request, slug=slug)                     >\
-            Either(a.SlugToPath(), e.NotFound())                |\
-            a.DateAndSlugFromPath()                             |\
-            a.Metadata()                                        |\
+    return ContextInput(request, slug=slug)                       >\
+            AddArchive(archive_paths=article.get_article_paths()) |\
+            Either(a.SlugToPath(), e.NotFound())                  |\
+            a.DateAndSlugFromPath()                               |\
+            a.Metadata()                                          |\
             Either(a.GetFullText(),
-                   e.ServerError("Could not prepare document")) |\
+                   e.ServerError("Could not prepare document"))   |\
             Render("blog/article_view.html")
 
 def index(request, page=1):
