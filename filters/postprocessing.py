@@ -32,4 +32,5 @@ class ResolveLocalURLs(CheckedFilter):
         context["article"]["html"] = re.sub(s.TEMPLATE_LOCAL_URL, slug, html)
         return request, context
 
-postprocessing = PandocToMathJax() | SlackToUnicode() | ResolveLocalURLs()
+def postprocessing():
+    return PandocToMathJax() | SlackToUnicode() | ResolveLocalURLs()

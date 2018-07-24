@@ -6,7 +6,7 @@ from django.shortcuts import render
 from .filters.base import Lambda
 from .filters.inputs import ContextInput, PublishedPaths
 from .filters.outputs import Render
-from .filters.postprocessing import PandocToMathJax, SlackToUnicode, ResolveLocalURLs
+from .filters.postprocessing import postprocessing
 from .filters.flow import For, Alternative, Either
 from .filters import errors as e
 from .filters import article as a
@@ -35,11 +35,10 @@ def _page_list(page):
                 to="path",
                 giving="article",
                 result="article_list",
-                f=a.DateAndSlugFromPath() | 
-                    Alternative(a.MetadataSafe() | a.MetadataDangerous() |
+                f=a.DateAndSlugFromPath() | a.MetadataSafe() |
+                    Alternative(a.MetadataDangerous() |
                                     a.GetStub()       |
-                                    PandocToMathJax() | SlackToUnicode() |
-                                    ResolveLocalURLs(),
+                                    postprocessing(),
                                 Lambda(err)))                       |\
             Render("blog/index.html")
 
@@ -58,7 +57,7 @@ def article_view(request, slug):
             a.DateAndSlugFromPath()                               |\
             Either(a.MetadataSafe() | a.MetadataDangerous() | a.GetFullText(),
                    e.ServerError("Could not prepare document"))   |\
-            PandocToMathJax() | SlackToUnicode() | ResolveLocalURLs() |\
+            postprocessing()                                      |\
             Render("blog/article_view.html")
 
 def index(request, page=1):
@@ -89,7 +88,7 @@ def wip_article(request, slug):
             a.MetadataSafe()                           |\
             a.MetadataDangerous()                      |\
             a.GetFullText()                            |\
-            PandocToMathJax() | SlackToUnicode() | ResolveLocalURLs()|\
+            postprocessing()                           |\
             Render("blog/wip/article.html")
 
 def wip_index(request):
