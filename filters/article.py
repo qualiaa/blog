@@ -41,7 +41,8 @@ class MetadataSafe(CheckedFilter):
         slug = context["slug"]
 
         article_context = {
-            "path": str(path),
+            "path": path,
+            "path_string": str(path),
             "title": slug_to_title(slug),
             "slug": slug,
             "markdown": path/s.MARKDOWN_FILENAME
@@ -61,7 +62,7 @@ class MetadataDangerous(CheckedFilter):
 
         if not markdown_path.exists():
             e= ArticleError(context["article"],
-                    FileNotFoundError("Markdown file not found"))
+                    FileNotFoundError("Markdown file not found."))
             e.context = context
             raise e
 

@@ -1,10 +1,13 @@
 import pathlib
 
+ROOT_DIR = pathlib.Path("blog")
 ARTICLES_PER_PAGE = 5
 MARKDOWN_FILENAME = "article.md"
-ARTICLE_PATH=pathlib.Path("blog/articles/")
+ARTICLE_PATH=ROOT_DIR/"articles"
 WIP_PATH = ARTICLE_PATH/"wip"
-TAG_PATH = pathlib.Path("blog/tags")
+TAG_PATH = ROOT_DIR/"tags"
+CACHE_PATH = ROOT_DIR/"cache"
+
 date_glob_string = "{}-{}-{}".format("[0-9]" * 4,"[0-9]" * 2, "[0-9]" * 2)
 
 TEMPLATE_LOCAL_URL = "STATIC"
