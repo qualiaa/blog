@@ -1,3 +1,4 @@
+import traceback
 from abc import ABC, abstractmethod
 
 from .errors import FilterError
@@ -23,8 +24,7 @@ class CheckedFilter(Filter):
         self._out = _to_set(outputs)
 
     def __or__(self, other):
-        if issubclass(self, Composition):
-            raise RuntimeError("This should never happen")
+        assert not issubclass(self, Composition)
         inputs, outputs = self._resolve_deps(self, other)
 
         return CheckedComposition(
@@ -57,13 +57,14 @@ class Composition(Filter):
             try:
                 left_result = self.left(*args,**kargs)
             except FilterError as e:
+                traceback.print_exc()
                 return e.handler()
 
             if type(left_result) == tuple:
                 return self.right(*left_result)
             else:
                 return self.right(left_result)
-        except TypeError as e:
+        except (TypeError,ValueError) as e:
             e.args += (type(self.left), type(self.right))
             raise RuntimeError(*e.args)
 

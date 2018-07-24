@@ -55,5 +55,5 @@ class Either(CheckedFilter):
     def __call__(self, request, context):
         try:
             return self.filter(request, context)
-        except Exception:
-            raise self.error
+        except Exception as e:
+            raise self.error from e
