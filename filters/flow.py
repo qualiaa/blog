@@ -19,7 +19,6 @@ class For(CheckedFilter):
     def __call__(self, request, context):
         # TODO: consider changing the way this works
         context[self.result] = []
-        print(self.f._out)
         for x in context[self.over]:
             temp_context = dict()
             temp_context.update(context)

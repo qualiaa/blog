@@ -21,7 +21,6 @@ class ContextInput(Input):
         inputs = set(self.context.keys())
         if not inputs.issuperset(f._in):
             raise TypeError("Inputs not satisfied: {}".format(f._in - inputs))
-        print(self.context)
         return super().__gt__(f)
 
 # TODO: LsPath
