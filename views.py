@@ -6,6 +6,7 @@ from django.shortcuts import render
 from .filters.base import Lambda
 from .filters.inputs import ContextInput, PublishedPaths
 from .filters.outputs import Render
+from .filters.postprocessing import PandocToMathJax, SlackToUnicode, ResolveLocalURLs
 from .filters.flow import For, Alternative, Either
 from .filters import errors as e
 from .filters import article as a
@@ -28,12 +29,18 @@ def _page_list(page):
     def err(r, c):
         c["article"]["html"] = "Could not load article"
         return r, c
-    return Paginate(page=page, items_per_page=s.ARTICLES_PER_PAGE)         |\
-            For(over="paths",to="path",giving="article",result="article_list", f=
-                        a.DateAndSlugFromPath() |
-                        Alternative(
-                            a.Metadata() | a.GetStub(),
-                            Lambda(err))) |\
+    return \
+            Paginate(page=page, items_per_page=s.ARTICLES_PER_PAGE) |\
+            For(over="paths",
+                to="path",
+                giving="article",
+                result="article_list",
+                f=a.DateAndSlugFromPath() | 
+                    Alternative(a.MetadataSafe() | a.MetadataDangerous() |
+                                    a.GetStub()       |
+                                    PandocToMathJax() | SlackToUnicode() |
+                                    ResolveLocalURLs(),
+                                Lambda(err)))                       |\
             Render("blog/index.html")
 
 def article_media(request, slug, url):
@@ -49,9 +56,9 @@ def article_view(request, slug):
             AddArchive(archive_paths=article.get_article_paths()) |\
             Either(a.SlugToPath(), e.NotFound())                  |\
             a.DateAndSlugFromPath()                               |\
-            a.Metadata()                                          |\
-            Either(a.GetFullText(),
+            Either(a.MetadataSafe() | a.MetadataDangerous() | a.GetFullText(),
                    e.ServerError("Could not prepare document"))   |\
+            PandocToMathJax() | SlackToUnicode() | ResolveLocalURLs() |\
             Render("blog/article_view.html")
 
 def index(request, page=1):
@@ -79,8 +86,10 @@ def tags_view(request, tag_string, page=1):
 def wip_article(request, slug):
     path = s.WIP_PATH/slug
     return ContextInput(request, slug=slug, path=path) >\
-            a.Metadata()                               |\
+            a.MetadataSafe()                           |\
+            a.MetadataDangerous()                      |\
             a.GetFullText()                            |\
+            PandocToMathJax() | SlackToUnicode() | ResolveLocalURLs()|\
             Render("blog/wip/article.html")
 
 def wip_index(request):

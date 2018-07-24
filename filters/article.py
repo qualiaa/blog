@@ -1,9 +1,8 @@
 from .base import CheckedFilter
 
 from ..article import ArticleError
-from ..article import extract_metadata, slug_to_title, post_processing
-from ..article import extract_date_and_slug_from_path
-from ..article import extract_stub
+from ..article import extract_metadata, slug_to_title
+from ..article import extract_date_and_slug_from_path, extract_stub
 from .. import pandoc
 from .. import settings as s
 
@@ -33,7 +32,7 @@ class DateAndSlugFromPath(CheckedFilter):
 
         return request, context
 
-class Metadata(CheckedFilter):
+class MetadataSafe(CheckedFilter):
     def __init__(self):
         super().__init__(inputs=["path","slug"], outputs="article")
 
@@ -41,29 +40,35 @@ class Metadata(CheckedFilter):
         path = context["path"]
         slug = context["slug"]
 
-        markdown_path = path/s.MARKDOWN_FILENAME
-
         article_context = {
             "path": str(path),
             "title": slug_to_title(slug),
             "slug": slug,
-            "markdown": markdown_path
+            "markdown": path/s.MARKDOWN_FILENAME
         }
         if "date" in context: article_context["date"] = context["date"]
 
+        context["article"] = article_context
+
+        return request, context
+
+class MetadataDangerous(CheckedFilter):
+    def __init__(self):
+        super().__init__(inputs="article", outputs="article")
+
+    def __call__(self, request, context):
+        markdown_path = context["article"]["markdown"]
+
         if not markdown_path.exists():
-            context["article"] = article_context
-            e= ArticleError(article_context,
+            e= ArticleError(context["article"],
                     FileNotFoundError("Markdown file not found"))
             e.context = context
             raise e
 
-
         try: metadata = extract_metadata(markdown_path)
         except (YAMLError, IOError): metadata = {}
-        article_context.update(metadata)
 
-        context["article"] = article_context
+        context["article"].update(metadata)
 
         return request, context
 
@@ -75,12 +80,10 @@ class GetStub(CheckedFilter):
         markdown_path = context["article"]["markdown"]
         try:
             stub, stub_finished = extract_stub(markdown_path)
-            html = pandoc.md2html(stub)
+            context["article"]["html"] = pandoc.md2html(stub)
+            context["article"]["finished"] = stub_finished
         except Exception as e:
             raise ArticleError(context["article"], e)
-        slug = context["article"]["slug"]
-        context["article"]["html"] = post_processing(html, slug)
-        context["article"]["finished"] = stub_finished
 
         return request, context
 
@@ -90,9 +93,7 @@ class GetFullText(CheckedFilter):
 
     def __call__(self, request, context):
         try:
-            html = pandoc.md2html(context["article"]["markdown"])
-            slug = context["article"]["slug"]
-            context["article"]["html"] = post_processing(html, slug)
+            context["article"]["html"] = pandoc.md2html(context["article"]["markdown"])
         except Exception as e:
             raise ArticleError(context["article"], e)
 
