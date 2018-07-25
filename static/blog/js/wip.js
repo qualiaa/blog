@@ -11,12 +11,32 @@ window.MathJax = {
 }
 
 var updateTime = 1000
-var requestUrl = "/json/wip/" + slug
+var requestUrl = "/blog/json/wip/" + slug
+var mtime = 0
+
+
+// code from 
+// https://docs.djangoproject.com/en/2.0/ref/csrf/#setting-the-token-on-the-ajax-request
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
 
 $(function() {
     setInterval(function() {
-        $.get(requestUrl,
+        $.post(requestUrl,
+            {"mtime": mtime},
             function(data) {
+                if (data === undefined) {
+                    return;
+                }
                 /* Update the page metadata first */
                 if (data.hasOwnProperty("title")) {
                     var title = data["title"]
@@ -28,6 +48,10 @@ $(function() {
                         }).join(", "))
                 } else {
                     $("p.tags").text("Tags: None")
+                }
+
+                if (data.hasOwnProperty("mtime")) {
+                    mtime = data["mtime"]
                 }
 
                 /* If we're still rendering the previous MathJax then skip */
@@ -50,7 +74,6 @@ $(function() {
                         .addClass("article-html")
                         .addClass("buffer")
                     buffer.insertAfter(".article-html")
-                    
                 }
 
                 /* Set the buffer HTML */
