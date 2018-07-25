@@ -68,6 +68,8 @@ class MetadataDangerous(CheckedFilter):
 
         try: metadata = extract_metadata(markdown_path)
         except (YAMLError, IOError): metadata = {}
+        if "tags" in metadata:
+            metadata["tags"].sort()
 
         context["article"].update(metadata)
 
