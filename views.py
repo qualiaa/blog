@@ -3,7 +3,7 @@ import mimetypes
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 
-from .filters.base import Lambda
+from .filters.utils import Lambda
 from .filters.inputs import ContextInput, PublishedPaths
 from .filters.outputs import Render
 from .filters.postprocessing import postprocessing

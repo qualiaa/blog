@@ -77,21 +77,3 @@ class CheckedComposition(Composition, CheckedFilter):
             Composition.__init__(self, left, right)
         else:
             raise TypeError("CheckedComposition not provided with left and right")
-
-class Lambda(Filter):
-    def __init__(self, func):
-        self.func = func
-
-    def __call__(self,*args, **kargs):
-        return self.func(*args, **kargs)
-
-class CheckedLambda(CheckedFilter):
-    def __init__(self, func, inputs={}, outputs={}):
-        super().__init__(inputs, outputs)
-        if type(func) == Lambda:
-            self.func = func.func
-        else:
-            self.func = func
-
-    def __call__(self, *args, **kargs):
-        return self.func(*args, **kargs)
