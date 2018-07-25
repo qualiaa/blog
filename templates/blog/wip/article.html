@@ -24,4 +24,8 @@
 
         <a href="{% url "blog:wip-index" %}">Back to WIP index</a>
     </article>
+    {% csrf_token %}
+    <script>
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    </script>
 {% endblock %}
