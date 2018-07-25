@@ -27,10 +27,10 @@ def _return_file(request, path, url):
     return HttpResponse(path.read_bytes(), content_type=mimetypes.guess_type(url))
 
 def _page_list(page):
+    @Lambda
     def article_error(r, c):
         c["article"]["html"] = "Could not load article"
         return r, c
-    article_error = Lambda(article_error)
     return \
             Paginate(page=page, items_per_page=s.ARTICLES_PER_PAGE) |\
             For(over="paths",
