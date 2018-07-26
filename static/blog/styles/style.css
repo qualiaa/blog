@@ -137,3 +137,34 @@ a:hover, a:focus {
     color: #2A6496;
     text-decoration: underline;
 }
+
+h1 a, h1 a:hover, h1 a:focus,
+h2 a, h2 a:hover, h2 a:focus,
+h3 a, h3 a:hover, h3 a:focus,
+h4 a, h4 a:hover, h4 a:focus {
+    color: inherit;
+}
+
+article h1,
+article h2,
+article h3,
+article h4 {
+    position: relative;
+}
+
+article h1 a.section-link,
+article h2 a.section-link,
+article h3 a.section-link,
+article h4 a.section-link {
+    position: absolute;
+    left: -0.7em;
+    color: rgba(0,0,0,0.4);
+    text-decoration: none;
+}
+
+article h1:hover a.section-link,
+article h2:hover a.section-link,
+article h3:hover a.section-link,
+article h4:hover a.section-link {
+    color: black;
+}
