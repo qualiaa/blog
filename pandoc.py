@@ -6,13 +6,15 @@ from . import settings as s
 
 
 def pandoc2mathjax(string):
+    """
     string = re.sub("<span class=\"math inline\">"+re.escape(r"\(")+
-                    "(.*)" + re.escape(r"\)") + "</span>",
+                    "(.*?)" + re.escape(r"\)") + "</span>",
                     "<script type=\"math/tex\">\g<1></script>", string)
     string = re.sub("<span class=\"math display\">"+re.escape(r"\[")+
-                    "(.*)" + re.escape(r"\]") + "</span>",
+                    "(.*?)" + re.escape(r"\]") + "</span>",
                     "<script type=\"math/tex; mode=display\">\g<1></script>",
                     string)
+    """
     return string
 
 

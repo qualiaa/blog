@@ -33,4 +33,5 @@ class ResolveLocalURLs(CheckedFilter):
         return request, context
 
 def postprocessing():
-    return PandocToMathJax() | SlackToUnicode() | ResolveLocalURLs()
+    return ResolveLocalURLs()
+    #return PandocToMathJax() | SlackToUnicode() | ResolveLocalURLs()

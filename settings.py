@@ -17,8 +17,10 @@ PANDOC_EXTENSIONS = [
     "space_in_atx_header",
     "implicit_header_references",
     "blank_before_blockquote",
+    "emoji",
     "fenced_code_blocks",
     "fenced_code_attributes",
+    "inline_code_attributes",
     "line_blocks",
     "fancy_lists",
     "definition_lists",
@@ -32,9 +34,10 @@ PANDOC_EXTENSIONS = [
     "subscript",
     "raw_html",
     "tex_math_dollars",
+    "latex_macros",
     "markdown_in_html_blocks",
     "shortcut_reference_links",
-    "implicit_figures"
+    "implicit_figures",
 ]
 
 PANDOC_OPTIONS = [
