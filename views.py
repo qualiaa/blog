@@ -1,6 +1,6 @@
 import mimetypes
 
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.shortcuts import render
 
 from .filters.utils import Lambda
