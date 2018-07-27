@@ -19,6 +19,7 @@ class For(CheckedFilter):
     def __call__(self, request, context):
         # TODO: consider changing the way this works
         context[self.result] = []
+
         for x in context[self.over]:
             temp_context = dict()
             temp_context.update(context)
@@ -26,6 +27,11 @@ class For(CheckedFilter):
             temp_context[self.to] = x
             result_request, result_context = self.f(request,temp_context)
             context[self.result].append(result_context[self.giving])
+
+        try:
+            temp_context
+        except Exception:
+            raise ValueError("No arguments for loop: {}".format(context[self.over]))
 
         return result_request, context
 
