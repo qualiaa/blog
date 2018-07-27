@@ -1,4 +1,7 @@
+import re
 from itertools import chain
+
+from django.http import Http404
 
 from .base import CheckedFilter
 from ..tag import get_articles_for_tag
@@ -9,8 +12,8 @@ class Tags(CheckedFilter):
         self.tags = tags
 
         # TODO raise sensible error
-        if not all(x.isalpha() for x in self.tags):
-            raise Http404
+        if not all(re.match("[A-Za-z_]",x) for x in self.tags):
+            raise ValueError("Invalid tag in {}".format(self.tags))
 
     def __call__(self, request, context):
         article_paths = chain(*[get_articles_for_tag(t) for t in self.tags])

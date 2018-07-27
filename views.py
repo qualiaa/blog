@@ -82,14 +82,11 @@ def md(request, slug):
 
 def tags_view(request, tag_string, page=1):
     tag_list = tag_string.lower().split("+")
-    if not all(x.isalpha() for x in tag_list):
-        raise Http404
 
     return PublishedPaths(request) >\
             AddArchive()           |\
             Tags(tag_list)         |\
             _page_list(page)
-
 
 def wip_article(request, slug):
     path = s.WIP_PATH/slug
