@@ -70,6 +70,7 @@ class MetadataDangerous(CheckedFilter):
         except (YAMLError, IOError): metadata = {}
         if "tags" in metadata:
             metadata["tags"].sort()
+            metadata["tags"] = [tag.replace("_"," ") for tag in metadata["tags"]]
 
         context["article"].update(metadata)
 
