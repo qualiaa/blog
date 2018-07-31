@@ -12,7 +12,7 @@ from .filters import cache as c
 from .filters import errors as e
 from .filters import article as a
 from .filters.Paginate import Paginate
-from .filters.AddArchive import AddArchive
+from .filters.sidebars import Sidebars
 from .filters.Tags import Tags
 
 from . import article
@@ -57,7 +57,7 @@ def article_media(request, slug, url):
 def article_view(request, slug):
     se = e.ServerError
     return ContextInput(request, slug=slug)                       >\
-            AddArchive(archive_paths=article.get_article_paths()) |\
+            Sidebars(archive_paths=article.get_article_paths())   |\
             Either(a.SlugToPath(), e.NotFound())                  |\
             a.DateAndSlugFromPath()                               |\
             a.MetadataSafe()                                      |\
@@ -71,7 +71,7 @@ def article_view(request, slug):
 
 def index(request, page=1):
     return PublishedPaths(request) >\
-            AddArchive()           |\
+            Sidebars()             |\
             _page_list(page)
 
 def md(request, slug):
@@ -84,7 +84,7 @@ def tags_view(request, tag_string, page=1):
     tag_list = tag_string.lower().split("+")
 
     return PublishedPaths(request) >\
-            AddArchive()           |\
+            Sidebars()             |\
             Tags(tag_list)         |\
             _page_list(page)
 

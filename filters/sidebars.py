@@ -1,12 +1,30 @@
 import datetime
 from collections import defaultdict
 from itertools import repeat
+import hashlib
 
 from django.urls import reverse
 
 from .base import CheckedFilter
 from .. import article
 from .. import settings as s
+
+class AddTagbar(CheckedFilter):
+    def __call__(self, request, context):
+        tags = sorted([tag.name for tag in s.TAG_PATH.iterdir()])
+        tags = [{"slug": x,
+                 "name": x.replace("_"," ").title(),
+                 "url": reverse("blog:tags", kwargs={"tag_string":x})
+                 } for x in tags]
+
+        for tag in tags:
+            h = hashlib.blake2s(tag["slug"].encode())
+            v = int.from_bytes(h.digest(), byteorder="big")
+            tag["color"] = (v & 0xFF, (v & 0xFF00) >> 8, (v & 0xFF0000) >> 16)
+
+
+        context.update({"all_tags": tags})
+        return request, context
 
 
 class AddArchive(CheckedFilter):
@@ -50,3 +68,5 @@ class AddArchive(CheckedFilter):
         return request, context
 
 
+def Sidebars(archive_paths=None):
+    return AddArchive(archive_paths) | AddTagbar()
