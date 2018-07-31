@@ -7,9 +7,9 @@ app_name = "blog"
 urlpatterns = [
     path("", views.index, name="article-index"),
     path("page/<int:page>", views.index, name="article-index-page"),
+    path("publish/<slug:slug>", views.publish_view, name="wip-publish"),
     path("wip", views.wip_index, name="wip-index"),
     path("wip/<slug:slug>", views.wip_article, name="wip-article"),
-    path("wip/<slug:slug>/publish", views.publish_view, name="wip-publish"),
     path("wip/<slug:slug>/<path:url>", views.wip_media),
     path("tags/<str:tag_string>", views.tags_view, name="tags"),
     path("tags/<str:tag_string>/page/<int:page>", views.tags_view, name="tags-page"),
