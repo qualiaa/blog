@@ -3,48 +3,50 @@
     <h3>Tags</h3>
     <ul class="taglist noselect">
         {% for tag in all_tags %}
-        <a href="{{ tag.url }}">
-            <li id="{{ tag.slug }}" {% if tag.slug in tags %} class="active"{% endif %}>
-                <div title="Add {{ tag.name }}"
-                     class="circ"
-                     onclick="return tagMod(this)">
-                </div>
-                {{ tag.name }}
+            <li>
+                <a href="{{ tag.url }}">
+                    <div id="{{ tag.slug }}" {% if tag.slug in tags %} class="active"{% endif %}>
+                        <div title="Add {{ tag.name }}"
+                             class="circ"
+                             onclick="return tagMod(this)">
+                        </div>
+                        {{ tag.name }}
+                    </div>
+                </a>
             </li>
-        </a>
         {% endfor %}
         <style>
             {% for tag in all_tags %}
-                li#{{ tag.slug }} {
+                #{{ tag.slug }} {
                     border-color: rgb({{ tag.color|join:"," }});
                 }
-                li#{{ tag.slug }}:hover {
+                #{{ tag.slug }}:hover {
                     background-color: rgba({{ tag.color|join:"," }},0.1);
                 }
-                li#{{ tag.slug }}.active {
+                #{{ tag.slug }}.active {
                     background-color: rgb({{ tag.color|join:"," }});
                     color: white;
                 }
-                li#{{ tag.slug }}.active:hover {
+                #{{ tag.slug }}.active:hover {
                     background-color: rgba({{ tag.color|join:"," }},0.9);
                     color: white;
                 }
 
-                li#{{ tag.slug }} .circ {
+                #{{ tag.slug }} .circ {
                     background-color: rgb({{ tag.color|join:"," }});
                     color: rgb({{ tag.color|join:"," }});
                 }
 
-                li#{{ tag.slug }} .circ:hover {
+                #{{ tag.slug }} .circ:hover {
                     background-color: white;
                     border: 1px solid;
                     border-color: rgb({{ tag.color|join:"," }});
                 }
-                li#{{ tag.slug }}.active .circ {
+                #{{ tag.slug }}.active .circ {
                     background-color: white;
                 }
 
-                li#{{ tag.slug }}.active .circ:hover {
+                #{{ tag.slug }}.active .circ:hover {
                     border: none;
                 }
             {% endfor %}

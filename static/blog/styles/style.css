@@ -194,7 +194,7 @@ ul.taglist {
     padding: 0 0;
 }
 
-.taglist li {
+.taglist a > div {
     display: flex;
     justify-content: center;
     clear: none;
@@ -215,7 +215,7 @@ ul.taglist {
 
 }
 
-div.circ {
+.circ {
     display: inline-block;
     align-self: center;
     clear: none;
