@@ -8,7 +8,7 @@ from ..tag import get_articles_for_tag
 
 class Tags(CheckedFilter):
     def __init__(self, tags : [str]):
-        super().__init__(outputs="paths")
+        super().__init__(outputs={"paths","tags"})
         self.tags = tags
 
         # TODO raise sensible error
@@ -24,5 +24,6 @@ class Tags(CheckedFilter):
             article_paths = article_paths.intersection(paths)
 
         context["paths"] = article_paths
+        context["tags"] = self.tags
 
         return request, context
