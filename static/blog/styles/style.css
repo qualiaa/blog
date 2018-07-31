@@ -101,8 +101,13 @@ textarea {
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
+
 body {
     font-family: "Palatino", serif;
+}
+
+header h1 {
+    font-size: 2.6em;
 }
 
 /* Link Styles */
@@ -176,12 +181,12 @@ article .pubdate {
 
 
 /* article headers */
+
 article h1,
 article h2,
 article h3,
 article h4,
 article h5 {
-    border-bottom: 1px solid #f0f0f0;
     position: relative;
 }
 
@@ -202,6 +207,28 @@ article h3:hover a.section-link,
 article h4:hover a.section-link,
 article h5:hover a.section-link {
     color: black;
+}
+
+article > h1:first-of-type {
+    font-size: 1.8em;
+    border-bottom: 1px solid #f0f0f0;
+    margin-top: 0;
+}
+article h1 {
+    font-size: 1.6em;
+}
+article h2 {
+    font-size: 1.4em;
+}
+article h3 {
+    font-size: 1.2em;
+}
+article h4 {
+    font-size: 1.0em;
+}
+article h5 {
+    font-size: 1.0em;
+    font-style: italic;
 }
 
 /* Tag bar */
