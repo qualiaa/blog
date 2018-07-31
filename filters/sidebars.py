@@ -17,10 +17,13 @@ class AddTagbar(CheckedFilter):
                  "url": reverse("blog:tags", kwargs={"tag_string":x})
                  } for x in tags]
 
-        for tag in tags:
-            h = hashlib.blake2s(tag["slug"].encode())
-            v = int.from_bytes(h.digest(), byteorder="big")
-            tag["color"] = (v & 0xFF, (v & 0xFF00) >> 8, (v & 0xFF0000) >> 16)
+        for i, tag in enumerate(tags):
+            try:
+                tag["color"] = s.TAG_COLORS[i]
+            except IndexError:
+                h = hashlib.blake2s(tag["slug"].encode())
+                v = int.from_bytes(h.digest(), byteorder="big")
+                tag["color"] = (v & 0xFF, (v & 0xFF00) >> 8, (v & 0xFF0000) >> 16)
 
 
         context.update({"all_tags": tags})
