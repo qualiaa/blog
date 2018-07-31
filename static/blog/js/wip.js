@@ -82,6 +82,8 @@ $(function() {
                 /* Process article */
                 highlightCode(buffer)
                 addPermalinkToSections(buffer)
+                decorateExterns()
+
 
                 /* Queue a MathJax typeset job */
                 jaxFinishedRendering = false

@@ -31,9 +31,13 @@ function isExternal(index) {
     return domain(location.href) !== domain(url);
 }
 
+function decorateExterns() {
+    $("a[href^=http]").filter(isExternal).addClass("extern");
+}
+
 function pageInit() {
     highlightCode($("article"));
-    $("a[href^=http]").filter(isExternal).addClass("extern");
+    decorateExterns();
 }
 
 $(pageInit);
