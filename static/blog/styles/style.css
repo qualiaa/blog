@@ -105,19 +105,6 @@ body {
     font-family: "Palatino", serif;
 }
 
-article {
-    font-size: 18px;
-}
-
-article img {
-    max-width: 100%;
-}
-
-pre code {
-    font-size: 14px;
-    font-family: "Source Code Pro", "Ubuntu Mono", monospace;
-}
-
 /* Link Styles */
 a {
     color: #428BCA;
@@ -144,10 +131,51 @@ a:hover, a:focus {
 h1 a, h1 a:hover, h1 a:focus,
 h2 a, h2 a:hover, h2 a:focus,
 h3 a, h3 a:hover, h3 a:focus,
-h4 a, h4 a:hover, h4 a:focus {
+h4 a, h4 a:hover, h4 a:focus,
+h5 a, h5 a:hover, h5 a:focus {
     color: inherit;
 }
 
+/* Article styles */
+
+article {
+    font-size: 18px;
+}
+
+article img {
+    max-width: 100%;
+}
+
+code {
+    font-size: 16px;
+    font-family: "Source Code Pro", "Ubuntu Mono", monospace;
+}
+
+article div {
+    display: block;
+    clear: both;
+    width: 100%;
+}
+
+article div.meta {
+    font-style: italic;
+    font-size: 0.9em;
+    margin-bottom: 1em;
+}
+
+article .tags {
+    text-align: right;
+    float: right;
+    clear: right;
+}
+article .pubdate {
+    text-align: left;
+    float: left;
+    clear: left;
+}
+
+
+/* article headers */
 article h1,
 article h2,
 article h3,
@@ -155,7 +183,6 @@ article h4,
 article h5 {
     border-bottom: 1px solid #f0f0f0;
     position: relative;
-
 }
 
 article h1 a.section-link,

@@ -8,10 +8,12 @@
 
     <h1>{{ article.title }}</h1>
 {% endif %}
-<time datetime="{{ article.date|date:"Y-m-d" }}">
-    {{ article.date|date:"l jS F, Y" }}
-</time>
-<p class="tags">Tags: {{ article.tags|join:", "|title|default:"None" }}</p>
+<div class="meta clearfix">
+    <span class="pubdate"><time datetime="{{ article.date|date:"Y-m-d" }}">
+        {{ article.date|date:"l jS F, Y" }}
+    </span>
+    <span class="tags">Tags: {{ article.tags|join:", "|title|default:"None" }}</span>
+</div>
 
 <div class="article-html">
     {{ article.html|safe }}
