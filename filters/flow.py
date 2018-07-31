@@ -1,3 +1,5 @@
+import traceback
+
 from .base import CheckedFilter
 from .errors import FilterError
 
@@ -46,6 +48,8 @@ class Alternative(CheckedFilter):
         try:
             return self.left(request, context)
         except Exception as e:
+            traceback.print_exc()
+            print(e.args)
             if hasattr(e,"context"):
                 context = e.context
             return self.right(request, context)
