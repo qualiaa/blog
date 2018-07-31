@@ -4,8 +4,9 @@
     <ul class="taglist noselect">
         {% for tag in all_tags %}
         <a href="{{ tag.url }}">
-            <li id="{{ tag.slug }}">
-                <i class="circ"> </i>{{ tag.name }}
+            <li id="{{ tag.slug }}"
+                    {% if tag.slug in tags %} class="active"{% endif %}>
+                <div title="Add {{ tag.name }}" class="circ" onclick="return tagMod(this)"></div>{{ tag.name }}
             </li>
         </a>
         {% endfor %}
@@ -17,12 +18,40 @@
                 li#{{ tag.slug }}:hover {
                     background-color: rgba({{ tag.color|join:"," }},0.1);
                 }
-
-                li#{{ tag.slug }} i.circ {
+                li#{{ tag.slug }}.active {
                     background-color: rgb({{ tag.color|join:"," }});
+                    color: white;
+                }
+                li#{{ tag.slug }}.active:hover {
+                    background-color: rgba({{ tag.color|join:"," }},0.9);
+                    color: white;
+                }
+
+                li#{{ tag.slug }} .circ {
+                    background-color: rgb({{ tag.color|join:"," }});
+                    color: rgb({{ tag.color|join:"," }});
+                }
+
+                li#{{ tag.slug }} .circ:hover {
+                    background-color: white;
+                    border: 1px solid;
+                    border-color: rgb({{ tag.color|join:"," }});
+                }
+                li#{{ tag.slug }}.active .circ {
+                    background-color: white;
+                }
+
+                li#{{ tag.slug }}.active .circ:hover {
+                    border: none;
                 }
             {% endfor %}
         </style>
     </ul>
 </div>
+    <script>
+        function tagMod(x) {
+            alert(x);
+            return false;
+        }
+    </script>
 {% endif %}

@@ -215,19 +215,27 @@ ul.taglist {
 
 }
 
-.taglist li:hover {
-    background-color: rgba(255,0,0,0.1);
-}
-
-i.circ {
+div.circ {
+    display: inline-block;
     align-self: center;
+    clear: none;
     width: 1em;
     height: 1em;
     margin-right: 0.2em;
-
     border-radius: 50%;
-    background-color: red;
-    /*vertical-align: middle;*/
+    z-index: 10;
+    box-sizing: border-box;
+
+    text-align: center;
+    line-height: 1em;
+    font-weight: bold;
+}
+
+.circ:hover::after {
+    content: "+";
+}
+.active .circ:hover::after {
+    content: "x";
 }
 
 .taglist a {
