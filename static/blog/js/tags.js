@@ -36,7 +36,7 @@ function tagMod(buttonObject) {
     if (newTags.length > 0) {
         window.location=TAG_URL + newTags.join("+");
     } else {
-        window.location="/";
+        window.location="/blog/";
     }
 
 
