@@ -24,12 +24,23 @@ class CachedText(CheckedFilter):
 
         if not cache_file.exists():
             raise CacheFileNotFound()
+
         if markdown_path.stat().st_mtime > cache_file.stat().st_mtime:
             raise CacheFileOlderThanSource()
+
         print("Loading {} from cache".format(cache_file))
+
         with cache_file.open() as f:
             context["article"]["html"] = f.read()
 
+        # check stub finished state, stored as .finished file
+        if self.stub:
+            finished_path = cache_file.with_suffix(".finished")
+            if finished_path.exists():
+                finished = True
+            else:
+                finished = False
+            context["article"]["finished"] = finished
         return request, context
 
 class CacheHTML(CheckedFilter):
@@ -45,5 +56,15 @@ class CacheHTML(CheckedFilter):
         print ("Writing {} to cache".format(cache_file))
         with cache_file.open("w") as f:
             f.write(html)
+
+        # Save finished state as empty file
+        if self.stub: 
+            finished_path = cache_file.with_suffix(".finished")
+            if not context["article"]["finished"] and finished_path.exists():
+                finished_path.unlink()
+            elif context["article"]["finished"] and not finished_path.exists():
+                f = finished_path.open("w")
+                f.close()
+
 
         return request, context
