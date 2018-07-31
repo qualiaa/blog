@@ -30,7 +30,6 @@ function tagMod(buttonObject) {
             newTags = [activeTag].concat(currentTags)
         }
     } else {
-        console.log("currentTags not defined")
         var newTags = [activeTag];
     }
 
