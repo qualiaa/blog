@@ -4,9 +4,12 @@
     <ul class="taglist noselect">
         {% for tag in all_tags %}
         <a href="{{ tag.url }}">
-            <li id="{{ tag.slug }}"
-                    {% if tag.slug in tags %} class="active"{% endif %}>
-                <div title="Add {{ tag.name }}" class="circ" onclick="return tagMod(this)"></div>{{ tag.name }}
+            <li id="{{ tag.slug }}" {% if tag.slug in tags %} class="active"{% endif %}>
+                <div title="Add {{ tag.name }}"
+                     class="circ"
+                     onclick="return tagMod(this)">
+                </div>
+                {{ tag.name }}
             </li>
         </a>
         {% endfor %}
@@ -48,10 +51,9 @@
         </style>
     </ul>
 </div>
+    {% if tags %}
     <script>
-        function tagMod(x) {
-            alert(x);
-            return false;
-        }
+        var currentTags = ["{{ tags|join:'","' }}"];
     </script>
+    {% endif %}
 {% endif %}
