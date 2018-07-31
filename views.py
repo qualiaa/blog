@@ -83,10 +83,18 @@ def md(request, slug):
 def tags_view(request, tag_string, page=1):
     tag_list = tag_string.lower().split("+")
 
+    @Lambda
+    def error_msg(r,c):
+        c["content"] = "<h2>No posts</h2>"
+        return r,c
+
     return PublishedPaths(request) >\
             Sidebars()             |\
             Tags(tag_list)         |\
-            _page_list(page)
+            Alternative(_page_list(page),
+                error_msg |
+                Render("blog/simple.html"))
+
 
 def wip_article(request, slug):
     path = s.WIP_PATH/slug
