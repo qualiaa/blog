@@ -1,7 +1,9 @@
 import mimetypes
 
-from django.http import HttpResponse, HttpResponseBadRequest, Http404
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseServerError, HttpResponseRedirect, Http404
 from django.shortcuts import render
+from django.urls import reverse
 
 from .filters.utils import Lambda
 from .filters.inputs import ContextInput, PublishedPaths
@@ -17,6 +19,7 @@ from .filters.Tags import Tags
 
 from . import article
 from . import settings as s
+from . import publish
 
 def _return_file(request, path, url):
     if url.find("../") >= 0:
@@ -117,3 +120,15 @@ def wip_media(request, slug, url):
     path = s.WIP_PATH/slug/url
 
     return _return_file(request, path, url)
+
+def publish_view(request, slug):
+    try:
+        publish.publish(slug)
+    except FileNotFoundError as e:
+        print(e.args)
+        return HttpResponseServerError("Could not find article")
+    except FileExistsError as e:
+        print(e.args)
+        return HttpResponseServerError("Article already published")
+
+    return HttpResponseRedirect(reverse("blog:article",kwargs={"slug":slug}))
