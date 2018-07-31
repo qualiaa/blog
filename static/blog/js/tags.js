@@ -34,6 +34,7 @@ function tagMod(buttonObject) {
     }
 
     if (newTags.length > 0) {
+        newTags.sort()
         window.location=TAG_URL + newTags.join("+");
     } else {
         window.location="/blog/";
