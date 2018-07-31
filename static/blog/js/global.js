@@ -21,4 +21,21 @@ function highlightCode(jObj) {
     })
 }
 
-$(function() { highlightCode($("article")) });
+// from https://stackoverflow.com/a/9744104/1905448
+function isExternal(index) {
+    var url = this.getAttribute("href");
+    var domain = function(url) {
+        return url.replace('http://','').replace('https://','').split('/')[0];
+    };
+
+    return domain(location.href) !== domain(url);
+}
+
+function pageInit() {
+    highlightCode($("article"));
+    $("a[href^=http]").filter(isExternal).addClass("extern");
+}
+
+$(pageInit);
+
+
