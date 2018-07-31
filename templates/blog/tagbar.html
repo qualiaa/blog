@@ -1,0 +1,28 @@
+{% if all_tags %}
+<div class="sidebar" id="tags">
+    <h3>Tags</h3>
+    <ul class="taglist noselect">
+        {% for tag in all_tags %}
+        <a href="{{ tag.url }}">
+            <li id="{{ tag.slug }}">
+                <i class="circ"> </i>{{ tag.name }}
+            </li>
+        </a>
+        {% endfor %}
+        <style>
+            {% for tag in all_tags %}
+                li#{{ tag.slug }} {
+                    border-color: rgb({{ tag.color|join:"," }});
+                }
+                li#{{ tag.slug }}:hover {
+                    background-color: rgba({{ tag.color|join:"," }},0.1);
+                }
+
+                li#{{ tag.slug }} i.circ {
+                    background-color: rgb({{ tag.color|join:"," }});
+                }
+            {% endfor %}
+        </style>
+    </ul>
+</div>
+{% endif %}

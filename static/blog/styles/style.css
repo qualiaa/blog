@@ -181,3 +181,58 @@ article h4:hover a.section-link,
 article h5:hover a.section-link {
     color: black;
 }
+
+/* Tag bar */
+
+div.sidebar {
+    width: 100%;
+    clear: both;
+}
+
+ul.taglist {
+    list-style-type: none;
+    padding: 0 0;
+}
+
+.taglist li {
+    display: flex;
+    justify-content: center;
+    clear: none;
+    float: left;
+
+    border-radius: 50vh;
+    border-style: solid;
+    border-width: 1px;
+    border-color: red;
+
+    padding: 2px 1em 2px 2%;
+    margin-bottom: 0.5em;
+    margin-right: 0.5em;
+    font-size: 12px;
+    font-family: "Open Sans", sans;
+    cursor: pointer;
+
+
+}
+
+.taglist li:hover {
+    background-color: rgba(255,0,0,0.1);
+}
+
+i.circ {
+    align-self: center;
+    width: 1em;
+    height: 1em;
+    margin-right: 0.2em;
+
+    border-radius: 50%;
+    background-color: red;
+    /*vertical-align: middle;*/
+}
+
+.taglist a {
+    color: black;
+}
+.taglist a:hover {
+    text-decoration: none;
+}
