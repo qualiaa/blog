@@ -15,15 +15,9 @@
 <!-- Display WIP article -->
 {% block content %}
     <article>
-        <h1 id="title">{{ article.title }}</h1>
-
-        <p class="tags">Tags: {{ article.tags|join:", "|title|default:"None" }}</p>
-        <div class="article-html">
-            {{ article.html|safe }}
-        </div>
-
-        <a href="{% url "blog:wip-index" %}">Back to WIP index</a>
+        {% include "blog/article.html" %}
     </article>
+    <a href="{% url "blog:wip-index" %}">Back to WIP index</a>
     {% csrf_token %}
     <script>
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();

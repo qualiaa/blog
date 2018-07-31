@@ -1,20 +1,20 @@
 {% url "blog:article" slug=article.slug as article_url %}
 
 {% if request.path != article_url %}
-
-    <h1><a href="{% url "blog:article" slug=article.slug %}">{{ article.title }}</a></h1>
-
+<h1 class="article-title"><a href="{% url "blog:article" slug=article.slug %}">{{ article.title }}</a></h1>
 {% else %}
-
-    <h1>{{ article.title }}</h1>
+<h1 class="article-title">{{ article.title }}</h1>
 {% endif %}
+
 <div class="meta clearfix">
+    {% if article.date %}
     <span class="pubdate"><time datetime="{{ article.date|date:"Y-m-d" }}">
         {{ article.date|date:"l jS F, Y" }}
     </span>
+    {% endif %}
     <span class="tags">Tags: {{ article.tags|join:", "|title|default:"None" }}</span>
 </div>
 
 <div class="article-html">
     {{ article.html|safe }}
-<div class="article-html">
+</div>

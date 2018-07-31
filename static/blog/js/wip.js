@@ -40,14 +40,14 @@ $(function() {
                 /* Update the page metadata first */
                 if (data.hasOwnProperty("title")) {
                     var title = data["title"]
-                    $("h1#title").text(title)
+                    $("h1.article-title").text(title)
                 }
                 if (data.hasOwnProperty("tags")) {
-                    $("p.tags").text("Tags: "+ data.tags.map(function(s) {
+                    $("span.tags").text("Tags: "+ data.tags.map(function(s) {
                             return s[0].toUpperCase() + s.slice(1)
                         }).join(", "))
                 } else {
-                    $("p.tags").text("Tags: None")
+                    $("span.tags").text("Tags: None")
                 }
 
                 if (data.hasOwnProperty("mtime")) {
