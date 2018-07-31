@@ -2,13 +2,18 @@
 
 {% block content %}
     {% for article in article_list %}
-        <article>
+        <article id="article-{{ article.slug }}">
             {% include "blog/article.html" %}
 
             {% if not article.finished %}
                 <a href="{% url "blog:article" slug=article.slug %}">Read more...</a>
             {% endif %}
         </article>
+        <hr class="hidden" />
     {% endfor %}
     {% include "blog/next_prev.html" %}
+    {% csrf_token %}
+    <script>
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    </script>
 {% endblock %}
