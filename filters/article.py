@@ -34,7 +34,7 @@ class DateAndSlugFromPath(CheckedFilter):
 
 class MetadataSafe(CheckedFilter):
     def __init__(self):
-        super().__init__(inputs=["path","slug"], outputs="article")
+        super().__init__(inputs={"path","slug"}, outputs={"article","title"})
 
     def __call__(self, request, context):
         path = context["path"]
@@ -50,12 +50,13 @@ class MetadataSafe(CheckedFilter):
         if "date" in context: article_context["date"] = context["date"]
 
         context["article"] = article_context
+        context["title"] = article_context["title"]
 
         return request, context
 
 class MetadataDangerous(CheckedFilter):
     def __init__(self):
-        super().__init__(inputs="article", outputs="article")
+        super().__init__(inputs="article", outputs={"article","title"})
 
     def __call__(self, request, context):
         markdown_path = context["article"]["markdown"]
@@ -73,6 +74,7 @@ class MetadataDangerous(CheckedFilter):
             metadata["tags"] = [tag.replace("_"," ") for tag in metadata["tags"]]
 
         context["article"].update(metadata)
+        context["title"] = context["article"]["title"]
 
         return request, context
 

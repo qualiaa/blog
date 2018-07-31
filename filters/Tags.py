@@ -8,7 +8,7 @@ from ..tag import get_articles_for_tag
 
 class Tags(CheckedFilter):
     def __init__(self, tags : [str]):
-        super().__init__(outputs={"paths","tags"})
+        super().__init__(outputs={"paths","tags","title"})
         self.tags = tags
 
         # TODO raise sensible error
@@ -25,5 +25,6 @@ class Tags(CheckedFilter):
 
         context["paths"] = article_paths
         context["tags"] = self.tags
+        context["title"] = "Tags: "+", ".join(self.tags).replace("_"," ").title()
 
         return request, context

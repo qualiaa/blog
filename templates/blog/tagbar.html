@@ -1,6 +1,7 @@
 {% if all_tags %}
 <div class="sidebar" id="tags">
     <h3>Tags</h3>
+    <nav>
     <ul class="taglist noselect">
         {% for tag in all_tags %}
             <li>
@@ -15,47 +16,49 @@
                 </a>
             </li>
         {% endfor %}
-        <style>
-            {% for tag in all_tags %}
-                #{{ tag.slug }} {
-                    border-color: rgb({{ tag.color|join:"," }});
-                }
-                #{{ tag.slug }}:hover {
-                    background-color: rgba({{ tag.color|join:"," }},0.1);
-                }
-                #{{ tag.slug }}.active {
-                    background-color: rgb({{ tag.color|join:"," }});
-                    color: white;
-                }
-                #{{ tag.slug }}.active:hover {
-                    background-color: rgba({{ tag.color|join:"," }},0.9);
-                    color: white;
-                }
-
-                #{{ tag.slug }} .circ {
-                    background-color: rgb({{ tag.color|join:"," }});
-                    color: rgb({{ tag.color|join:"," }});
-                }
-
-                #{{ tag.slug }} .circ:hover {
-                    background-color: white;
-                    border: 1px solid;
-                    border-color: rgb({{ tag.color|join:"," }});
-                }
-                #{{ tag.slug }}.active .circ {
-                    background-color: white;
-                }
-
-                #{{ tag.slug }}.active .circ:hover {
-                    border: none;
-                }
-            {% endfor %}
-        </style>
     </ul>
-</div>
+    </nav>
+
+    <style>
+        {% for tag in all_tags %}
+            #{{ tag.slug }} {
+                border-color: rgb({{ tag.color|join:"," }});
+            }
+            #{{ tag.slug }}:hover {
+                background-color: rgba({{ tag.color|join:"," }},0.1);
+            }
+            #{{ tag.slug }}.active {
+                background-color: rgb({{ tag.color|join:"," }});
+                color: white;
+            }
+            #{{ tag.slug }}.active:hover {
+                background-color: rgba({{ tag.color|join:"," }},0.9);
+                color: white;
+            }
+
+            #{{ tag.slug }} .circ {
+                background-color: rgb({{ tag.color|join:"," }});
+                color: rgb({{ tag.color|join:"," }});
+            }
+
+            #{{ tag.slug }} .circ:hover {
+                background-color: white;
+                border: 1px solid;
+                border-color: rgb({{ tag.color|join:"," }});
+            }
+            #{{ tag.slug }}.active .circ {
+                background-color: white;
+            }
+
+            #{{ tag.slug }}.active .circ:hover {
+                border: none;
+            }
+        {% endfor %}
+    </style>
     {% if tags %}
     <script>
         var currentTags = ["{{ tags|join:'","' }}"];
     </script>
     {% endif %}
+</div>
 {% endif %}

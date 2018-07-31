@@ -25,7 +25,6 @@ class AddTagbar(CheckedFilter):
                 v = int.from_bytes(h.digest(), byteorder="big")
                 tag["color"] = (v & 0xFF, (v & 0xFF00) >> 8, (v & 0xFF0000) >> 16)
 
-
         context.update({"all_tags": tags})
         return request, context
 
