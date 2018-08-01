@@ -20,6 +20,11 @@ class SlackToUnicode(CheckedFilter):
     
     def __call__(self, request, context):
         context["article"]["html"] = slack2unicode(context["article"]["html"])
+        context["article"]["title"] = slack2unicode(context["article"]["title"])
+        try:
+            context["title"] = slack2unicode(context["title"])
+        except KeyError: pass
+
         return request, context
 
 class ResolveLocalURLs(CheckedFilter):
@@ -33,5 +38,4 @@ class ResolveLocalURLs(CheckedFilter):
         return request, context
 
 def postprocessing():
-    return ResolveLocalURLs()
-    #return PandocToMathJax() | SlackToUnicode() | ResolveLocalURLs()
+    return SlackToUnicode() | ResolveLocalURLs()
