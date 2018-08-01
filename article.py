@@ -16,7 +16,11 @@ class ArticleError(Exception):
 
 
 def get_article_paths():
-    if get_article_paths.paths is None:
+    self = get_article_paths
+    now=datetime.datetime.now() 
+    five_minutes = datetime.timedelta(minutes=5)
+    if self.paths is None or now - self.last_update > five_minutes:
+        self.last_update = now
         get_article_paths.paths = list(s.ARTICLE_PATH.glob(s.date_glob_string + "_*/"))
         get_article_paths.paths.sort(reverse=True)
     return get_article_paths.paths
