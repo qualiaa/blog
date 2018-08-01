@@ -13,7 +13,7 @@ class SlugToPath(CheckedFilter):
 
     def __call__(self, request, context):
         # TODO: Handle case of multiple matches
-        paths = s.ARTICLE_PATH.glob(s.date_glob_string + "_" + context["slug"] + "/")
+        paths = s.ARTICLE_PATH.glob(s.date_glob_string + "-" + context["slug"] + "/")
         try:
             context["path"] = next(paths)
         except StopIteration:

@@ -21,7 +21,7 @@ def get_article_paths():
     five_minutes = datetime.timedelta(minutes=5)
     if self.paths is None or now - self.last_update > five_minutes:
         self.last_update = now
-        get_article_paths.paths = list(s.ARTICLE_PATH.glob(s.date_glob_string + "_*/"))
+        get_article_paths.paths = list(s.ARTICLE_PATH.glob(s.date_glob_string + "-*/"))
         get_article_paths.paths.sort(reverse=True)
     return get_article_paths.paths
 get_article_paths.paths = None
@@ -33,10 +33,10 @@ def post_processing(html,slug):
     return html
 
 def slug_to_title(slug):
-    return slug.title().replace("_"," ")
+    return slug.title().replace("-"," ")
 
 def extract_date_and_slug_from_path(path):
-    match = re.fullmatch("(\d{4})-(\d{2})-(\d{2})_(.*)", str(path.name))
+    match = re.fullmatch("(\d{4})-(\d{2})-(\d{2})-(.*)", str(path.name))
     y,m,d = [int(x) for x in match.groups()[:3]]
     slug = match.groups()[-1]
 
@@ -69,7 +69,7 @@ def extract_stub(markdown_path):
 
 def path_from_slug(slug):
     # TODO: Handle case of multiple matches
-    paths = s.ARTICLE_PATH.glob(s.date_glob_string + "_" + slug + "/")
+    paths = s.ARTICLE_PATH.glob(s.date_glob_string + "-" + slug + "/")
     try:
         return next(paths)
     except StopIteration:
