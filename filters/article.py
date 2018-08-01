@@ -1,3 +1,5 @@
+from yaml import YAMLError
+
 from .base import CheckedFilter
 
 from ..article import ArticleError
