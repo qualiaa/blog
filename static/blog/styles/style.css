@@ -102,6 +102,10 @@ textarea {
                                   supported by Chrome and Opera */
 }
 
+.smallcaps {
+    font-variant: small-caps;
+}
+
 body {
     font-family: "Palatino", serif;
 }
@@ -151,9 +155,18 @@ article img {
     max-width: 100%;
 }
 
-code {
+article code {
     font-size: 16px;
     font-family: "Source Code Pro", "Ubuntu Mono", monospace;
+}
+
+article p > code {
+    background-color: #ffe9e9;
+    border-color: #ffc3c3;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    padding: 1px 0.15em;
 }
 
 article div {
