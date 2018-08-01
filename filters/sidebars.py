@@ -51,10 +51,10 @@ class AddArchive(CheckedFilter):
         date_and_slug = [article.extract_date_and_slug_from_path(x) for x in paths]
         dates = set(datetime.date(x.year,x.month, 1) for x, _ in date_and_slug)
         dates = sorted(list(dates),reverse=True)
-        archive_context = dict(zip((x.year for x in dates), repeat({})))
+        archive_context = {}
 
         for date in dates:
-            archive_context[date.year][date.strftime("%B")] = []
+            archive_context.setdefault(date.year,{})[date.strftime("%B")] = []
 
         for date, slug, path in zip(*list(zip(*date_and_slug)),paths):
             title = article.slug_to_title(slug)
@@ -65,6 +65,7 @@ class AddArchive(CheckedFilter):
             except FileNotFoundError: pass
             url = reverse("blog:article",kwargs={"slug":slug})
             archive_context[date.year][date.strftime("%B")].append((url,title))
+            print(archive_context.items())
 
         context.update({"archive": archive_context})
         return request, context
