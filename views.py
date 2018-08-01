@@ -20,6 +20,7 @@ from .filters.Tags import Tags
 from . import article
 from . import settings as s
 from . import publish
+from . import tag
 
 def _return_file(request, path, url):
     if url.find("../") >= 0:
@@ -132,3 +133,7 @@ def publish_view(request, slug):
         return HttpResponseServerError("Article already published")
 
     return HttpResponseRedirect(reverse("blog:article",kwargs={"slug":slug}))
+
+def tag_all_view(*args,**kargs):
+    tag.tag_all()
+    return HttpResponse()
