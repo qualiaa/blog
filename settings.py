@@ -10,7 +10,7 @@ CACHE_PATH = ROOT_DIR/"cache"
 
 date_glob_string = "{}-{}-{}".format("[0-9]" * 4,"[0-9]" * 2, "[0-9]" * 2)
 
-TEMPLATE_LOCAL_URL = "STATIC"
+TEMPLATE_LOCAL_URL = "LOCAL"
 
 PANDOC_EXTENSIONS = [
     "blank_before_header",
