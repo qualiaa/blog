@@ -2,6 +2,7 @@ import datetime
 
 from . import settings as s
 from . import article
+from . import tag
 
 def publish(slug):
     date_string = datetime.date.today().isoformat()
@@ -18,3 +19,4 @@ def publish(slug):
     except FileNotFoundError: pass
 
     source_path.rename(dest_path)
+    tag.tag_article(dest_path)
