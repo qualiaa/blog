@@ -88,7 +88,9 @@ $(function() {
 
                 /* Queue a MathJax typeset job */
                 jaxFinishedRendering = false
-                MathJax.Hub.Queue(["Typeset",MathJax.Hub,buffer[0],swapBuffers])
+                MathJax.Hub.Queue(
+                    ["resetEquationNumbers",MathJax.InputJax.TeX],
+                    ["Typeset",MathJax.Hub,buffer[0],swapBuffers])
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.log("Failure\n"+textStatus + "\n" + errorThrown)
