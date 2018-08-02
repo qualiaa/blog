@@ -1,18 +1,27 @@
 import pathlib
 
-ROOT_DIR = pathlib.Path("blog")
-ARTICLES_PER_PAGE = 5
-MARKDOWN_FILENAME = "article.md"
-ARTICLE_PATH=ROOT_DIR/"articles"
-WIP_PATH = ARTICLE_PATH/"wip"
-TAG_PATH = ROOT_DIR/"tags"
-CACHE_PATH = ROOT_DIR/"cache"
+ARTICLES_PER_PAGE       = 5
+
+ROOT_DIR                = pathlib.Path("blog")
+DATA_DIR                = ROOT_DIR/"data"
+
+
+ARTICLE_PATH            = ROOT_DIR/"articles"
+WIP_PATH                = ARTICLE_PATH/"wip"
+
+TAG_PATH                = ROOT_DIR/"tags"
+CACHE_PATH              = ROOT_DIR/"cache"
+
+EMOJI_JSON_FILE         = DATA_DIR/"emoji.json"
+EMOJI_SHORT_NAMES_FILE  = DATA_DIR/"short_names.json"
+CSL_FILE                = DATA_DIR/"third_party/ieee.csl"
+
+MARKDOWN_FILENAME       = "article.md"
+TEMPLATE_LOCAL_URL      = "LOCAL"
 
 date_glob_string = "{}-{}-{}".format("[0-9]" * 4,"[0-9]" * 2, "[0-9]" * 2)
 
-TEMPLATE_LOCAL_URL = "LOCAL"
 
-CSL_FILE = "blog/data/third_party/ieee.csl"
 
 PANDOC_EXTENSIONS = [
     "blank_before_header",
