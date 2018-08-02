@@ -12,6 +12,8 @@ date_glob_string = "{}-{}-{}".format("[0-9]" * 4,"[0-9]" * 2, "[0-9]" * 2)
 
 TEMPLATE_LOCAL_URL = "LOCAL"
 
+CSL_FILE = "blog/data/third_party/ieee.csl"
+
 PANDOC_EXTENSIONS = [
     "blank_before_header",
     "space_in_atx_header",
@@ -42,7 +44,9 @@ PANDOC_EXTENSIONS = [
 
 PANDOC_OPTIONS = [
     "--mathjax",
-    "--no-highlight"
+    "--no-highlight",
+    "--filter", "pandoc-citeproc",
+    "--csl", CSL_FILE
 ]
 
 TAG_COLORS = [
