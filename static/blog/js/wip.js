@@ -64,6 +64,7 @@ $(function() {
                 
                 function swapBuffers() {
                     $("div.article-html").toggleClass("buffer")
+                    $(".buffer").remove()
                     jaxFinishedRendering = true
                 }
 
