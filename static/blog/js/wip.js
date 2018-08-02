@@ -50,13 +50,13 @@ $(function() {
                     $("span.tags").text("Tags: None")
                 }
 
-                if (data.hasOwnProperty("mtime")) {
-                    mtime = data["mtime"]
-                }
-
                 /* If we're still rendering the previous MathJax then skip */
                 if (!jaxFinishedRendering) {
                     return
+                }
+
+                if (data.hasOwnProperty("mtime")) {
+                    mtime = data["mtime"]
                 }
 
                 /* Update the article HTML */
