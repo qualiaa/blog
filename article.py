@@ -10,7 +10,7 @@ from . import pandoc
 from . import settings as s
 
 class ArticleError(Exception):
-    def __init__(self, context, e):
+    def __init__(self, context):
         self.article_context = context
         self.exception = e
 
