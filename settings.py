@@ -54,8 +54,6 @@ PANDOC_EXTENSIONS = [
 PANDOC_OPTIONS = [
     "--mathjax",
     "--no-highlight",
-    "--filter", "pandoc-citeproc",
-    "--csl", CSL_FILE
 ]
 
 TAG_COLORS = [

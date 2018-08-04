@@ -31,6 +31,10 @@ $.ajaxSetup({
 
 $(function() {
     setInterval(function() {
+        /* If we're still rendering the previous MathJax then skip */
+        if (!jaxFinishedRendering) {
+            return
+        }
         $.post(requestUrl,
             {"mtime": mtime},
             function(data) {
@@ -50,11 +54,6 @@ $(function() {
                     $("span.tags").text("Tags: None")
                 }
 
-                /* If we're still rendering the previous MathJax then skip */
-                if (!jaxFinishedRendering) {
-                    return
-                }
-
                 if (data.hasOwnProperty("mtime")) {
                     mtime = data["mtime"]
                 }
@@ -62,20 +61,17 @@ $(function() {
                 /* Update the article HTML */
                 var article_html = data["html"]
                 
-                function swapBuffers() {
-                    $("div.article-html").toggleClass("buffer")
+                function swapBuffers(buffer) {
+                    $(".article-html").toggleClass("buffer")
                     $(".buffer").remove()
                     jaxFinishedRendering = true
                 }
 
-                /* If a buffer element doesn't exist, create it */
-                var buffer = $(".buffer")
-                if (buffer.length == 0) {
-                    buffer = $("<div></div>")
-                        .addClass("article-html")
-                        .addClass("buffer")
-                    buffer.insertAfter(".article-html")
-                }
+                /* Create a buffer element doesn't exist, create it */
+                var buffer = $("<div></div>")
+                    .addClass("article-html")
+                    .addClass("buffer")
+                buffer.insertAfter(".meta")
 
                 /* Set the buffer HTML */
                 buffer.html(article_html)
@@ -85,12 +81,12 @@ $(function() {
                 addPermalinkToSections(buffer)
                 decorateExterns()
 
-
                 /* Queue a MathJax typeset job */
                 jaxFinishedRendering = false
                 MathJax.Hub.Queue(
                     ["resetEquationNumbers",MathJax.InputJax.TeX],
-                    ["Typeset",MathJax.Hub,buffer[0],swapBuffers])
+                    ["Typeset",MathJax.Hub,buffer[0]],
+                    [swapBuffers])
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.log("Failure\n"+textStatus + "\n" + errorThrown)

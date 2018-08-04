@@ -86,12 +86,20 @@ class GetStub(CheckedFilter):
 
     def __call__(self, request, context):
         markdown_path = context["article"]["markdown"]
+
         try:
             stub, stub_finished = extract_stub(markdown_path)
-            context["article"]["html"] = pandoc.md2html(stub)
+            bib_path = markdown_path.parent/"bib.bib"
+
+            if bib_path.exists():
+                html = pandoc.md2html(stub, bib_path)
+            else:
+                html = pandoc.md2html(stub)
+
+            context["article"]["html"] = html
             context["article"]["finished"] = stub_finished
         except Exception as e:
-            raise ArticleError(context["article"], e)
+            raise ArticleError(context["article"]) from e
 
         return request, context
 
@@ -101,8 +109,16 @@ class GetFullText(CheckedFilter):
 
     def __call__(self, request, context):
         try:
-            context["article"]["html"] = pandoc.md2html(context["article"]["markdown"])
+            markdown_path = context["article"]["markdown"]
+            bib_path = markdown_path.parent/"bib.bib"
+
+            if bib_path.exists():
+                html = pandoc.md2html(markdown_path, bib_path)
+            else:
+                html = pandoc.md2html(markdown_path)
+
+            context["article"]["html"] = html
         except Exception as e:
-            raise ArticleError(context["article"], e)
+            raise ArticleError(context["article"]) from e
 
         return request, context

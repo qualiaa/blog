@@ -18,12 +18,25 @@ def pandoc2mathjax(string):
     return string
 
 
-def md2html(path_or_string):
+def md2html(path_or_string, bib_path=None):
+    opts = list(s.PANDOC_OPTIONS)
+
+    if bib_path:
+        opts += [
+            "--filter", "pandoc-citeproc",
+            "--csl", s.CSL_FILE,
+            "--bibliography", str(bib_path)
+        ]
+
     command = [
         "pandoc",
-        *s.PANDOC_OPTIONS,
+        *opts,
         "-f", "+".join(["markdown"]+s.PANDOC_EXTENSIONS),
-        "-t", "html"]
+        "-t", "html"
+    ]
+
+
+
 
     if type(path_or_string) == str:
         stdin=str.encode(path_or_string)
