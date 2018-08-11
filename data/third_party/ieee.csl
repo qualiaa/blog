@@ -335,6 +335,19 @@
           </group>
         </else>
       </choose>
+      <choose>
+        <if type="webpage" />
+        <else>
+          <choose>
+            <if variable="doi">
+              <text variable="doi" prefix=", DOI: " />
+            </if>
+            <else-if variable="URL">
+              <text variable="URL" prefix=", " />
+            </else-if>
+          </choose>
+        </else>
+      </choose>
     </layout>
   </bibliography>
 </style>
