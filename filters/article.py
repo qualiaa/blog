@@ -64,10 +64,10 @@ class MetadataDangerous(CheckedFilter):
         markdown_path = context["article"]["markdown"]
 
         if not markdown_path.exists():
-            e= ArticleError(context["article"],
-                    FileNotFoundError("Markdown file not found."))
+            e= ArticleError(context["article"])
+                    
             e.context = context
-            raise e
+            raise e from FileNotFoundError("Markdown file not found.")
 
         try: metadata = extract_metadata(markdown_path)
         except (YAMLError, IOError): metadata = {}
