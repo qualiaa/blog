@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render
 
@@ -23,3 +23,9 @@ class ToRequestContext(CheckedFilter):
     def __call__(self, request, context):
         return RequestContext(request, context)
 
+class Redirect(CheckedFilter):
+    def __init__(self, url):
+        super().__init__()
+        self.url = url
+    def __call__(self, request, context):
+        return HttpResponseRedirect(self.url)
