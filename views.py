@@ -110,9 +110,11 @@ def wip_article(request, slug):
             Render("blog/wip/article.html")
 
 def wip_index(request):
-    article_names = [x.name for x in s.WIP_PATH.iterdir()
+    article_paths = [x for x in s.WIP_PATH.iterdir()
             if x.is_dir() and
             (x/s.MARKDOWN_FILENAME).exists()]
+    article_paths.sort(key=lambda x: x.stat().st_mtime,reverse=True)
+    article_names = [x.name for x in article_paths]
 
     return render(request, "blog/wip/index.html",
             {"article_names": article_names})
