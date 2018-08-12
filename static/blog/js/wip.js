@@ -12,7 +12,7 @@ window.MathJax = {
 
 var updateTime = 1000
 var requestUrl = "/blog/json/wip/" + slug
-var mtime = 0
+var mtime = Math.round((new Date()).time()/1000);
 
 
 // code from 
