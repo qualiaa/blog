@@ -19,6 +19,10 @@ function highlightCode(jObj) {
         $(this).attr("class", $(this).parent().attr("class"));
         hljs.highlightBlock(block);
     })
+    jObj.find("code.hl").each(function(i, block) {
+        /* Need to move pandoc's <pre> classes to <code> tag for hljs */
+        $(this).html(hljs.highlightAuto($(this).text()).value);
+    })
 }
 
 // from https://stackoverflow.com/a/9744104/1905448
