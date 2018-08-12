@@ -1,7 +1,6 @@
 {% if all_tags %}
-<div class="sidebar" id="tags">
-    <h3>Tags</h3>
-    <nav>
+<aside class="sidebar" id="tags">
+    <h2>Tags</h2>
     <ul class="taglist noselect">
         {% for tag in all_tags %}
             <li>
@@ -17,7 +16,6 @@
             </li>
         {% endfor %}
     </ul>
-    </nav>
 
     <style>
         {% for tag in all_tags %}
@@ -60,5 +58,5 @@
         var currentTags = ["{{ tags|join:'","' }}"];
     </script>
     {% endif %}
-</div>
+</aside>
 {% endif %}

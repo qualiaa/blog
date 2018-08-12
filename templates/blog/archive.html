@@ -1,6 +1,6 @@
 {% if archive %}
-<div class="sidebar" id="archive">
-<h3>Archive</h3>
+<aside class="sidebar" id="archive">
+<h2>Archive</h2>
 {% for year, months in archive.items %}
     <h4>{{ year }}</h4>
     {% for month, articles in months.items %}
@@ -12,5 +12,5 @@
         </ul>
     {% endfor %}
 {% endfor %}
-</div>
+</aside>
 {% endif %}
