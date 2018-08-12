@@ -80,6 +80,7 @@ $(function() {
                 highlightCode(buffer)
                 addPermalinkToSections(buffer)
                 decorateExterns()
+                decorateGithubLinks()
 
                 /* Queue a MathJax typeset job */
                 jaxFinishedRendering = false

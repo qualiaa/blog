@@ -39,9 +39,14 @@ function decorateExterns() {
     $("a[href^=http]").filter(isExternal).addClass("extern");
 }
 
+function decorateGithubLinks() {
+    $("a[href*=github]").addClass("github").removeClass("extern");
+}
+
 function pageInit() {
     highlightCode($("article"));
     decorateExterns();
+    decorateGithubLinks();
 }
 
 $(pageInit);
