@@ -161,13 +161,20 @@ article code {
     font-family: "Source Code Pro", "Ubuntu Mono", monospace;
 }
 
-article p > code {
+article code {
     background-color: #ffe9e9;
     border-color: #ffc3c3;
     border-style: solid;
     border-width: 1px;
     border-radius: 4px;
     padding: 1px 0.15em;
+}
+
+article pre > code {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: inherit;
 }
 
 article div {
