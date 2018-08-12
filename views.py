@@ -6,9 +6,9 @@ from django.http import HttpResponseServerError, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.urls import reverse
 
-from .filters.utils import Lambda
+from .filters.utils import CheckedLambda,Lambda
 from .filters.inputs import ContextInput, PublishedPaths
-from .filters.outputs import Render
+from .filters.outputs import Render, Redirect
 from .filters.postprocessing import postprocessing
 from .filters.flow import For, Alternative, Either
 from .filters import cache as c
@@ -103,12 +103,22 @@ def tags_view(request, tag_string, page=1):
 
 def wip_article(request, slug):
     path = s.WIP_PATH/slug
+
+    return_article = a.MetadataDangerous() | a.GetFullText() | postprocessing() |\
+                     Render("blog/wip/article.html")
+
+    @CheckedLambda
+    def CheckAlreadyPublished(r,c):
+        article.path_from_slug(slug)
+        return r, c
+
+    published_url = reverse("blog:article",kwargs={"slug": slug})
+
     return ContextInput(request, slug=slug, path=path, date=datetime.date.today()) >\
             a.MetadataSafe()                           |\
-            a.MetadataDangerous()                      |\
-            a.GetFullText()                            |\
-            postprocessing()                           |\
-            Render("blog/wip/article.html")
+            Alternative(return_article,
+                Either(CheckAlreadyPublished | Redirect(published_url),
+                    e.NotFound))
 
 def wip_index(request):
     article_paths = [x for x in s.WIP_PATH.iterdir()
