@@ -1,3 +1,4 @@
+import datetime
 import mimetypes
 
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -102,7 +103,7 @@ def tags_view(request, tag_string, page=1):
 
 def wip_article(request, slug):
     path = s.WIP_PATH/slug
-    return ContextInput(request, slug=slug, path=path) >\
+    return ContextInput(request, slug=slug, path=path, date=datetime.date.today()) >\
             a.MetadataSafe()                           |\
             a.MetadataDangerous()                      |\
             a.GetFullText()                            |\
