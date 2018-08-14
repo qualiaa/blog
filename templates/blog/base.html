@@ -11,16 +11,16 @@
   <!--[if lte IE 9]>
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
   <![endif]-->
-    <div style="margin: 0 auto; width: 90%; max-width: 66em;">
+    <div id="wrapper">
         <header>
             <h1><a href="{% url "blog:article-index" %}">Jamie's Blog</a></h1>
             <hr class="hidden" />
         </header>
-        <div style="margin: 0 auto; width: 60%; max-width:40em; float: left; clear: left;">
+        <div id="main">
             {% block content %}
             {% endblock %}
         </div>
-        <div style="margin: 0 auto; width: 35%; max-width: 20em; padding-left: 2%; float: right; clear: right;">
+        <div id="side">
             {% block sidebar %}
                 {% include "blog/tagbar.html" %}
                 {% include "blog/archive.html" %}
