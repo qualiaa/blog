@@ -81,6 +81,7 @@ $(function() {
                 addPermalinkToSections(buffer)
                 decorateExterns()
                 decorateGithubLinks()
+                decorateTwitterLinks()
 
                 /* Queue a MathJax typeset job */
                 jaxFinishedRendering = false

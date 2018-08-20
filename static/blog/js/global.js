@@ -40,15 +40,17 @@ function decorateExterns() {
 }
 
 function decorateGithubLinks() {
-    $("a[href*=github]").addClass("github").removeClass("extern");
+    $("a[href*=github\\.com]").addClass("github").removeClass("extern");
+}
+function decorateTwitterLinks() {
+    $("a[href*=twitter\\.com]").removeClass("extern").not(".own-twitter").addClass("twitter");
 }
 
 function pageInit() {
     highlightCode($("article"));
     decorateExterns();
     decorateGithubLinks();
+    decorateTwitterLinks();
 }
 
 $(pageInit);
-
-
