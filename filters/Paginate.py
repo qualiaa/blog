@@ -16,7 +16,7 @@ class Paginate(CheckedFilter):
         #TODO: Sort filter
         article_paths = sorted(list(article_paths), reverse=True)
 
-        num_pages = len(article_paths) // self.items_per_page + 1
+        num_pages = (len(article_paths)-1) // self.items_per_page + 1
         page_index = self.page - 1
         if page_index < 0 or page_index >= num_pages:
             raise Http404
@@ -29,7 +29,7 @@ class Paginate(CheckedFilter):
         if self.page < num_pages:
             context["page"]["next"] = reverse(url_name, kwargs={"page":self.page+1})
 
-        start_article = (page_index-1)*self.items_per_page
+        start_article = page_index*self.items_per_page
 
 
         article_paths = article_paths[
