@@ -35,7 +35,6 @@ html {
 /*
  * A better looking default horizontal rule
  */
-
 hr {
     display: block;
     height: 1px;
@@ -151,11 +150,11 @@ a.extern {
     background-position: right center;
 }
 a.github {
-    padding-left: 1.1em;
+    padding-left: 1.2em;
     background-image: linear-gradient(transparent, transparent),
                       url('../img/third_party/GitHub-Mark/PNG/GitHub-Mark-32px.png');
     background-repeat: no-repeat;
-    background-size: 0.9em 0.9em;
+    background-size: 0.9em;
     background-position: left top;
 }
 a.twitter {
@@ -167,9 +166,17 @@ a.twitter {
     background-position: 0% 10%;
 }
 a.own-twitter {
-    padding-left: 1.1em;
+    padding-left: 1.2em;
     background-image: linear-gradient(transparent, transparent),
                       url('../img/third_party/Twitter Social Icons/Twitter Social Icons/Twitter_SocialIcon_Circle/Twitter_Social_Icon_Circle_Color.svg');
+    background-repeat: no-repeat;
+    background-size: 0.9em;
+    background-position: left top;
+}
+a.own-itchio.extern {
+    padding-left: 1.2em;
+    background-image: linear-gradient(transparent, transparent),
+                      url('../img/third_party/itchio.svg');
     background-repeat: no-repeat;
     background-size: 0.9em;
     background-position: left top;
