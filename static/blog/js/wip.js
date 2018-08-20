@@ -30,6 +30,7 @@ $.ajaxSetup({
 });
 
 $(function() {
+    generateTOC($(".article-html"))
     setInterval(function() {
         /* If we're still rendering the previous MathJax then skip */
         if (!jaxFinishedRendering) {
@@ -71,7 +72,7 @@ $(function() {
                 var buffer = $("<div></div>")
                     .addClass("article-html")
                     .addClass("buffer")
-                buffer.insertAfter(".meta")
+                buffer.insertAfter("article header")
 
                 /* Set the buffer HTML */
                 buffer.html(article_html)
@@ -79,6 +80,7 @@ $(function() {
                 /* Process article */
                 highlightCode(buffer)
                 addPermalinkToSections(buffer)
+                generateTOC(buffer)
                 decorateExterns()
                 decorateGithubLinks()
                 decorateTwitterLinks()
