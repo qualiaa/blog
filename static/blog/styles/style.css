@@ -253,6 +253,9 @@ article .pubdate {
     clear: left;
 }
 
+.footnotes, #refs {
+    font-size: 0.8em;
+}
 
 /* article headers */
 
