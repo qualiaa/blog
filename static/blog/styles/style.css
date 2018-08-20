@@ -499,6 +499,10 @@ figure img {
         text-shadow: none !important;
     }
 
+    .sidebar {
+        display: none;
+    }
+
     a,
     a:visited {
         text-decoration: underline;
