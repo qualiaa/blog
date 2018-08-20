@@ -4,6 +4,7 @@
 <!-- Article specific styles and scripts -->
 {% block head %}
 {{ block.super }}
+<script src="{% static "blog/js/third_party/footnote.js" %}"></script>
 <script type="text/javascript">
     {% if article.slug %}var slug="{{article.slug}}"{% endif %}
 </script>
