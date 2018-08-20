@@ -23,13 +23,7 @@
         <div id="side">
             {% block sidebar %}
                 {% include "blog/sidebars/tags.html" %}
-                <aside class="sidebar" id="other_places">
-                    <h2>Other Places</h2>
-                    <ul style="list-style: none; padding: 0; margin: 0 1em;">
-                        <li><a href="https://github.com/qualiaa">Github</a></li>
-                        <li><a class="own-twitter" href="https://twitter.com/quaIiaa">Twitter</a></li>
-                    </ul>
-                </aside>
+                {% include "blog/sidebars/other_places.html" %}
                 {% include "blog/sidebars/archive.html" %}
             {% endblock %}
         </div>
