@@ -114,23 +114,25 @@ body {
     margin: 0 auto;
     width: 90%;
     max-width: 66em;
+    clear: both;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#wrapper > header {
+    display: block;
+    clear: both;
+    width: 100%;
 }
 
 #main {
-    margin: 0 auto;
-    width: 60%;
-    max-width: 40em;
-    float: left;
-    clear: left;
+    width: 63%;
 }
 
 #side {
-    margin: 0 auto;
-    width: 35%;
-    max-width: 20em;
-    float: right;
-    clear: right;
-    padding-left: 2%;
+    width: 30%;
 }
 
 header h1 {
@@ -478,9 +480,6 @@ figure img {
     /* Style adjustments for viewports that meet the condition */
 
     #main, #side {
-        clear: both;
-        float: left;
-        max-width: 100%;
         width: 100%;
     }
 }
