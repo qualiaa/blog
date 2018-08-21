@@ -57,4 +57,8 @@ function generateTOC(jObj) {
     }
 
 }
-$(function(){addPermalinkToSections($(".article-html"))});
+$(function() {
+    let article = $(".article-html")
+    generateTOC(article)
+    addPermalinkToSections(article)
+});

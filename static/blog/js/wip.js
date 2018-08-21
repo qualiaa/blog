@@ -30,7 +30,6 @@ $.ajaxSetup({
 });
 
 $(function() {
-    generateTOC($(".article-html"))
     setInterval(function() {
         /* If we're still rendering the previous MathJax then skip */
         if (!jaxFinishedRendering) {
@@ -79,8 +78,8 @@ $(function() {
 
                 /* Process article */
                 highlightCode(buffer)
-                addPermalinkToSections(buffer)
                 generateTOC(buffer)
+                addPermalinkToSections(buffer)
                 decorateExterns()
                 decorateGithubLinks()
                 decorateTwitterLinks()
