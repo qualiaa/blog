@@ -114,23 +114,25 @@ body {
     margin: 0 auto;
     width: 90%;
     max-width: 66em;
+    clear: both;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#wrapper > header {
+    display: block;
+    clear: both;
+    width: 100%;
 }
 
 #main {
-    margin: 0 auto;
-    width: 60%;
-    max-width: 40em;
-    float: left;
-    clear: left;
+    width: 63%;
 }
 
 #side {
-    margin: 0 auto;
-    width: 35%;
-    max-width: 20em;
-    float: right;
-    clear: right;
-    padding-left: 2%;
+    width: 30%;
 }
 
 header h1 {
@@ -155,7 +157,7 @@ a.github {
                       url('../img/third_party/GitHub-Mark/PNG/GitHub-Mark-32px.png');
     background-repeat: no-repeat;
     background-size: 0.9em;
-    background-position: left top;
+    background-position: left center;
 }
 a.twitter {
     padding-left: 1em;
@@ -164,6 +166,7 @@ a.twitter {
     background-repeat: no-repeat;
     background-size: 0.9em;
     background-position: 0% 10%;
+    background-position: left center;
 }
 a.own-twitter {
     padding-left: 1.2em;
@@ -171,7 +174,7 @@ a.own-twitter {
                       url('../img/third_party/Twitter Social Icons/Twitter Social Icons/Twitter_SocialIcon_Circle/Twitter_Social_Icon_Circle_Color.svg');
     background-repeat: no-repeat;
     background-size: 0.9em;
-    background-position: left top;
+    background-position: left center;
 }
 a.own-itchio.extern {
     padding-left: 1.2em;
@@ -179,7 +182,7 @@ a.own-itchio.extern {
                       url('../img/third_party/itchio.svg');
     background-repeat: no-repeat;
     background-size: 0.9em;
-    background-position: left top;
+    background-position: left center;
 }
 
 a:active, a:hover {
@@ -253,6 +256,9 @@ article .pubdate {
     clear: left;
 }
 
+.footnotes, #refs {
+    font-size: 0.8em;
+}
 
 /* article headers */
 
@@ -303,6 +309,24 @@ article h5 {
     font-style: italic;
 }
 
+figure img {
+    display: block;
+    margin: 0 auto;
+}
+
+.halfwidth {
+    display:block;
+    max-width: 45%;
+    margin: inherit auto;
+    float: left;
+    clear: none;
+}
+.halfwidth + img.halfwidth {
+    max-width: 45%;
+    margin: inherit auto;
+    float: right;
+    clear: none;
+}
 
 /* Tag bar */
 
@@ -367,24 +391,6 @@ ul.taglist {
 }
 
 
-figure img {
-    display: block;
-    margin: 0 auto;
-}
-
-.halfwidth {
-    display:block;
-    max-width: 45%;
-    margin: inherit auto;
-    float: left;
-    clear: none;
-}
-.halfwidth + img.halfwidth {
-    max-width: 45%;
-    margin: inherit auto;
-    float: right;
-    clear: none;
-}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -475,9 +481,6 @@ figure img {
     /* Style adjustments for viewports that meet the condition */
 
     #main, #side {
-        clear: both;
-        float: left;
-        max-width: 100%;
         width: 100%;
     }
 }
