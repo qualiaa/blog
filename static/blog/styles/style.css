@@ -132,6 +132,8 @@ body {
 }
 
 #side {
+    display: flex;
+    flex-direction: column;
     width: 30%;
 }
 
@@ -390,6 +392,11 @@ ul.taglist {
     text-decoration: none;
 }
 
+#toc {
+    position: sticky;
+    top: 0;
+}
+
 
 /* ==========================================================================
    Helper classes
@@ -482,6 +489,11 @@ ul.taglist {
 
     #main, #side {
         width: 100%;
+    }
+
+    #toc {
+        position: static;
+        top: auto;
     }
 }
 
