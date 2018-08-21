@@ -204,6 +204,10 @@ h5 a, h5 a:hover, h5 a:focus {
     color: inherit;
 }
 
+#toc a.focused {
+    font-weight: bold;
+}
+
 /* Article styles */
 
 article {

@@ -62,3 +62,33 @@ $(function() {
     generateTOC(article)
     addPermalinkToSections(article)
 });
+
+$(window).scroll(function() {
+    let toc = $("#toc")
+    if (toc.exists()) {
+        let pos = window.scrollY + window.innerHeight/4;
+        let headers = $(`.article-html h2,
+           .article-html h3,
+           .article-html h4,
+           .article-html h5`)
+            .map((i,el) => ({ el: el, offset: $(el).offset() }))
+            .get();
+        let closestHeader = null;
+
+        for (let header of headers) {
+            if (header.offset.top > pos) continue;
+            if (closestHeader === null) {
+                closestHeader = header;
+            } else {
+                if (closestHeader.offset.top < header.offset.top) {
+                    closestHeader = header;
+                }
+            }
+        }
+
+        $("#toc a").removeClass("focused");
+        if (closestHeader !== null) {
+            $(`#toc a[href="#${closestHeader.el.id}"]`).addClass("focused");
+        }
+    }
+});
