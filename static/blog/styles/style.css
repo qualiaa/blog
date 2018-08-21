@@ -309,6 +309,24 @@ article h5 {
     font-style: italic;
 }
 
+figure img {
+    display: block;
+    margin: 0 auto;
+}
+
+.halfwidth {
+    display:block;
+    max-width: 45%;
+    margin: inherit auto;
+    float: left;
+    clear: none;
+}
+.halfwidth + img.halfwidth {
+    max-width: 45%;
+    margin: inherit auto;
+    float: right;
+    clear: none;
+}
 
 /* Tag bar */
 
@@ -373,24 +391,6 @@ ul.taglist {
 }
 
 
-figure img {
-    display: block;
-    margin: 0 auto;
-}
-
-.halfwidth {
-    display:block;
-    max-width: 45%;
-    margin: inherit auto;
-    float: left;
-    clear: none;
-}
-.halfwidth + img.halfwidth {
-    max-width: 45%;
-    margin: inherit auto;
-    float: right;
-    clear: none;
-}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
