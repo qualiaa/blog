@@ -334,13 +334,15 @@ figure img {
     clear: none;
 }
 
-/* Tag bar */
-
+/* ========================================================================== 
+   Sidebars */
+   ========================================================================== */
 aside.sidebar {
     width: 100%;
     clear: both;
 }
 
+/* Tag bar */
 ul.taglist {
     list-style-type: none;
     padding: 0 0;
@@ -363,8 +365,6 @@ ul.taglist {
     font-size: 12px;
     font-family: "Ubuntu", "Open Sans", sans-serif;
     cursor: pointer;
-
-
 }
 
 .circ {
@@ -396,11 +396,16 @@ ul.taglist {
     text-decoration: none;
 }
 
+/* Table of contents */
+
 #toc {
     position: sticky;
     top: 0;
 }
 
+#toc ul {
+    padding-left: 1em;
+}
 
 /* ==========================================================================
    Helper classes
