@@ -2,7 +2,8 @@
     font-family: "Palatino";
     font-style: normal;
     font-weight: normal;
-    src:url('../fonts/palatino-regular.ttf') format("truetype");
+    /*src:url('../fonts/palatino-regular.ttf') format("truetype");*/
+    src:url('../fonts/texgyrepagella-regular.otf') format("opentype");
 }
 
 @font-face {
