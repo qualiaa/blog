@@ -24,7 +24,7 @@ class CheckedFilter(Filter):
         self._out = _to_set(outputs)
 
     def __or__(self, other):
-        assert not issubclass(self, Composition)
+        assert not issubclass(type(self), Composition)
         inputs, outputs = self._resolve_deps(self, other)
 
         return CheckedComposition(
