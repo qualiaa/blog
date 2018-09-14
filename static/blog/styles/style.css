@@ -530,6 +530,10 @@ ul.taglist {
         text-shadow: none !important;
     }
 
+    #main {
+        width: 100%;
+    }
+
     .sidebar {
         display: none;
     }
@@ -552,13 +556,32 @@ ul.taglist {
      * or use the `javascript:` pseudo protocol
      */
 
+    h1 a[href^="/"]:after,
     a[href^="#"]:after,
+    a.uri:after,
     a[href^="javascript:"]:after {
         content: "";
     }
 
+    a.footnote-ref,
+    .citation a,
+    a[href^="javascript:"],
+    h1 a[href^="/"] {
+        text-decoration: none;
+    }
+
+    a.own-twitter,
+    a.own-itchio.extern,
+    a.twitter,
+    a.github,
+    a.extern {
+        padding: 0;
+        background-image: none;
+    }
+
     pre {
         white-space: pre-wrap !important;
+        page-break-inside: avoid;
     }
     pre,
     blockquote {
