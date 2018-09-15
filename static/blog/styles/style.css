@@ -187,6 +187,10 @@ a.own-itchio.extern {
     background-position: left center;
 }
 
+a.uri {
+    white-space: nowrap;
+}
+
 a:active, a:hover {
     outline: 0px none;
 }
