@@ -425,6 +425,8 @@ ul.taglist {
 #toc {
     position: sticky;
     top: 0;
+    overflow-y: scroll;
+    max-height: 100vh;
 }
 
 #toc ul {
