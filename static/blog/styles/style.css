@@ -141,6 +141,26 @@ header h1 {
     font-size: 2.6em;
 }
 
+/* Table Styles */
+
+table {
+    margin: auto;
+    border-collapse: collapse;
+}
+
+tbody {
+    border-top: 1px solid black;
+}
+
+th, td {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+
+
+
+
 /* Link Styles */
 a {
     color: #428BCA;
