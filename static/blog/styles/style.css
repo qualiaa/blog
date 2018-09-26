@@ -556,12 +556,23 @@ ul.taglist {
         text-shadow: none !important;
     }
 
+    #main > a,
+    span.tags,
+    .sidebar,
+    #wrapper > header {
+        display: none;
+    }
+
     #main {
         width: 100%;
     }
 
-    .sidebar {
-        display: none;
+    article h1 {
+        border: none;
+    }
+
+    article {
+        font-size: 12px;
     }
 
     a,
@@ -626,7 +637,7 @@ ul.taglist {
 
     tr,
     img {
-        page-break-inside: avoid;
+        page-break-inside: avoid !important;
     }
 
     p,
@@ -640,4 +651,5 @@ ul.taglist {
     h3 {
         page-break-after: avoid;
     }
+
 }
