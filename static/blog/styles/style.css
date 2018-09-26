@@ -307,7 +307,7 @@ article h4 a.section-link,
 article h5 a.section-link {
     position: absolute;
     left: -0.7em;
-    color: rgba(0,0,0,0.4);
+    color: rgba(0,0,0,0.2);
     text-decoration: none;
 }
 
