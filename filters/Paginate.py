@@ -13,7 +13,7 @@ class Paginate(CheckedFilter):
         context["page"] = {"num": self.page}
 
         article_paths = context[self.on]
-        #TODO: Sort filter
+        #TODO: implement sort filter
         article_paths = sorted(list(article_paths), reverse=True)
 
         num_pages = (len(article_paths)-1) // self.items_per_page + 1
@@ -24,10 +24,13 @@ class Paginate(CheckedFilter):
         url_name = request.resolver_match.url_name
         url_name = "blog:" + url_name
         if url_name.find("page") < 0: url_name += "-page"
+        kwargs = {}
+        if "tags" in context:
+            kwargs = {"tag_string": "+".join(context["tags"])}
         if self.page > 1:
-            context["page"]["prev"] = reverse(url_name, kwargs={"page":self.page-1})
+            context["page"]["prev"] = reverse(url_name, kwargs=dict(**kwargs,page=self.page-1))
         if self.page < num_pages:
-            context["page"]["next"] = reverse(url_name, kwargs={"page":self.page+1})
+            context["page"]["next"] = reverse(url_name, kwargs=dict(**kwargs,page=self.page+1))
 
         start_article = page_index*self.items_per_page
 
