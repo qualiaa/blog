@@ -65,7 +65,7 @@ class AddArchive(CheckedFilter):
             except FileNotFoundError: pass
             url = reverse("blog:article",kwargs={"slug":slug})
             archive_context[date.year][date.strftime("%B")].append((url,title))
-            print(archive_context.items())
+            #print(archive_context.items())
 
         context.update({"archive": archive_context})
         return request, context

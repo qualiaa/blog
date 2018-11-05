@@ -104,8 +104,9 @@ def tags_view(request, tag_string, page=1):
 def wip_article(request, slug):
     path = s.WIP_PATH/slug
 
-    return_article = a.MetadataDangerous() | a.GetFullText() | postprocessing() |\
-                     Render("blog/wip/article.html")
+    return_article = a.MetadataDangerous() |\
+            Either(a.GetFullText(), e.ServerError("Pandoc Error")) |\
+            postprocessing() | Render("blog/wip/article.html")
 
     @CheckedLambda
     def CheckAlreadyPublished(r,c):
@@ -115,7 +116,7 @@ def wip_article(request, slug):
     published_url = reverse("blog:article",kwargs={"slug": slug})
 
     return ContextInput(request, slug=slug, path=path, date=datetime.date.today()) >\
-            a.MetadataSafe()                           |\
+            a.MetadataSafe() |\
             Alternative(return_article,
                 Either(CheckAlreadyPublished | Redirect(published_url),
                     e.NotFound))

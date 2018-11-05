@@ -1,3 +1,5 @@
+from sys import stderr
+from subprocess import CalledProcessError
 from yaml import YAMLError
 
 from .base import CheckedFilter
@@ -108,17 +110,20 @@ class GetFullText(CheckedFilter):
         super().__init__(inputs="article", outputs="article")
 
     def __call__(self, request, context):
-        try:
-            markdown_path = context["article"]["markdown"]
-            bib_path = markdown_path.parent/"bib.bib"
+        markdown_path = context["article"]["markdown"]
+        bib_path = markdown_path.parent/"bib.bib"
 
+        try:
             if bib_path.exists():
                 html = pandoc.md2html(markdown_path, bib_path)
             else:
                 html = pandoc.md2html(markdown_path)
-
-            context["article"]["html"] = html
+        except CalledProcessError as e:
+            print(e.stderr.decode('utf-8'),file=stderr)
+            raise e
         except Exception as e:
             raise ArticleError(context["article"]) from e
+
+        context["article"]["html"] = html
 
         return request, context
