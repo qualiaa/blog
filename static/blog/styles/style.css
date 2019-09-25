@@ -249,8 +249,8 @@ article code {
 }
 
 article code {
-    background-color: #ffe9e9;
-    border-color: #ffc3c3;
+    background-color: rgb(253, 246, 227);
+    border-color: rgb(242, 227, 185);
     border-style: solid;
     border-width: 1px;
     border-radius: 4px;
