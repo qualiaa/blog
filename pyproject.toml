@@ -1,0 +1,19 @@
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "jamie-blog"
+version = "1.0.0"
+description = "A simple django blog without databases"
+authors = ["Jamie Bayne <jamiebayne@hotmail.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+homepage = "https://jamiebayne.co.uk/blog"
+repository = "https://github.com/qualiaa/blog"
+keywords = ["django", "blog"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+django = ">=2, <4"
+pyyaml = ">3.13"
