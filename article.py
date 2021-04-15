@@ -51,7 +51,7 @@ def extract_metadata(markdown_path):
         if next(f).startswith(delimiter):
             lines = list(takewhile(lambda x: not x.startswith(delimiter), f))
             string = "".join(lines)
-            metadata = yaml.load(string)
+            metadata = yaml.safe_load(string)
     return metadata
 
 def extract_stub(markdown_path):
