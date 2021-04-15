@@ -23,7 +23,7 @@ def md2html(path_or_string, bib_path=None):
 
     if bib_path:
         opts += [
-            "--filter", "pandoc-citeproc",
+            "--citeproc",
             "--csl", s.CSL_FILE,
             "--bibliography", str(bib_path)
         ]
