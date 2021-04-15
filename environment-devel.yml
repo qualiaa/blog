@@ -1,0 +1,30 @@
+name: jamie-blog
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.8
+  - django
+  - pandoc
+  - pyyaml
+
+  - pytest
+  - hypothesis
+  - tox
+  - pylint
+  - flake8
+  - ipython
+  - debugpy
+  - epc
+  - python-language-server[all]
+  - black
+  - isort
+  - autoflake
+  - readline
+  - pip
+  - pip:
+    - pytest-cov
+    - pyls-mypy
+    - pyls-black
+    - pyls-isort
+    - importmagic
