@@ -1,3 +1,4 @@
+from django.conf import settings as s
 from django.http import HttpResponseNotModified
 
 from .filters import article as a
@@ -9,12 +10,11 @@ from .filters.outputs import JSON, ToRequestContext
 from .filters.postprocessing import postprocessing
 from .filters.utils import Extract, Remove
 
-from . import settings as s
 
 def wip(request, slug):
-    path = s.WIP_PATH / slug 
-    markdown_path = path / s.MARKDOWN_FILENAME
-    local_mtime = markdown_path.stat().st_mtime 
+    path = s.BLOG_WIP_PATH / slug
+    markdown_path = path / s.BLOG_MARKDOWN_FILENAME
+    local_mtime = markdown_path.stat().st_mtime
     print("Server mtime:",local_mtime)
     if "mtime" in request.POST:
         print("Client mtime:",request.POST["mtime"])

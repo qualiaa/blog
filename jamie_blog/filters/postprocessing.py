@@ -1,10 +1,10 @@
 import re
 
-from .base import CheckedFilter
+from django.conf import settings as s
 
 from ..pandoc import pandoc2mathjax
 from ..emoji import slack2unicode
-from .. import settings as s
+from .base import CheckedFilter
 
 class PandocToMathJax(CheckedFilter):
     def __init__(self):
@@ -34,7 +34,7 @@ class ResolveLocalURLs(CheckedFilter):
     def __call__(self, request, context):
         slug = context["article"]["slug"]
         html = context["article"]["html"]
-        context["article"]["html"] = re.sub(s.TEMPLATE_LOCAL_URL, slug, html)
+        context["article"]["html"] = re.sub(s.BLOG_TEMPLATE_LOCAL_URL, slug, html)
         return request, context
 
 def postprocessing():

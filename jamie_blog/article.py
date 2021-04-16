@@ -3,11 +3,11 @@ import re
 from itertools import takewhile
 
 import yaml
+from django.conf import settings as s
 from yaml import YAMLError
 
 from . import emoji
 from . import pandoc
-from . import settings as s
 
 class ArticleError(Exception):
     def __init__(self, context):
@@ -20,7 +20,8 @@ def get_article_paths():
     five_minutes = datetime.timedelta(minutes=5)
     if self.paths is None or now - self.last_update > five_minutes:
         self.last_update = now
-        get_article_paths.paths = list(s.ARTICLE_PATH.glob(s.date_glob_string + "-*/"))
+        get_article_paths.paths = list(s.BLOG_ARTICLE_PATH.glob(
+            s.BLOG_DATE_GLOB_STRING + "-*/"))
         get_article_paths.paths.sort(reverse=True)
     return get_article_paths.paths
 get_article_paths.paths = None
@@ -68,7 +69,7 @@ def extract_stub(markdown_path):
 
 def path_from_slug(slug):
     # TODO: Handle case of multiple matches
-    paths = s.ARTICLE_PATH.glob(s.date_glob_string + "-" + slug + "/")
+    paths = s.BLOG_ARTICLE_PATH.glob(s.BLOG_DATE_GLOB_STRING + "-" + slug + "/")
     try:
         return next(paths)
     except StopIteration:

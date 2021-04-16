@@ -4,12 +4,12 @@ import re
 from functools import reduce
 from operator import add
 
-from . import settings as s
+from django.conf import settings as s
 
 def slack2unicode(input_string):
-    with s.EMOJI_JSON_FILE.open() as f:
+    with s.BLOG_EMOJI_JSON_FILE.open() as f:
         emoji_lookup = json.load(f)
-    with s.EMOJI_SHORT_NAMES_FILE.open() as f:
+    with s.BLOG_EMOJI_SHORT_NAMES_FILE.open() as f:
         short_name_lookup = json.load(f)
 
     working_string = input_string
@@ -48,12 +48,12 @@ def generate_emoji_list(json_path):
         if len(others) == 0: continue
         short_name_lookup[name] = others
 
-    with s.EMOJI_JSON_FILE.open("w") as f:
+    with s.BLOG_EMOJI_JSON_FILE.open("w") as f:
         json.dump(emoji_lookup,f,separators=(',',':'))
-    with s.SHORT_NAMES_FILE.open("w") as f:
+    with s.BLOG_SHORT_NAMES_FILE.open("w") as f:
         json.dump(short_name_lookup,f,separators=(',',':'))
 
 
 if __name__ == "__main__":
-    emoji_path = pathlib.Path(s.DATA_DIR/"third_party/slack_emoji.json")
+    emoji_path = pathlib.Path(s.BLOG_DATA_DIR/"third_party/slack_emoji.json")
     generate_emoji_list(emoji_path)

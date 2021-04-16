@@ -3,15 +3,15 @@ from collections import defaultdict
 from itertools import repeat
 import hashlib
 
+from django.conf import settings as s
 from django.urls import reverse
 
 from .base import CheckedFilter
 from .. import article
-from .. import settings as s
 
 class AddTagbar(CheckedFilter):
     def __call__(self, request, context):
-        tags = sorted([tag.name for tag in s.TAG_PATH.iterdir()])
+        tags = sorted([tag.name for tag in s.BLOG_TAG_PATH.iterdir()])
         tags = [{"slug": x,
                  "name": x.replace("_"," ").title(),
                  "url": reverse("jamie_blog:tags", kwargs={"tag_string":x})
@@ -19,7 +19,7 @@ class AddTagbar(CheckedFilter):
 
         for i, tag in enumerate(tags):
             try:
-                tag["color"] = s.TAG_COLORS[i]
+                tag["color"] = s.BLOG_TAG_COLORS[i]
             except IndexError:
                 h = hashlib.blake2s(tag["slug"].encode())
                 v = int.from_bytes(h.digest(), byteorder="big")
@@ -58,7 +58,7 @@ class AddArchive(CheckedFilter):
 
         for date, slug, path in zip(*list(zip(*date_and_slug)),paths):
             title = article.slug_to_title(slug)
-            markdown_path = path/s.MARKDOWN_FILENAME
+            markdown_path = path/s.BLOG_MARKDOWN_FILENAME
             try:
                 metadata = article.extract_metadata(markdown_path)
                 title = metadata.get("title", title)

@@ -1,5 +1,6 @@
+from django.conf import settings as s
+
 from .base import CheckedFilter
-from .. import settings as s
 
 class CacheError(Exception): pass
 class CacheFileNotFound(CacheError): pass
@@ -10,7 +11,7 @@ def cache_file_path(article_path, stub):
     if stub:
         suffix = ".stub.html"
 
-    return (s.CACHE_PATH/article_path.name).with_suffix(suffix)
+    return (s.BLOG_CACHE_PATH/article_path.name).with_suffix(suffix)
 
 class CachedText(CheckedFilter):
     def __init__(self, stub=False):

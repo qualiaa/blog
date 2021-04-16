@@ -1,25 +1,24 @@
 from os.path import relpath
 
 import yaml
+from django.conf import settings as s
 
 if __name__ == "__main__":
     import article
-    import settings as s
 else:
     from . import article
-    from . import settings as s
 
 def get_articles_for_tag(tag):
-    return [x.resolve() for x in (s.TAG_PATH/tag).iterdir()]
+    return [x.resolve() for x in (s.BLOG_TAG_PATH/tag).iterdir()]
 
 def _clear_existing_tags():
-    for tag_folder in s.TAG_PATH.iterdir():
+    for tag_folder in s.BLOG_TAG_PATH.iterdir():
         for tagged_article in tag_folder.iterdir():
             tagged_article.unlink()
 
 def add_article_to_tag(article_folder, tag):
     # TODO: Warn on nonexistent tags
-    tag_folder = s.TAG_PATH/tag
+    tag_folder = s.BLOG_TAG_PATH/tag
     symlink = tag_folder/article_folder.name
     article_relative_to_tag_folder = relpath(article_folder, tag_folder)
     if tag_folder.exists():
@@ -28,7 +27,7 @@ def add_article_to_tag(article_folder, tag):
         raise FileNotFoundError
 
 def tag_article(folder_path):
-    markdown_path = folder_path/s.MARKDOWN_FILENAME
+    markdown_path = folder_path/s.BLOG_MARKDOWN_FILENAME
     metadata = article.extract_metadata(markdown_path)
     for tag in metadata.get("tags"):
         add_article_to_tag(folder_path, tag)

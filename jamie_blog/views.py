@@ -1,6 +1,7 @@
 import datetime
 import mimetypes
 
+from django.conf import settings as s
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.http import HttpResponseServerError, HttpResponseRedirect, Http404
 from django.shortcuts import render
@@ -19,7 +20,6 @@ from .filters.sidebars import Sidebars
 from .filters.Tags import Tags
 
 from . import article
-from . import settings as s
 from . import publish
 from . import tag
 
@@ -37,7 +37,7 @@ def _page_list(page):
         c["article"]["html"] = "Could not load article"
         return r, c
     return \
-            Paginate(page=page, items_per_page=s.ARTICLES_PER_PAGE) |\
+            Paginate(page=page, items_per_page=s.BLOG_ARTICLES_PER_PAGE) |\
             For(over="paths",
                 to="path",
                 giving="article",
@@ -81,7 +81,7 @@ def index(request, page=1):
 
 def md(request, slug):
     path = article.path_from_slug(slug)
-    markdown_path = path/s.MARKDOWN_FILENAME
+    markdown_path = path/s.BLOG_MARKDOWN_FILENAME
     with markdown_path.open() as f:
         return HttpResponse(f.read(),content_type="text/markdown")
 
@@ -102,7 +102,7 @@ def tags_view(request, tag_string, page=1):
 
 
 def wip_article(request, slug):
-    path = s.WIP_PATH/slug
+    path = s.BLOG_WIP_PATH/slug
 
     return_article = a.MetadataDangerous() |\
             Either(a.GetFullText(), e.ServerError("Pandoc Error")) |\
@@ -122,9 +122,9 @@ def wip_article(request, slug):
                     e.NotFound))
 
 def wip_index(request):
-    article_paths = [x for x in s.WIP_PATH.iterdir()
+    article_paths = [x for x in s.BLOG_WIP_PATH.iterdir()
             if x.is_dir() and
-            (x/s.MARKDOWN_FILENAME).exists()]
+            (x/s.BLOG_MARKDOWN_FILENAME).exists()]
     article_paths.sort(key=lambda x: x.stat().st_mtime,reverse=True)
     article_names = [x.name for x in article_paths]
 
@@ -132,7 +132,7 @@ def wip_index(request):
             {"article_names": article_names})
 
 def wip_media(request, slug, url):
-    path = s.WIP_PATH/slug/url
+    path = s.BLOG_WIP_PATH/slug/url
 
     return _return_file(request, path, url)
 

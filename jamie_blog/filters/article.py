@@ -1,14 +1,14 @@
 from sys import stderr
 from subprocess import CalledProcessError
+
+from django.conf import settings as s
 from yaml import YAMLError
 
-from .base import CheckedFilter
-
+from .. import pandoc
 from ..article import ArticleError
 from ..article import extract_metadata, slug_to_title
 from ..article import extract_date_and_slug_from_path, extract_stub
-from .. import pandoc
-from .. import settings as s
+from .base import CheckedFilter
 
 
 class SlugToPath(CheckedFilter):
@@ -17,7 +17,8 @@ class SlugToPath(CheckedFilter):
 
     def __call__(self, request, context):
         # TODO: Handle case of multiple matches
-        paths = s.ARTICLE_PATH.glob(s.date_glob_string + "-" + context["slug"] + "/")
+        paths = s.BLOG_ARTICLE_PATH.glob(
+                s.date_glob_string + "-" + context["slug"] + "/")
         try:
             context["path"] = next(paths)
         except StopIteration:
@@ -49,7 +50,7 @@ class MetadataSafe(CheckedFilter):
             "path_string": str(path),
             "title": slug_to_title(slug),
             "slug": slug,
-            "markdown": path/s.MARKDOWN_FILENAME
+            "markdown": path/s.BLOG_MARKDOWN_FILENAME
         }
         if "date" in context: article_context["date"] = context["date"]
 

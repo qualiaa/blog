@@ -2,7 +2,7 @@ import pathlib
 import re
 import subprocess
 
-from . import settings as s
+from django.conf import settings as s
 
 
 def pandoc2mathjax(string):
@@ -19,19 +19,19 @@ def pandoc2mathjax(string):
 
 
 def md2html(path_or_string, bib_path=None):
-    opts = list(s.PANDOC_OPTIONS)
+    opts = list(s.BLOG_PANDOC_OPTIONS)
 
     if bib_path:
         opts += [
             "--citeproc",
-            "--csl", s.CSL_FILE,
+            "--csl", s.BLOG_CSL_FILE,
             "--bibliography", str(bib_path)
         ]
 
     command = [
         "pandoc",
         *opts,
-        "-f", "+".join(["markdown"]+s.PANDOC_EXTENSIONS),
+        "-f", "+".join(["markdown"]+s.BLOG_PANDOC_EXTENSIONS),
         "-t", "html"
     ]
 
