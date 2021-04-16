@@ -23,6 +23,12 @@ from . import article
 from . import publish
 from . import tag
 
+
+class ArticleError(Exception):
+    def __init__(self, context):
+        self.article_context = context
+
+
 def _return_file(request, path, url):
     if url.find("../") >= 0:
         return HttpResponseBadRequest("Invalid URL")
@@ -36,43 +42,41 @@ def _page_list(page):
     def article_error(r, c):
         c["article"]["html"] = "Could not load article"
         return r, c
-    return \
-            Paginate(page=page, items_per_page=s.BLOG_ARTICLES_PER_PAGE) |\
-            For(over="paths",
-                to="path",
-                giving="article",
-                result="article_list",
-                f=a.DateAndSlugFromPath() | a.MetadataSafe() |
-                    Alternative(a.MetadataDangerous(), article_error) |
-                    Alternative(c.CachedText(stub=True),
-                        Alternative(a.GetStub() |
-                                postprocessing() |
-                                c.CacheHTML(stub=True),
-                            article_error)))                        |\
-            Render("jamie_blog/index.html")
+    return Paginate(page=page, items_per_page=s.BLOG_ARTICLES_PER_PAGE) |\
+           For(over="paths",
+               to="path",
+               giving="article",
+               result="article_list",
+               f=a.DateAndSlugFromPath() | a.MetadataSafe() |
+                   Alternative(a.MetadataDangerous(), article_error) |
+                   Alternative(c.CachedText(stub=True),
+                       Alternative(a.GetStub() |
+                               postprocessing() |
+                               c.CacheHTML(stub=True),
+                           article_error)))                        |\
+           Render("jamie_blog/index.html")
 
 def article_media(request, slug, url):
     try:
         path = article.path_from_slug(slug)/url
     except FileNotFoundError:
         raise Http404
-
     return _return_file(request, path, url)
 
 def article_view(request, slug):
     se = e.ServerError
     return ContextInput(request, slug=slug)                       >\
-            Sidebars(archive_paths=article.get_article_paths())   |\
-            Either(a.SlugToPath(), e.NotFound())                  |\
-            a.DateAndSlugFromPath()                               |\
-            a.MetadataSafe()                                      |\
-            Either(a.MetadataDangerous(),
-                   se("Could not read file"))                     |\
-            Alternative(c.CachedText(),
-                        Either(a.GetFullText(), se("Could not read file")) |
-                            Either(postprocessing(), se("Postprocessing error")) |
-                            Either(c.CacheHTML(), se("Cache error"))) |\
-            Render("jamie_blog/article_view.html")
+           Sidebars(archive_paths=article.get_article_paths())    |\
+           Either(a.SlugToPath(), e.NotFound("No article at this address")) |\
+           a.DateAndSlugFromPath()                                |\
+           a.MetadataSafe()                                       |\
+           Either(a.MetadataDangerous(),
+                  se("Could not read file"))                      |\
+           Alternative(c.CachedText(),
+                       Either(a.GetFullText(), se("Could not read file")) |
+                           Either(postprocessing(), se("Postprocessing error")) |
+                           Either(c.CacheHTML(), se("Cache error"))) |\
+           Render("jamie_blog/article_view.html")
 
 def index(request, page=1):
     return PublishedPaths(request) >\

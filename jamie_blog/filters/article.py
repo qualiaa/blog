@@ -5,9 +5,9 @@ from django.conf import settings as s
 from yaml import YAMLError
 
 from .. import pandoc
-from ..article import ArticleError
 from ..article import extract_metadata, slug_to_title
 from ..article import extract_date_and_slug_from_path, extract_stub
+from . import errors as e
 from .base import CheckedFilter
 
 
@@ -22,8 +22,7 @@ class SlugToPath(CheckedFilter):
         try:
             context["path"] = next(paths)
         except StopIteration:
-            raise FileNotFoundError("No articles found")
-
+            raise e.NotFound("No articles found")
         return request, context
 
 class DateAndSlugFromPath(CheckedFilter):
@@ -67,13 +66,13 @@ class MetadataDangerous(CheckedFilter):
         markdown_path = context["article"]["markdown"]
 
         if not markdown_path.exists():
-            e= ArticleError(context["article"])
-                    
-            e.context = context
-            raise e from FileNotFoundError("Markdown file not found.")
+            raise e.NotFound(
+                    "Markdown file not found.", context["article"])
 
-        try: metadata = extract_metadata(markdown_path)
-        except (YAMLError, IOError): metadata = {}
+        try:
+            metadata = extract_metadata(markdown_path)
+        except (YAMLError, IOError):
+            raise e.ServerError("Invalid article metadata")
         if "tags" in metadata:
             metadata["tags"].sort()
             metadata["tags"] = [tag.replace("_"," ") for tag in metadata["tags"]]

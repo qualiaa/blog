@@ -65,7 +65,7 @@ class Composition(Filter):
             return self.right(left_result)
         except (TypeError,ValueError) as e:
             e.args += (type(self.left), type(self.right))
-            raise RuntimeError(*e.args)
+            raise
 
 class CheckedComposition(Composition, CheckedFilter):
     def __init__(self, left=None, right=None, inputs={}, outputs={}, composition=None):
