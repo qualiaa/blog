@@ -49,7 +49,7 @@ def _page_list(page):
                                 postprocessing() |
                                 c.CacheHTML(stub=True),
                             article_error)))                        |\
-            Render("blog/index.html")
+            Render("jamie_blog/index.html")
 
 def article_media(request, slug, url):
     try:
@@ -72,7 +72,7 @@ def article_view(request, slug):
                         Either(a.GetFullText(), se("Could not read file")) |
                             Either(postprocessing(), se("Postprocessing error")) |
                             Either(c.CacheHTML(), se("Cache error"))) |\
-            Render("blog/article_view.html")
+            Render("jamie_blog/article_view.html")
 
 def index(request, page=1):
     return PublishedPaths(request) >\
@@ -98,7 +98,7 @@ def tags_view(request, tag_string, page=1):
             Tags(tag_list)         |\
             Alternative(_page_list(page),
                 error_msg |
-                Render("blog/simple.html"))
+                Render("jamie_blog/simple.html"))
 
 
 def wip_article(request, slug):
@@ -106,14 +106,14 @@ def wip_article(request, slug):
 
     return_article = a.MetadataDangerous() |\
             Either(a.GetFullText(), e.ServerError("Pandoc Error")) |\
-            postprocessing() | Render("blog/wip/article.html")
+            postprocessing() | Render("jamie_blog/wip/article.html")
 
     @CheckedLambda
     def CheckAlreadyPublished(r,c):
         article.path_from_slug(slug)
         return r, c
 
-    published_url = reverse("blog:article",kwargs={"slug": slug})
+    published_url = reverse("jamie_blog:article",kwargs={"slug": slug})
 
     return ContextInput(request, slug=slug, path=path, date=datetime.date.today()) >\
             a.MetadataSafe() |\
@@ -128,7 +128,7 @@ def wip_index(request):
     article_paths.sort(key=lambda x: x.stat().st_mtime,reverse=True)
     article_names = [x.name for x in article_paths]
 
-    return render(request, "blog/wip/index.html",
+    return render(request, "jamie_blog/wip/index.html",
             {"article_names": article_names})
 
 def wip_media(request, slug, url):
@@ -146,7 +146,7 @@ def publish_view(request, slug):
         print(e.args)
         return HttpResponseServerError("Article already published")
 
-    return HttpResponseRedirect(reverse("blog:article",kwargs={"slug":slug}))
+    return HttpResponseRedirect(reverse("jamie_blog:article",kwargs={"slug":slug}))
 
 def tag_all_view(*args,**kargs):
     tag.tag_all()

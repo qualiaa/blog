@@ -4,7 +4,7 @@ from . import views
 from . import ajax
 from . import tag
 
-app_name = "blog"
+app_name = "jamie_blog"
 urlpatterns = [
     path("", views.index, name="article-index"),
     path("page/<int:page>", views.index, name="article-index-page"),

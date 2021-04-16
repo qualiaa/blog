@@ -1,0 +1,5 @@
+{% if article.slug %}
+<div class="sidebar" id="publish">
+    <a href="{% url "jamie_blog:wip-publish" slug=article.slug %}">Publish</a>
+</div>
+{% endif %}

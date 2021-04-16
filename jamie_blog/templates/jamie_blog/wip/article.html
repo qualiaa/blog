@@ -1,23 +1,23 @@
-{% extends "blog/base.html" %}
+{% extends "jamie_blog/base.html" %}
 {% load static %}
 
 <!-- WIP specific styles and scripts -->
 {% block head %}
 {{ block.super }}
-<link rel="stylesheet" type="text/css" href="{% static "blog/styles/wip.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "jamie_blog/styles/wip.css" %}" />
 <script type="text/javascript">
     {% if article.slug %}var slug="{{article.slug}}"{% endif %}
 </script>
-<script src="{% static "blog/js/article.js" %}"></script>
-<script src="{% static "blog/js/wip.js" %}"></script>
+<script src="{% static "jamie_blog/js/article.js" %}"></script>
+<script src="{% static "jamie_blog/js/wip.js" %}"></script>
 {% endblock %}
 
 <!-- Display WIP article -->
 {% block content %}
     <article>
-        {% include "blog/article.html" %}
+        {% include "jamie_blog/article.html" %}
     </article>
-    <a href="{% url "blog:wip-index" %}">Back to WIP index</a>
+    <a href="{% url "jamie_blog:wip-index" %}">Back to WIP index</a>
     {% csrf_token %}
     <script>
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();
@@ -25,5 +25,5 @@
 {% endblock %}
 
 {% block sidebar %}
-{% include "blog/sidebars/publish.html" %}
+{% include "jamie_blog/sidebars/publish.html" %}
 {% endblock %}

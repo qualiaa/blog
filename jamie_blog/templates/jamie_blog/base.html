@@ -4,7 +4,7 @@
 <html lang="en-gb">
 <head>
     {% block head %}
-        {% include "blog/head.html" %}
+        {% include "jamie_blog/head.html" %}
     {% endblock %}
 </head>
 <body class="clearfix">
@@ -13,7 +13,7 @@
   <![endif]-->
     <div id="wrapper">
         <header>
-            <h1><a href="{% url "blog:article-index" %}">Jamie's Blog</a></h1>
+            <h1><a href="{% url "jamie_blog:article-index" %}">Jamie's Blog</a></h1>
             <hr class="hidden" />
         </header>
         <div id="main">
@@ -22,15 +22,15 @@
         </div>
         <div id="side">
             {% block sidebar %}
-                {% include "blog/sidebars/tags.html" %}
-                {% include "blog/sidebars/other_places.html" %}
-                {% include "blog/sidebars/archive.html" %}
+                {% include "jamie_blog/sidebars/tags.html" %}
+                {% include "jamie_blog/sidebars/other_places.html" %}
+                {% include "jamie_blog/sidebars/archive.html" %}
             {% endblock %}
         </div>
     </div>
 
 {% block footer %}
-{% include "blog/footer.html" %}
+{% include "jamie_blog/footer.html" %}
 {% endblock footer%}
 
 </body>

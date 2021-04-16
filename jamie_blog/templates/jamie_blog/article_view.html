@@ -1,4 +1,4 @@
-{% extends "blog/base.html" %}
+{% extends "jamie_blog/base.html" %}
 {% load static %}
 
 <!-- Article specific styles and scripts -->
@@ -7,12 +7,12 @@
 <script type="text/javascript">
     {% if article.slug %}var slug="{{article.slug}}"{% endif %}
 </script>
-<script src="{% static "blog/js/article.js" %}"></script>
+<script src="{% static "jamie_blog/js/article.js" %}"></script>
 {% endblock %}
 
 <!-- Wrap article.html in <article> tag -->
 {% block content %}
     <article>
-        {% include "blog/article.html" %}
+        {% include "jamie_blog/article.html" %}
     </article>
 {% endblock %}

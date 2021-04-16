@@ -14,7 +14,7 @@ class AddTagbar(CheckedFilter):
         tags = sorted([tag.name for tag in s.TAG_PATH.iterdir()])
         tags = [{"slug": x,
                  "name": x.replace("_"," ").title(),
-                 "url": reverse("blog:tags", kwargs={"tag_string":x})
+                 "url": reverse("jamie_blog:tags", kwargs={"tag_string":x})
                  } for x in tags]
 
         for i, tag in enumerate(tags):
@@ -63,7 +63,7 @@ class AddArchive(CheckedFilter):
                 metadata = article.extract_metadata(markdown_path)
                 title = metadata.get("title", title)
             except FileNotFoundError: pass
-            url = reverse("blog:article",kwargs={"slug":slug})
+            url = reverse("jamie_blog:article",kwargs={"slug":slug})
             archive_context[date.year][date.strftime("%B")].append((url,title))
             #print(archive_context.items())
 

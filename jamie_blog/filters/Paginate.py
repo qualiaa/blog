@@ -22,7 +22,7 @@ class Paginate(CheckedFilter):
             raise Http404
 
         url_name = request.resolver_match.url_name
-        url_name = "blog:" + url_name
+        url_name = "jamie_blog:" + url_name
         if url_name.find("page") < 0: url_name += "-page"
         kwargs = {}
         if "tags" in context:
