@@ -8,4 +8,4 @@ COPY . app/
 RUN pip install ./app \
     && ln -sf app/docker/settings.py mysite/mysite/settings.py
 
-CMD ["app/docker/run_uwsgi.sh"]
+CMD ["uwsgi", "--ini", "app/docker/uwsgi.ini"]
