@@ -38,7 +38,7 @@ class For(CheckedFilter):
         return result_request, context
 
 class Alternative(CheckedFilter):
-    def __init__(self, left : CheckedFilter, right : CheckedFilter):
+    def __init__(self, left: CheckedFilter, right: CheckedFilter):
         self.left = left
         self.right = right
         self._in = left._in
@@ -55,7 +55,7 @@ class Alternative(CheckedFilter):
             return self.right(request, context)
 
 class Either(CheckedFilter):
-    def __init__(self, f: CheckedFilter, error : FilterError):
+    def __init__(self, f: CheckedFilter, error: FilterError):
         self.filter = f
         self.error = error
         self._in = f._in

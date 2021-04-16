@@ -12,6 +12,7 @@ from . import pandoc
 class ArticleError(Exception):
     def __init__(self, context):
         self.article_context = context
+        super().__init__(self, context)
 
 
 def get_article_paths():
@@ -62,8 +63,10 @@ def extract_stub(markdown_path):
             lambda line: re.match("^ *<!-- *break *--> *$",
                 line) is None,
             markdown_file))
-        try: next(markdown_file)
-        except: finished = True
+        try:
+            next(markdown_file)
+        except:
+            finished = True
     stub = "".join(stub)
     return stub, finished
 

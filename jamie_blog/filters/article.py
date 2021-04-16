@@ -18,7 +18,7 @@ class SlugToPath(CheckedFilter):
     def __call__(self, request, context):
         # TODO: Handle case of multiple matches
         paths = s.BLOG_ARTICLE_PATH.glob(
-                s.date_glob_string + "-" + context["slug"] + "/")
+                s.BLOG_DATE_GLOB_STRING + "-" + context["slug"] + "/")
         try:
             context["path"] = next(paths)
         except StopIteration:
@@ -80,7 +80,6 @@ class MetadataDangerous(CheckedFilter):
 
         context["article"].update(metadata)
         context["title"] = context["article"]["title"]
-
         return request, context
 
 class GetStub(CheckedFilter):

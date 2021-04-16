@@ -60,10 +60,9 @@ class Composition(Filter):
                 traceback.print_exc()
                 return e.handler()
 
-            if type(left_result) == tuple:
+            if isinstance(left_result, tuple):
                 return self.right(*left_result)
-            else:
-                return self.right(left_result)
+            return self.right(left_result)
         except (TypeError,ValueError) as e:
             e.args += (type(self.left), type(self.right))
             raise RuntimeError(*e.args)
