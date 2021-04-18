@@ -7,7 +7,7 @@ from .errors import FilterError
 
 class For(CheckedFilter):
     def __init__(self, over: str, to: str, giving:str, result: str,
-            f: CheckedFilter):
+                 f: CheckedFilter):
         super().__init__(inputs=over, outputs=to)
         # in = over, out = result
         self.f = f
@@ -17,7 +17,7 @@ class For(CheckedFilter):
         self.result = result
         if f._in and to not in f._in:
             raise TypeError("For loop does not satisfy filter inputs:" +
-                    str((f._in - {to})))
+                            str((f._in - {to})))
 
     def __call__(self, request, context):
         # TODO: consider changing the way this works
@@ -28,15 +28,17 @@ class For(CheckedFilter):
             temp_context.update(context)
             del temp_context[self.over]
             temp_context[self.to] = x
-            result_request, result_context = self.f(request,temp_context)
+            result_request, result_context = self.f(request, temp_context)
             context[self.result].append(result_context[self.giving])
 
         try:
             temp_context
-        except Exception:
-            raise ValueError("No arguments for loop: {}".format(context[self.over]))
+        except Exception as e:
+            raise ValueError(
+                f"No arguments for loop: {context[self.over]}") from e
 
         return result_request, context
+
 
 class Alternative(CheckedFilter):
     def __init__(self, left: CheckedFilter, right: CheckedFilter):
@@ -55,6 +57,7 @@ class Alternative(CheckedFilter):
             if hasattr(e, "context"):
                 context = e.context
             return self.right(request, context)
+
 
 class Either(CheckedFilter):
     def __init__(self, f: CheckedFilter, error: FilterError):

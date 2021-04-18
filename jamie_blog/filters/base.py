@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 
 from .errors import FilterError
 
+
 def _to_set(v):
     if type(v) != set:
         if type(v) == str:
@@ -12,12 +13,14 @@ def _to_set(v):
             v = set(v)
     return v
 
+
 class Filter(ABC):
     @abstractmethod
     def __call__(self): pass
 
     def __or__(self, other):
         return Composition(self, other)
+
 
 class CheckedFilter(Filter):
     def __init__(self, inputs={}, outputs={}):
@@ -44,6 +47,7 @@ class CheckedFilter(Filter):
         outputs = left._out | right._out
         return inputs, outputs
 
+
 class Composition(Filter):
     def __init__(self, left, right):
         self.left = left
@@ -56,7 +60,7 @@ class Composition(Filter):
     def __call__(self, *args, **kargs):
         try:
             try:
-                left_result = self.left(*args,**kargs)
+                left_result = self.left(*args, **kargs)
             except FilterError as e:
                 logging.warning("Composition received left exception")
                 logging.warning("%s", traceback.format_exc())
@@ -65,9 +69,10 @@ class Composition(Filter):
             if isinstance(left_result, tuple):
                 return self.right(*left_result)
             return self.right(left_result)
-        except (TypeError,ValueError) as e:
+        except (TypeError, ValueError) as e:
             e.args += (type(self.left), type(self.right))
             raise
+
 
 class CheckedComposition(Composition, CheckedFilter):
     def __init__(self, left=None, right=None, inputs={}, outputs={}, composition=None):

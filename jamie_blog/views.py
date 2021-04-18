@@ -8,7 +8,7 @@ from django.http import HttpResponseServerError, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.urls import reverse
 
-from .filters.utils import CheckedLambda,Lambda
+from .filters.utils import CheckedLambda, Lambda
 from .filters.inputs import ContextInput, PublishedPaths
 from .filters.outputs import Render, Redirect
 from .filters.postprocessing import postprocessing
@@ -49,12 +49,12 @@ def _page_list(page):
                giving="article",
                result="article_list",
                f=a.DateAndSlugFromPath() | a.MetadataSafe() |
-                   Alternative(a.MetadataDangerous(), article_error) |
-                   Alternative(c.CachedText(stub=True),
-                       Alternative(a.GetStub() |
-                               postprocessing() |
-                               c.CacheHTML(stub=True),
-                           article_error)))                        |\
+                     Alternative(a.MetadataDangerous(), article_error) |
+                     Alternative(c.CachedText(stub=True),
+                                 Alternative(a.GetStub() |
+                                             postprocessing() |
+                                             c.CacheHTML(stub=True),
+                                             article_error))) |\
            Render("jamie_blog/index.html")
 
 def article_media(request, slug, url):

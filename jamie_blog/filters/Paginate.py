@@ -2,9 +2,10 @@ from django.urls import reverse
 
 from .base import CheckedFilter
 
+
 class Paginate(CheckedFilter):
     def __init__(self, page, items_per_page=5, on="paths"):
-        super().__init__(inputs=on, outputs=[on,"page"])
+        super().__init__(inputs=on, outputs=[on, "page"])
         self.on = on
         self.page = page
         self.items_per_page = items_per_page
@@ -33,7 +34,6 @@ class Paginate(CheckedFilter):
             context["page"]["next"] = reverse(url_name, kwargs=dict(**kwargs,page=self.page+1))
 
         start_article = page_index*self.items_per_page
-
 
         article_paths = article_paths[
             page_index*self.items_per_page:(page_index+1)*self.items_per_page]

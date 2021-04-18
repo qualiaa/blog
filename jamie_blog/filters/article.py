@@ -5,8 +5,13 @@ from django.conf import settings as s
 from yaml import YAMLError
 
 from .. import pandoc
-from ..article import extract_metadata, slug_to_title
-from ..article import extract_date_and_slug_from_path, extract_stub
+from ..article import (
+    extract_metadata,
+    slug_to_title,
+    ArticleError,
+    extract_date_and_slug_from_path,
+    extract_stub
+)
 from . import errors as e
 from .base import CheckedFilter
 
@@ -103,6 +108,7 @@ class GetStub(CheckedFilter):
             raise ArticleError(context["article"]) from e
 
         return request, context
+
 
 class GetFullText(CheckedFilter):
     def __init__(self):

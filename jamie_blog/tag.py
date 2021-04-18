@@ -26,7 +26,7 @@ def add_article_to_tag(article_folder, tag):
     if tag_folder.exists():
         symlink.symlink_to(article_relative_to_tag_folder)
     else:
-        raise FileNotFoundError
+        raise FileNotFoundError(f"No folder {tag_folder} for {tag}")
 
 
 def tag_article(folder_path):
