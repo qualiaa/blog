@@ -9,7 +9,7 @@ class BlogConfig(AppConfig):
     def ready(self):
         for path in (s.BLOG_ARTICLE_PATH, s.BLOG_WIP_PATH, s.BLOG_CACHE_PATH,
                      s.BLOG_TAG_PATH):
-            path.mkdir(mode=0o600, exist_ok=True, parents=True)
+            path.mkdir(mode=0o700, exist_ok=True, parents=True)
 
         try:
             init_tags()

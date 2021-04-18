@@ -43,7 +43,7 @@ def init_tags():
         AttributeError if settings.BLOG_TAGS not set
     """
     for tag in s.BLOG_TAGS:
-        (s.BLOG_TAG_PATH/tag).mkdir(mode=0o600, exist_ok=True, parents=True)
+        (s.BLOG_TAG_PATH/tag).mkdir(mode=0o700, exist_ok=True, parents=True)
 
 
 def tag_all():
