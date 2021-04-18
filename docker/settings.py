@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = secrets.token_urlsafe()
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'django_apps.urls'
+ROOT_URLCONF = "mysite.urls"
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_apps.wsgi.application'
+WSGI_APPLICATION = "mysite.wsgi.application"
 
 
 # Database
@@ -128,23 +128,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Blog settings
 
-BLOG_ARTICLES_PER_PAGE       = 5
+BLOG_ARTICLES_PER_PAGE = 5
 
-BLOG_ROOT_DIR                = Path(inspect.getfile(jamie_blog)).parent
-BLOG_DATA_DIR                = BLOG_ROOT_DIR/"data"
+BLOG_ROOT_DIR = Path(inspect.getfile(jamie_blog)).parent
+BLOG_DATA_DIR = BLOG_ROOT_DIR / "data"
 
-BLOG_EMOJI_JSON_FILE         = BLOG_DATA_DIR/"emoji.json"
-BLOG_EMOJI_SHORT_NAMES_FILE  = BLOG_DATA_DIR/"short_names.json"
-BLOG_CSL_FILE                = BLOG_DATA_DIR/"third_party/ieee.csl"
+BLOG_EMOJI_JSON_FILE = BLOG_DATA_DIR / "emoji.json"
+BLOG_EMOJI_SHORT_NAMES_FILE = BLOG_DATA_DIR / "short_names.json"
+BLOG_CSL_FILE = BLOG_DATA_DIR / "third_party/ieee.csl"
 
-_blog_path                   = Path("blog")
-BLOG_ARTICLE_PATH            = _blog_path/"articles"
-BLOG_WIP_PATH                = BLOG_ARTICLE_PATH/"wip"
-BLOG_TAG_PATH                = _blog_path/"tags"
-BLOG_CACHE_PATH              = _blog_path/"cache"
+_blog_path = Path("/home/blog")
+BLOG_ARTICLE_PATH = _blog_path / "articles"
+BLOG_WIP_PATH = _blog_path / "wip"
+BLOG_TAG_PATH = _blog_path / "tags"
+BLOG_CACHE_PATH = _blog_path / "cache"
 
-BLOG_MARKDOWN_FILENAME       = "article.md"
-BLOG_TEMPLATE_LOCAL_URL      = "LOCAL"
+BLOG_MARKDOWN_FILENAME = "article.md"
+BLOG_TEMPLATE_LOCAL_URL = "LOCAL"
 
 BLOG_DATE_GLOB_STRING = f"{'[0-9]' * 4}-{'[0-9]' * 2}-{'[0-9]' * 2}"
 
@@ -181,12 +181,16 @@ BLOG_PANDOC_OPTIONS = [
     "--no-highlight",
 ]
 
+BLOG_TAGS = ["diary", "games", "machine learning", "notes", "opinions", "programming", "writing"]
+
 BLOG_TAG_COLORS = [
     (47, 66, 90),
-    (int("7a",16), int("82",16), int("ab",16)),
+    (int("7a", 16), int("82", 16), int("ab", 16)),
     (217, 93, 57),
     (130, 163, 161),
-    (int("bf",16), int("ab",16), int("25",16)),
-    (int("85",16), int("2f",16), int("5a",16)),
-    (212, 154, 175)
+    (int("bf", 16), int("ab", 16), int("25", 16)),
+    (int("85", 16), int("2f", 16), int("5a", 16)),
+    (212, 154, 175),
 ]
+
+STATIC_ROOT = _blog_path/"static"

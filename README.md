@@ -3,7 +3,7 @@
 This is my own personal blog. I was kind of messing around and it's a bit
 eccentric, but you can use it if you like.
 
-## Quick start
+## Quick start (local install)
 
 1. [Install Django](https://docs.djangoproject.com/en/3.2/intro/install/) and
    [set up a Django project](https://docs.djangoproject.com/en/3.2/intro/tutorial01/).
@@ -31,3 +31,13 @@ eccentric, but you can use it if you like.
 
 6. Start the development server and visit http://127.0.0.1:8000/blog/
    to see the blog in action.
+## Quick start (Docker Compose)
+
+1. Clone this repository with `git clone github.com/qualiaa/blog`.
+
+2. Configure [`docker/settings.py`](docker/settings.py) to suit your needs.
+
+3. You may want to make `wip` folder and add it as bind-mount in
+   [`docker/docker-compose.yml`](docker/docker-compose.yml).
+
+4. Run `docker-compose -f docker/docker-compose up`
