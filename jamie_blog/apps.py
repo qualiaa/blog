@@ -19,6 +19,3 @@ class BlogConfig(AppConfig):
                                    "create tag subfolders in {s.BLOG_TAG_PATH}"
                                    "manually") from e
         tag_all()
-
-
-default_app_config = BlogConfig
