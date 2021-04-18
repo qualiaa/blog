@@ -51,9 +51,6 @@ def tag_all():
     _clear_existing_tags()
 
     paths = list(article.get_article_paths())
-    if len(paths) == 0:
-        raise FileNotFoundError("No articles to tag")
-
     for folder_path in paths:
         tag_article(folder_path)
 
