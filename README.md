@@ -23,14 +23,18 @@ eccentric, but you can use it if you like.
     ]
     ``` 
 
-5. Include the `jamie_blog` URLconf in your project's `urls.py`:
+5. Copy the `BLOG_` settings from `docker/settings.py` and adjust to suit your
+   needs.
+
+6. Include the `jamie_blog` URLconf in your project's `urls.py`:
 
    ```python
    path('blog/', include('jamie_blog.urls')),
    ```
 
-6. Start the development server and visit http://127.0.0.1:8000/blog/
-   to see the blog in action.
+7. Start the development server with `python manage.py runserver` and visit
+   http://127.0.0.1:8000/blog/ to see the blog in action.
+
 ## Quick start (Docker Compose)
 
 1. Clone this repository with `git clone github.com/qualiaa/blog`.
