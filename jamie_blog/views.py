@@ -1,4 +1,5 @@
 import datetime
+import logging
 import mimetypes
 
 from django.conf import settings as s
@@ -33,7 +34,7 @@ def _return_file(request, path, url):
     if url.find("../") >= 0:
         return HttpResponseBadRequest("Invalid URL")
     if not path.exists():
-        print(str(path))
+        logging.warning("File not found: %s", path)
         raise Http404
     return HttpResponse(path.read_bytes(), content_type=mimetypes.guess_type(url))
 
@@ -144,10 +145,10 @@ def publish_view(request, slug):
     try:
         publish.publish(slug)
     except FileNotFoundError as e:
-        print(e.args)
+        logging.error("Could not find article to publish: %s", e.args)
         return HttpResponseServerError("Could not find article")
     except FileExistsError as e:
-        print(e.args)
+        logging.error("Attempted to publish article twice: %s", e.args)
         return HttpResponseServerError("Article already published")
 
     return HttpResponseRedirect(reverse("jamie_blog:article",kwargs={"slug":slug}))

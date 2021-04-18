@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings as s
 
 from .base import CheckedFilter
@@ -29,7 +31,7 @@ class CachedText(CheckedFilter):
         if markdown_path.stat().st_mtime > cache_file.stat().st_mtime:
             raise CacheFileOlderThanSource()
 
-        print("Loading {} from cache".format(cache_file))
+        logging.debug("Loading %s from cache", cache_file)
 
         with cache_file.open() as f:
             context["article"]["html"] = f.read()
@@ -54,7 +56,7 @@ class CacheHTML(CheckedFilter):
         path = context["article"]["path"]
 
         cache_file = cache_file_path(path, self.stub)
-        print ("Writing {} to cache".format(cache_file))
+        logging.debug("Writing %s to cache", cache_file)
         with cache_file.open("w") as f:
             f.write(html)
 

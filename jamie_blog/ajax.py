@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings as s
 from django.http import HttpResponseNotModified
 
@@ -15,9 +17,9 @@ def wip(request, slug):
     path = s.BLOG_WIP_PATH / slug
     markdown_path = path / s.BLOG_MARKDOWN_FILENAME
     local_mtime = markdown_path.stat().st_mtime
-    print("Server mtime:", local_mtime)
+    logging.debug("Server mtime: %s", local_mtime)
     if "mtime" in request.POST:
-        print("Client mtime:", request.POST["mtime"])
+        logging.debug("Client mtime: %s", request.POST["mtime"])
         if int(local_mtime) <= float(request.POST["mtime"]):
             return HttpResponseNotModified()
 

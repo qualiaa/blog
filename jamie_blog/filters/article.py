@@ -1,4 +1,4 @@
-from sys import stderr
+import logging
 from subprocess import CalledProcessError
 
 from django.conf import settings as s
@@ -118,7 +118,8 @@ class GetFullText(CheckedFilter):
             else:
                 html = pandoc.md2html(markdown_path)
         except CalledProcessError as e:
-            print(e.stderr.decode('utf-8'),file=stderr)
+            logging.error("Pandoc error processing %s", markdown_path)
+            logging.error("%s", e.stderr.decode('utf-8'))
             raise e
         except Exception as e:
             raise ArticleError(context["article"]) from e

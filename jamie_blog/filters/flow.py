@@ -1,3 +1,4 @@
+import logging
 import traceback
 
 from .base import CheckedFilter
@@ -48,9 +49,10 @@ class Alternative(CheckedFilter):
         try:
             return self.left(request, context)
         except Exception as e:
-            traceback.print_exc()
-            print(e.args)
-            if hasattr(e,"context"):
+            logging.warning("Alternative received exception")
+            logging.warning("%s%s", type(e), e.args)
+            logging.debug("%s", traceback.format_exc())
+            if hasattr(e, "context"):
                 context = e.context
             return self.right(request, context)
 

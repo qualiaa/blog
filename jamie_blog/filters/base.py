@@ -1,3 +1,4 @@
+import logging
 import traceback
 from abc import ABC, abstractmethod
 
@@ -57,7 +58,8 @@ class Composition(Filter):
             try:
                 left_result = self.left(*args,**kargs)
             except FilterError as e:
-                traceback.print_exc()
+                logging.warning("Composition received left exception")
+                logging.warning("%s", traceback.format_exc())
                 return e.handler()
 
             if isinstance(left_result, tuple):
