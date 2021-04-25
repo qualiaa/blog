@@ -58,9 +58,9 @@ class AddArchive(CheckedPipe):
 
         for date, slug, path in zip(*list(zip(*date_and_slug)),paths):
             title = article.slug_to_title(slug)
-            markdown_path = path/s.BLOG_MARKDOWN_FILENAME
+            text_path = article.get_text_path(path)
             try:
-                metadata = article.extract_metadata(markdown_path)
+                metadata = article.extract_metadata(text_path)
                 title = metadata.get("title", title)
             except FileNotFoundError: pass
             url = reverse("jamie_blog:article",kwargs={"slug":slug})
