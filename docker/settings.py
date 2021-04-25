@@ -179,6 +179,8 @@ BLOG_PANDOC_MARKDOWN_EXTENSIONS = [
 ]
 
 BLOG_PANDOC_OPTIONS = [
+    "--metadata",
+    "link-citations=true",
     "--mathjax",
     "--no-highlight",
 ]
