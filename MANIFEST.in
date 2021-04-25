@@ -1,3 +1,4 @@
 recursive-include jamie_blog/static *
 recursive-include jamie_blog/templates *
 recursive-include jamie_blog/data *
+recursive-include jamie_blog/pandoc-filters *
