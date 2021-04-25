@@ -1,3 +1,4 @@
+import logging
 from os.path import relpath
 
 from django.conf import settings as s
@@ -30,9 +31,16 @@ def add_article_to_tag(article_folder, tag):
 
 
 def tag_article(folder_path):
-    markdown_path = folder_path/s.BLOG_MARKDOWN_FILENAME
-    metadata = article.extract_metadata(markdown_path)
-    for tag in metadata.get("tags"):
+    try:
+        path = article.get_article_text_path(folder_path)
+    except FileNotFoundError as e:
+        logging.error("Could not tag article: %s", e.args[0])
+        return
+    metadata = article.extract_metadata(path)
+    tags = metadata.get("tags", [])
+    if not tags:
+        logging.warning("No tags for article: %s", path)
+    for tag in tags:
         add_article_to_tag(folder_path, tag)
 
 

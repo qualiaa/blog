@@ -19,6 +19,29 @@ def pandoc2mathjax(string):
 
 
 def md2html(path_or_string, bib_path=None):
+    return _run_cmd(*_build_pandoc_cmd(
+        path_or_string,
+        "+".join(["markdown"]+s.BLOG_PANDOC_MARKDOWN_EXTENSIONS),
+        bib_path))
+
+
+def org2html(path_or_string, bib_path=None):
+    return _run_cmd(*_build_pandoc_cmd(
+        path_or_string,
+        "org+smart",
+        bib_path))
+
+
+def _run_cmd(command, stdin):
+    return subprocess.run(
+        command,
+        input=stdin,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=True).stdout.decode("utf-8")
+
+
+def _build_pandoc_cmd(path_or_string, output_format, bib_path=None):
     opts = list(s.BLOG_PANDOC_OPTIONS)
 
     if bib_path:
@@ -29,28 +52,17 @@ def md2html(path_or_string, bib_path=None):
         ]
 
     command = [
-        "pandoc",
+        s.BLOG_PANDOC_PATH,
         *opts,
-        "-f", "+".join(["markdown"]+s.BLOG_PANDOC_EXTENSIONS),
+        "-f", output_format,
         "-t", "html"
     ]
 
-
-
-
-    if type(path_or_string) == str:
-        stdin=str.encode(path_or_string)
-    elif issubclass(type(path_or_string), pathlib.Path):
-        stdin=None
+    if isinstance(path_or_string, str):
+        stdin = str.encode(path_or_string)
+    elif isinstance(path_or_string, pathlib.Path):
+        stdin = None
         command += [str(path_or_string)]
     else:
-        raise TypeError
-
-    completed_process = subprocess.run(
-        command,
-        input=stdin,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=True)
-
-    return completed_process.stdout.decode("utf-8")
+        raise TypeError("path_or_string must be Path or str")
+    return command, stdin

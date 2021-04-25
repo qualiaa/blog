@@ -10,7 +10,8 @@ from ..article import (
     slug_to_title,
     ArticleError,
     extract_date_and_slug_from_path,
-    extract_stub
+    extract_stub,
+    get_article_text_path
 )
 from . import errors as e
 from .base import CheckedPipe
@@ -54,7 +55,6 @@ class MetadataSafe(CheckedPipe):
             "path_string": str(path),
             "title": slug_to_title(slug),
             "slug": slug,
-            "markdown": path/s.BLOG_MARKDOWN_FILENAME
         }
         if "date" in context: article_context["date"] = context["date"]
 
@@ -68,11 +68,11 @@ class MetadataDangerous(CheckedPipe):
         super().__init__(inputs="article", outputs={"article","title"})
 
     def __call__(self, request, context):
-        markdown_path = context["article"]["markdown"]
-
-        if not markdown_path.exists():
-            raise e.NotFound(
-                    "Markdown file not found.", context["article"])
+        try:
+            article_path = get_article_text_path(context["article"]["path"])
+        except FileNotFoundError as e:
+            raise e.NotFound(*e.args)
+        context["article"]["text_path"] = article_path
 
         try:
             metadata = extract_metadata(markdown_path)
@@ -86,24 +86,33 @@ class MetadataDangerous(CheckedPipe):
         context["title"] = context["article"]["title"]
         return request, context
 
+
+_text_converters = {
+    ".org": pandoc.org2html,
+    ".md": pandoc.md2html
+}
+
+
 class GetStub(CheckedPipe):
     def __init__(self):
         super().__init__(inputs="article", outputs="article")
 
     def __call__(self, request, context):
-        markdown_path = context["article"]["markdown"]
+        text_path = context["article"]["text_path"]
 
         try:
-            stub, stub_finished = extract_stub(markdown_path)
-            bib_path = markdown_path.parent/"bib.bib"
+            stub, stub_finished = extract_stub(text_path)
+            bib_path = context["article"]["path"]/"bib.bib"
 
-            if bib_path.exists():
-                html = pandoc.md2html(stub, bib_path)
-            else:
-                html = pandoc.md2html(stub)
+            stub_fn = _text_converters[text_path.suffix]
+            html = stub_fn(stub, bib_path if bib_path.exists() else None)
 
             context["article"]["html"] = html
             context["article"]["finished"] = stub_finished
+        except CalledProcessError as e:
+            logging.error("Pandoc error processing %s", text_path)
+            logging.error("%s", e.stderr.decode('utf-8'))
+            raise e
         except Exception as e:
             raise ArticleError(context["article"]) from e
 
@@ -115,16 +124,14 @@ class GetFullText(CheckedPipe):
         super().__init__(inputs="article", outputs="article")
 
     def __call__(self, request, context):
-        markdown_path = context["article"]["markdown"]
-        bib_path = markdown_path.parent/"bib.bib"
+        text_path = context["article"]["text_path"]
+        bib_path = context["article"]["path"]/"bib.bib"
 
         try:
-            if bib_path.exists():
-                html = pandoc.md2html(markdown_path, bib_path)
-            else:
-                html = pandoc.md2html(markdown_path)
+            conv_fn = _text_converters[text_path.suffix]
+            html = conv_fn(text_path, bib_path if bib_path.exists() else None)
         except CalledProcessError as e:
-            logging.error("Pandoc error processing %s", markdown_path)
+            logging.error("Pandoc error processing %s", text_path)
             logging.error("%s", e.stderr.decode('utf-8'))
             raise e
         except Exception as e:

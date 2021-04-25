@@ -144,12 +144,13 @@ BLOG_WIP_PATH = _blog_path / "wip"
 BLOG_TAG_PATH = _blog_path / "tags"
 BLOG_CACHE_PATH = _blog_path / "cache"
 
-BLOG_MARKDOWN_FILENAME = "article.md"
+BLOG_ARTICLE_FILENAME = "article"
 BLOG_TEMPLATE_LOCAL_URL = "LOCAL"
 
 BLOG_DATE_GLOB_STRING = f"{'[0-9]' * 4}-{'[0-9]' * 2}-{'[0-9]' * 2}"
 
-BLOG_PANDOC_EXTENSIONS = [
+BLOG_PANDOC_PATH = "pandoc"
+BLOG_PANDOC_MARKDOWN_EXTENSIONS = [
     "blank_before_header",
     "space_in_atx_header",
     "implicit_header_references",

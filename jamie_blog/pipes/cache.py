@@ -22,13 +22,13 @@ class CachedText(CheckedPipe):
 
     def __call__(self, request, context):
         path = context["article"]["path"]
-        markdown_path = context["article"]["markdown"]
+        text_path = context["article"]["text_path"]
         cache_file = cache_file_path(path, self.stub)
 
         if not cache_file.exists():
             raise CacheFileNotFound()
 
-        if markdown_path.stat().st_mtime > cache_file.stat().st_mtime:
+        if text_path.stat().st_mtime > cache_file.stat().st_mtime:
             raise CacheFileOlderThanSource()
 
         logging.debug("Loading %s from cache", cache_file)
