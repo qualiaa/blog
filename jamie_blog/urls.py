@@ -19,5 +19,6 @@ urlpatterns = [
     path("<slug:slug>", views.article_view, name="article"),
     path("<slug:slug>/<path:url>", views.article_media),
     path("<slug:slug>.md", views.md),
+    path("<slug:slug>.org", views.org),
 ]
 

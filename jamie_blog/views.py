@@ -5,7 +5,7 @@ import mimetypes
 from django.conf import settings as s
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.http import HttpResponseServerError, HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from .pipes.utils import CheckedLambda, Lambda
@@ -90,9 +90,20 @@ def index(request, page=1):
 
 def md(request, slug):
     path = article.path_from_slug(slug)
-    markdown_path = path/s.BLOG_MARKDOWN_FILENAME
-    with markdown_path.open() as f:
+    text_path = article.get_text_path(path)
+    if text_path.suffix == ".org":
+        return redirect(f"{slug}.org", slug=slug)
+    with text_path.open() as f:
         return HttpResponse(f.read(), content_type="text/markdown")
+
+
+def org(request, slug):
+    path = article.path_from_slug(slug)
+    text_path = article.get_text_path(path)
+    if text_path.suffix == ".md":
+        return redirect(f"{slug}.md", slug=slug)
+    with text_path.open() as f:
+        return HttpResponse(f.read(), content_type="text/org")
 
 
 def tags_view(request, tag_string, page=1):
