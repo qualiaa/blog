@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import django.http as http
 
-class FilterError(Exception, ABC):
+class PipeError(Exception, ABC):
     def __init__(self, error_string: str, *args, **kargs):
         self.error_string = error_string
         Exception.__init__(self, error_string, *args, **kargs)
@@ -10,16 +10,16 @@ class FilterError(Exception, ABC):
     @abstractmethod
     def handler(): pass
 
-class ServerError(FilterError):
+class ServerError(PipeError):
     def handler(self):
         return http.HttpResponseServerError(self, self.error_string)
 
 
-class BadRequestError(FilterError):
+class BadRequestError(PipeError):
     def handler(self):
         return http.HttpResponseBadRequest(self, self.error_string)
 
 
-class NotFound(FilterError):
+class NotFound(PipeError):
     def handler(self):
         raise http.Http404

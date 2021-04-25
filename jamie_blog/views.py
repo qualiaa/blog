@@ -8,17 +8,17 @@ from django.http import HttpResponseServerError, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.urls import reverse
 
-from .filters.utils import CheckedLambda, Lambda
-from .filters.inputs import ContextInput, PublishedPaths
-from .filters.outputs import Render, Redirect
-from .filters.postprocessing import postprocessing
-from .filters.flow import For, Alternative, Either
-from .filters import cache as c
-from .filters import errors as e
-from .filters import article as a
-from .filters.Paginate import Paginate
-from .filters.sidebars import Sidebars
-from .filters.Tags import Tags
+from .pipes.utils import CheckedLambda, Lambda
+from .pipes.inputs import ContextInput, PublishedPaths
+from .pipes.outputs import Render, Redirect
+from .pipes.postprocessing import postprocessing
+from .pipes.flow import For, Alternative, Either
+from .pipes import cache as c
+from .pipes import errors as e
+from .pipes import article as a
+from .pipes.Paginate import Paginate
+from .pipes.sidebars import Sidebars
+from .pipes.Tags import Tags
 
 from . import article
 from . import publish

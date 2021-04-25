@@ -1,13 +1,13 @@
-from .base import Filter, CheckedFilter, _to_set
+from .base import Pipe, CheckedPipe, _to_set
 
-class Lambda(Filter):
+class Lambda(Pipe):
     def __init__(self, func):
         self.func = func
 
     def __call__(self,*args, **kargs):
         return self.func(*args, **kargs)
 
-class CheckedLambda(CheckedFilter):
+class CheckedLambda(CheckedPipe):
     def __init__(self, func, inputs={}, outputs={}):
         super().__init__(inputs, outputs)
         if type(func) == Lambda:
@@ -18,7 +18,7 @@ class CheckedLambda(CheckedFilter):
     def __call__(self, *args, **kargs):
         return self.func(*args, **kargs)
 
-class Remove(CheckedFilter):
+class Remove(CheckedPipe):
     def __init__(self, keys):
         super().__init__(keys)
         self.keys = _to_set(keys)
@@ -28,7 +28,7 @@ class Remove(CheckedFilter):
             del context[key]
         return request, context
 
-class Extract(CheckedFilter):
+class Extract(CheckedPipe):
     def __init__(self, keys):
         super().__init__(inputs=keys)
         self.keys = _to_set(keys)

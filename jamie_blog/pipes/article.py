@@ -13,10 +13,10 @@ from ..article import (
     extract_stub
 )
 from . import errors as e
-from .base import CheckedFilter
+from .base import CheckedPipe
 
 
-class SlugToPath(CheckedFilter):
+class SlugToPath(CheckedPipe):
     def __init__(self):
         super().__init__(inputs="slug", outputs="path")
 
@@ -30,7 +30,7 @@ class SlugToPath(CheckedFilter):
             raise e.NotFound("No articles found")
         return request, context
 
-class DateAndSlugFromPath(CheckedFilter):
+class DateAndSlugFromPath(CheckedPipe):
     def __init__(self):
         super().__init__(inputs="path", outputs=["slug","date"])
 
@@ -41,7 +41,7 @@ class DateAndSlugFromPath(CheckedFilter):
 
         return request, context
 
-class MetadataSafe(CheckedFilter):
+class MetadataSafe(CheckedPipe):
     def __init__(self):
         super().__init__(inputs={"path","slug"}, outputs={"article","title"})
 
@@ -63,7 +63,7 @@ class MetadataSafe(CheckedFilter):
 
         return request, context
 
-class MetadataDangerous(CheckedFilter):
+class MetadataDangerous(CheckedPipe):
     def __init__(self):
         super().__init__(inputs="article", outputs={"article","title"})
 
@@ -86,7 +86,7 @@ class MetadataDangerous(CheckedFilter):
         context["title"] = context["article"]["title"]
         return request, context
 
-class GetStub(CheckedFilter):
+class GetStub(CheckedPipe):
     def __init__(self):
         super().__init__(inputs="article", outputs="article")
 
@@ -110,7 +110,7 @@ class GetStub(CheckedFilter):
         return request, context
 
 
-class GetFullText(CheckedFilter):
+class GetFullText(CheckedPipe):
     def __init__(self):
         super().__init__(inputs="article", outputs="article")
 

@@ -3,10 +3,10 @@ from itertools import chain
 
 from django.http import Http404
 
-from .base import CheckedFilter
+from .base import CheckedPipe
 from ..tag import get_articles_for_tag
 
-class Tags(CheckedFilter):
+class Tags(CheckedPipe):
     def __init__(self, tags : [str]):
         super().__init__(outputs={"paths","tags","title"})
         self.tags = tags

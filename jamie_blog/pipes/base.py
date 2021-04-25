@@ -2,7 +2,7 @@ import logging
 import traceback
 from abc import ABC, abstractmethod
 
-from .errors import FilterError
+from .errors import PipeError
 
 
 def _to_set(v):
@@ -14,7 +14,7 @@ def _to_set(v):
     return v
 
 
-class Filter(ABC):
+class Pipe(ABC):
     @abstractmethod
     def __call__(self): pass
 
@@ -22,7 +22,7 @@ class Filter(ABC):
         return Composition(self, other)
 
 
-class CheckedFilter(Filter):
+class CheckedPipe(Pipe):
     def __init__(self, inputs={}, outputs={}):
         self._in = _to_set(inputs)
         self._out = _to_set(outputs)
@@ -48,7 +48,7 @@ class CheckedFilter(Filter):
         return inputs, outputs
 
 
-class Composition(Filter):
+class Composition(Pipe):
     def __init__(self, left, right):
         self.left = left
         self.right = right
@@ -61,7 +61,7 @@ class Composition(Filter):
         try:
             try:
                 left_result = self.left(*args, **kargs)
-            except FilterError as e:
+            except PipeError as e:
                 logging.warning("Composition received left exception")
                 logging.warning("%s", traceback.format_exc())
                 return e.handler()
@@ -74,9 +74,9 @@ class Composition(Filter):
             raise
 
 
-class CheckedComposition(Composition, CheckedFilter):
+class CheckedComposition(Composition, CheckedPipe):
     def __init__(self, left=None, right=None, inputs={}, outputs={}, composition=None):
-        CheckedFilter.__init__(self, inputs, outputs)
+        CheckedPipe.__init__(self, inputs, outputs)
         if composition is not None:
             Composition.__init__(self, composition.left, composition.right)
         elif left is not None and right is not None:

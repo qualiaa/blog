@@ -2,7 +2,7 @@ import logging
 
 from django.conf import settings as s
 
-from .base import CheckedFilter
+from .base import CheckedPipe
 
 class CacheError(Exception): pass
 class CacheFileNotFound(CacheError): pass
@@ -15,7 +15,7 @@ def cache_file_path(article_path, stub):
 
     return (s.BLOG_CACHE_PATH/article_path.name).with_suffix(suffix)
 
-class CachedText(CheckedFilter):
+class CachedText(CheckedPipe):
     def __init__(self, stub=False):
         super().__init__(inputs="article", outputs="article")
         self.stub = stub
@@ -46,7 +46,7 @@ class CachedText(CheckedFilter):
             context["article"]["finished"] = finished
         return request, context
 
-class CacheHTML(CheckedFilter):
+class CacheHTML(CheckedPipe):
     def __init__(self, stub=False):
         super().__init__(inputs="article", outputs="article")
         self.stub = stub

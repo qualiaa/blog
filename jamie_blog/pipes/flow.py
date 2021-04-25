@@ -1,13 +1,13 @@
 import logging
 import traceback
 
-from .base import CheckedFilter
-from .errors import FilterError
+from .base import CheckedPipe
+from .errors import PipeError
 
 
-class For(CheckedFilter):
+class For(CheckedPipe):
     def __init__(self, over: str, to: str, giving:str, result: str,
-                 f: CheckedFilter):
+                 f: CheckedPipe):
         super().__init__(inputs=over, outputs=to)
         # in = over, out = result
         self.f = f
@@ -16,7 +16,7 @@ class For(CheckedFilter):
         self.to = to
         self.result = result
         if f._in and to not in f._in:
-            raise TypeError("For loop does not satisfy filter inputs:" +
+            raise TypeError("For loop does not satisfy pipe inputs:" +
                             str((f._in - {to})))
 
     def __call__(self, request, context):
@@ -40,8 +40,8 @@ class For(CheckedFilter):
         return result_request, context
 
 
-class Alternative(CheckedFilter):
-    def __init__(self, left: CheckedFilter, right: CheckedFilter):
+class Alternative(CheckedPipe):
+    def __init__(self, left: CheckedPipe, right: CheckedPipe):
         self.left = left
         self.right = right
         self._in = left._in
@@ -59,15 +59,15 @@ class Alternative(CheckedFilter):
             return self.right(request, context)
 
 
-class Either(CheckedFilter):
-    def __init__(self, f: CheckedFilter, error: FilterError):
-        self.filter = f
+class Either(CheckedPipe):
+    def __init__(self, f: CheckedPipe, error: PipeError):
+        self.pipe = f
         self.error = error
         self._in = f._in
         self._out = f._out
 
     def __call__(self, request, context):
         try:
-            return self.filter(request, context)
-        except FilterError as e:
+            return self.pipe(request, context)
+        except PipeError as e:
             raise self.error from e

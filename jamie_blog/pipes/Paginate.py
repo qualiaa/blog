@@ -1,10 +1,10 @@
 from django.http import Http404
 from django.urls import reverse
 
-from .base import CheckedFilter
+from .base import CheckedPipe
 
 
-class Paginate(CheckedFilter):
+class Paginate(CheckedPipe):
     def __init__(self, page, items_per_page=5, on="paths"):
         super().__init__(inputs=on, outputs=[on, "page"])
         self.on = on
@@ -15,10 +15,12 @@ class Paginate(CheckedFilter):
         context["page"] = {"num": self.page}
 
         article_paths = context[self.on]
-        #TODO: implement sort filter
+        #TODO: implement sort pipe
         article_paths = sorted(list(article_paths), reverse=True)
 
         num_pages = (len(article_paths)-1) // self.items_per_page + 1
+        if num_pages == 0:
+            return request, context
         page_index = self.page - 1
         if page_index < 0 or page_index >= num_pages:
             raise Http404

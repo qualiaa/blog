@@ -6,10 +6,10 @@ import hashlib
 from django.conf import settings as s
 from django.urls import reverse
 
-from .base import CheckedFilter
+from .base import CheckedPipe
 from .. import article
 
-class AddTagbar(CheckedFilter):
+class AddTagbar(CheckedPipe):
     def __call__(self, request, context):
         tags = sorted([tag.name for tag in s.BLOG_TAG_PATH.iterdir()])
         tags = [{"slug": x,
@@ -29,7 +29,7 @@ class AddTagbar(CheckedFilter):
         return request, context
 
 
-class AddArchive(CheckedFilter):
+class AddArchive(CheckedPipe):
     def __init__(self, archive_paths=None):
         inputs = {}
         if archive_paths is None:

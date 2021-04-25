@@ -4,9 +4,9 @@ from django.conf import settings as s
 
 from ..pandoc import pandoc2mathjax
 from ..emoji import slack2unicode
-from .base import CheckedFilter
+from .base import CheckedPipe
 
-class PandocToMathJax(CheckedFilter):
+class PandocToMathJax(CheckedPipe):
     def __init__(self):
         super().__init__(inputs="article",outputs="article")
     
@@ -14,7 +14,7 @@ class PandocToMathJax(CheckedFilter):
         context["article"]["html"] = pandoc2mathjax(context["article"]["html"])
         return request, context
 
-class SlackToUnicode(CheckedFilter):
+class SlackToUnicode(CheckedPipe):
     def __init__(self):
         super().__init__(inputs="article",outputs="article")
     
@@ -27,7 +27,7 @@ class SlackToUnicode(CheckedFilter):
 
         return request, context
 
-class ResolveLocalURLs(CheckedFilter):
+class ResolveLocalURLs(CheckedPipe):
     def __init__(self):
         super().__init__(inputs="article",outputs="article")
     

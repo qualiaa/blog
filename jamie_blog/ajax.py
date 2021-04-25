@@ -3,14 +3,14 @@ import logging
 from django.conf import settings as s
 from django.http import HttpResponseNotModified
 
-from .filters import article as a
-from .filters import errors as e
-from .filters import cache as c
-from .filters.flow import Either, Alternative
-from .filters.inputs import ContextInput
-from .filters.outputs import JSON
-from .filters.postprocessing import postprocessing
-from .filters.utils import Extract, Remove
+from .pipes import article as a
+from .pipes import errors as e
+from .pipes import cache as c
+from .pipes.flow import Either, Alternative
+from .pipes.inputs import ContextInput
+from .pipes.outputs import JSON
+from .pipes.postprocessing import postprocessing
+from .pipes.utils import Extract, Remove
 
 
 def wip(request, slug):

@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 from .. import article
 
-from .errors import FilterError
+from .errors import PipeError
 
 class Input:
     def __init__(self, *args, **kargs):

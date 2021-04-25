@@ -9,7 +9,7 @@ from .For import For
 from .article import SlugToPath, Metadata, GetFullText, GetStub
 
 
-class Plus(F.Filter):
+class Plus(F.Pipe):
     def __init__(self, n):
         super().__init__()
         self.n = n
@@ -17,7 +17,7 @@ class Plus(F.Filter):
     def __call__(self,x):
         return x + self.n
 
-class Mult(F.Filter):
+class Mult(F.Pipe):
     def __init__(self, n):
         super().__init__()
         self.n = n
@@ -38,8 +38,8 @@ def slug_test():
 
 def article_test():
     slug = "test"
-    filters = SlugToPath() | Metadata() | GetFullText()
-    return (ContextInput(request=None, slug=slug) > filters)[1]
+    pipes = SlugToPath() | Metadata() | GetFullText()
+    return (ContextInput(request=None, slug=slug) > pipes)[1]
 
 def paginate_test():
     class B:
@@ -49,8 +49,8 @@ def paginate_test():
 
     request = A()
 
-    filters = Tags(["diary"]) | Paginate(1) |\
+    pipes = Tags(["diary"]) | Paginate(1) |\
         For(over="paths",target="path",to="article_list",f=
             Metadata() | GetStub())
 
-    return (ContextInput(request) > filters)[1]
+    return (ContextInput(request) > pipes)[1]
