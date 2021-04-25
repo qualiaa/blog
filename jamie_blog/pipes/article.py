@@ -69,13 +69,13 @@ class MetadataDangerous(CheckedPipe):
 
     def __call__(self, request, context):
         try:
-            article_path = get_article_text_path(context["article"]["path"])
+            text_path = get_article_text_path(context["article"]["path"])
         except FileNotFoundError as e:
             raise e.NotFound(*e.args)
-        context["article"]["text_path"] = article_path
+        context["article"]["text_path"] = text_path
 
         try:
-            metadata = extract_metadata(markdown_path)
+            metadata = extract_metadata(text_path)
         except (YAMLError, IOError):
             raise e.ServerError("Invalid article metadata")
         if "tags" in metadata:
