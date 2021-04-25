@@ -36,7 +36,7 @@ class AddArchive(CheckedPipe):
             inputs = "paths"
         else:
             self.archive_paths = archive_paths
-        
+
         super().__init__(inputs=inputs,outputs="archive")
 
     def __call__(self, request, context):

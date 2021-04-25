@@ -25,37 +25,37 @@ from . import publish
 from . import tag
 
 
-class ArticleError(Exception):
-    def __init__(self, context):
-        self.article_context = context
-
-
 def _return_file(request, path, url):
     if url.find("../") >= 0:
         return HttpResponseBadRequest("Invalid URL")
     if not path.exists():
         logging.warning("File not found: %s", path)
         raise Http404
-    return HttpResponse(path.read_bytes(), content_type=mimetypes.guess_type(url))
+    return HttpResponse(path.read_bytes(),
+                        content_type=mimetypes.guess_type(url))
+
 
 def _page_list(page):
     @Lambda
     def article_error(r, c):
         c["article"]["html"] = "Could not load article"
         return r, c
-    return Paginate(page=page, items_per_page=s.BLOG_ARTICLES_PER_PAGE) |\
-           For(over="paths",
-               to="path",
-               giving="article",
-               result="article_list",
-               f=a.DateAndSlugFromPath() | a.MetadataSafe() |
-                     Alternative(a.MetadataDangerous(), article_error) |
-                     Alternative(c.CachedText(stub=True),
-                                 Alternative(a.GetStub() |
-                                             postprocessing() |
-                                             c.CacheHTML(stub=True),
-                                             article_error))) |\
-           Render("jamie_blog/index.html")
+    return (
+        Paginate(page=page, items_per_page=s.BLOG_ARTICLES_PER_PAGE)
+        | For(over="paths",
+              to="path",
+              giving="article",
+              result="article_list",
+              f=(a.DateAndSlugFromPath()
+                 | a.MetadataSafe()
+                 | Alternative(a.MetadataDangerous(), article_error)
+                 | Alternative(c.CachedText(stub=True),
+                               Alternative(a.GetStub()
+                                           | postprocessing()
+                                           | c.CacheHTML(stub=True),
+                                           article_error))))
+        | Render("jamie_blog/index.html"))
+
 
 def article_media(request, slug, url):
     try:
@@ -64,67 +64,73 @@ def article_media(request, slug, url):
         raise Http404
     return _return_file(request, path, url)
 
+
 def article_view(request, slug):
     se = e.ServerError
-    return ContextInput(request, slug=slug)                       >\
-           Sidebars(archive_paths=article.get_article_paths())    |\
-           Either(a.SlugToPath(), e.NotFound("No article at this address")) |\
-           a.DateAndSlugFromPath()                                |\
-           a.MetadataSafe()                                       |\
-           Either(a.MetadataDangerous(),
-                  se("Could not read file"))                      |\
-           Alternative(c.CachedText(),
-                       Either(a.GetFullText(), se("Could not read file")) |
-                           Either(postprocessing(), se("Postprocessing error")) |
-                           Either(c.CacheHTML(), se("Cache error"))) |\
-           Render("jamie_blog/article_view.html")
+    return ContextInput(request, slug=slug) > (
+        Sidebars(archive_paths=article.get_article_paths())
+        | Either(a.SlugToPath(), e.NotFound("No article at this address"))
+        | a.DateAndSlugFromPath()
+        | a.MetadataSafe()
+        | Either(a.MetadataDangerous(), se("Could not read file"))
+        | Alternative(
+            c.CachedText(),
+            (
+                Either(a.GetFullText(), se("Could not read file"))
+                | Either(postprocessing(), se("Postprocessing error"))
+                | Either(c.CacheHTML(), se("Cache error"))
+            ))
+        | Render("jamie_blog/article_view.html")
+    )
+
 
 def index(request, page=1):
-    return PublishedPaths(request) >\
-            Sidebars()             |\
-            _page_list(page)
+    return PublishedPaths(request) > Sidebars() | _page_list(page)
+
 
 def md(request, slug):
     path = article.path_from_slug(slug)
     markdown_path = path/s.BLOG_MARKDOWN_FILENAME
     with markdown_path.open() as f:
-        return HttpResponse(f.read(),content_type="text/markdown")
+        return HttpResponse(f.read(), content_type="text/markdown")
+
 
 def tags_view(request, tag_string, page=1):
     tag_list = tag_string.lower().split("+")
 
     @Lambda
-    def error_msg(r,c):
+    def error_msg(r, c):
         c["content"] = "<h2>No posts</h2>"
-        return r,c
+        return r, c
 
-    return PublishedPaths(request) >\
-            Sidebars()             |\
-            Tags(tag_list)         |\
-            Alternative(_page_list(page),
-                error_msg |
-                Render("jamie_blog/simple.html"))
+    return PublishedPaths(request) > (
+        Sidebars()
+        | Tags(tag_list)
+        | Alternative(_page_list(page),
+                      error_msg | Render("jamie_blog/simple.html")))
 
 
 def wip_article(request, slug):
     path = s.BLOG_WIP_PATH/slug
 
-    return_article = a.MetadataDangerous() |\
-            Either(a.GetFullText(), e.ServerError("Pandoc Error")) |\
-            postprocessing() | Render("jamie_blog/wip/article.html")
+    return_article = (
+        a.MetadataDangerous()
+        | Either(a.GetFullText(), e.ServerError("Pandoc Error"))
+        | postprocessing() | Render("jamie_blog/wip/article.html"))
 
     @CheckedLambda
-    def CheckAlreadyPublished(r,c):
+    def CheckAlreadyPublished(r, c):
         article.path_from_slug(slug)
         return r, c
 
-    published_url = reverse("jamie_blog:article",kwargs={"slug": slug})
+    published_url = reverse("jamie_blog:article", kwargs={"slug": slug})
 
-    return ContextInput(request, slug=slug, path=path, date=datetime.date.today()) >\
-            a.MetadataSafe() |\
-            Alternative(return_article,
-                Either(CheckAlreadyPublished | Redirect(published_url),
-                    e.NotFound))
+    return ContextInput(request, slug=slug, path=path, date=datetime.date.today()) > (
+        a.MetadataSafe()
+        | Alternative(return_article,
+                      Either(CheckAlreadyPublished | Redirect(published_url),
+                             e.NotFound)))
+
 
 def wip_index(request):
     article_paths = [x for x in s.BLOG_WIP_PATH.iterdir()
@@ -134,12 +140,14 @@ def wip_index(request):
     article_names = [x.name for x in article_paths]
 
     return render(request, "jamie_blog/wip/index.html",
-            {"article_names": article_names})
+                  {"article_names": article_names})
+
 
 def wip_media(request, slug, url):
     path = s.BLOG_WIP_PATH/slug/url
 
     return _return_file(request, path, url)
+
 
 def publish_view(request, slug):
     try:
@@ -151,8 +159,10 @@ def publish_view(request, slug):
         logging.error("Attempted to publish article twice: %s", e.args)
         return HttpResponseServerError("Article already published")
 
-    return HttpResponseRedirect(reverse("jamie_blog:article",kwargs={"slug":slug}))
+    return HttpResponseRedirect(reverse("jamie_blog:article",
+                                        kwargs={"slug": slug}))
 
-def tag_all_view(*args,**kargs):
+
+def tag_all_view(*args, **kargs):
     tag.tag_all()
     return HttpResponse(status=204)

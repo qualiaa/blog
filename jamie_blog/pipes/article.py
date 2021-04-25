@@ -31,20 +31,24 @@ class SlugToPath(CheckedPipe):
             raise e.NotFound("No articles found")
         return request, context
 
+
 class DateAndSlugFromPath(CheckedPipe):
     def __init__(self):
-        super().__init__(inputs="path", outputs=["slug","date"])
+        super().__init__(inputs="path", outputs=["slug", "date"])
 
     def __call__(self, request, context):
         date, slug = extract_date_and_slug_from_path(context["path"])
         context["date"] = date
-        if "slug" not in context: context["slug"] = slug
+        if "slug" not in context:
+            context["slug"] = slug
 
         return request, context
 
+
 class MetadataSafe(CheckedPipe):
     def __init__(self):
-        super().__init__(inputs={"path","slug"}, outputs={"article","title"})
+        super().__init__(inputs={"path", "slug"},
+                         outputs={"article", "title"})
 
     def __call__(self, request, context):
         path = context["path"]
@@ -56,16 +60,18 @@ class MetadataSafe(CheckedPipe):
             "title": slug_to_title(slug),
             "slug": slug,
         }
-        if "date" in context: article_context["date"] = context["date"]
+        if "date" in context:
+            article_context["date"] = context["date"]
 
         context["article"] = article_context
         context["title"] = article_context["title"]
 
         return request, context
 
+
 class MetadataDangerous(CheckedPipe):
     def __init__(self):
-        super().__init__(inputs="article", outputs={"article","title"})
+        super().__init__(inputs="article", outputs={"article", "title"})
 
     def __call__(self, request, context):
         try:
@@ -80,7 +86,8 @@ class MetadataDangerous(CheckedPipe):
             raise e.ServerError("Invalid article metadata")
         if "tags" in metadata:
             metadata["tags"].sort()
-            metadata["tags"] = [tag.replace("_"," ") for tag in metadata["tags"]]
+            metadata["tags"] = [
+                tag.replace("_", " ") for tag in metadata["tags"]]
 
         context["article"].update(metadata)
         context["title"] = context["article"]["title"]

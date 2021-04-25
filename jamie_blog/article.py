@@ -5,20 +5,20 @@ from itertools import takewhile
 
 import yaml
 from django.conf import settings as s
-from yaml import YAMLError
 
 from . import emoji
 from . import pandoc
 
+
 class ArticleError(Exception):
-    def __init__(self, context):
+    def __init__(self, context, *args):
         self.article_context = context
-        super().__init__(self, context)
+        super().__init__(*args, context)
 
 
 def get_article_paths():
     self = get_article_paths
-    now=datetime.datetime.now() 
+    now = datetime.datetime.now()
     five_minutes = datetime.timedelta(minutes=5)
     if self.paths is None or now - self.last_update > five_minutes:
         self.last_update = now
@@ -28,21 +28,25 @@ def get_article_paths():
     return get_article_paths.paths
 get_article_paths.paths = None
 
-def post_processing(html,slug):
+
+def post_processing(html, slug):
     html = re.sub("STATIC", slug, html)
     html = pandoc.pandoc2mathjax(html)
     html = emoji.slack2unicode(html)
     return html
 
+
 def slug_to_title(slug):
-    return slug.title().replace("-"," ")
+    return slug.title().replace("-", " ")
+
 
 def extract_date_and_slug_from_path(path):
-    match = re.fullmatch("(\d{4})-(\d{2})-(\d{2})-(.*)", str(path.name))
-    y,m,d = [int(x) for x in match.groups()[:3]]
+    match = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})-(.*)", str(path.name))
+    date = map(int, match.groups()[:3])
     slug = match.groups()[-1]
+    return datetime.date(*date), slug
 
-    return datetime.date(y,m,d), slug
+
 def extract_metadata(text_path):
     try:
         f = {

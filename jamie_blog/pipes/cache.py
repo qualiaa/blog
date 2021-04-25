@@ -46,6 +46,7 @@ class CachedText(CheckedPipe):
             context["article"]["finished"] = finished
         return request, context
 
+
 class CacheHTML(CheckedPipe):
     def __init__(self, stub=False):
         super().__init__(inputs="article", outputs="article")
@@ -61,13 +62,11 @@ class CacheHTML(CheckedPipe):
             f.write(html)
 
         # Save finished state as empty file
-        if self.stub: 
+        if self.stub:
             finished_path = cache_file.with_suffix(".finished")
             if not context["article"]["finished"] and finished_path.exists():
                 finished_path.unlink()
             elif context["article"]["finished"] and not finished_path.exists():
                 f = finished_path.open("w")
                 f.close()
-
-
         return request, context
