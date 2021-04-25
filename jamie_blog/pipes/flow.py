@@ -70,4 +70,6 @@ class Either(CheckedPipe):
         try:
             return self.pipe(request, context)
         except PipeError as e:
+            logging.error("Either received error %e, throwing %s",
+                          e, self.error)
             raise self.error from e

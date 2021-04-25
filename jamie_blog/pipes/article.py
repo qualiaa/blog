@@ -121,8 +121,7 @@ class GetStub(CheckedPipe):
             logging.error("%s", e.stderr.decode('utf-8'))
             raise e
         except Exception as e:
-            raise ArticleError(context["article"]) from e
-
+            raise ArticleError(context["article"], e) from e
         return request, context
 
 
@@ -142,7 +141,7 @@ class GetFullText(CheckedPipe):
             logging.error("%s", e.stderr.decode('utf-8'))
             raise e
         except Exception as e:
-            raise ArticleError(context["article"]) from e
+            raise ArticleError(context["article"], e) from e
 
         context["article"]["html"] = html
 

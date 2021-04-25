@@ -26,7 +26,7 @@ class CachedText(CheckedPipe):
         cache_file = cache_file_path(path, self.stub)
 
         if not cache_file.exists():
-            raise CacheFileNotFound()
+            raise CacheFileNotFound(cache_file)
 
         if text_path.stat().st_mtime > cache_file.stat().st_mtime:
             raise CacheFileOlderThanSource()

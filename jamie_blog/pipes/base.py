@@ -66,9 +66,14 @@ class Composition(Pipe):
                 logging.warning("%s", traceback.format_exc())
                 return e.handler()
 
-            if isinstance(left_result, tuple):
-                return self.right(*left_result)
-            return self.right(left_result)
+            try:
+                if isinstance(left_result, tuple):
+                    return self.right(*left_result)
+                return self.right(left_result)
+            except PipeError as e:
+                logging.warning("Composition received right exception")
+                logging.warning("%s", traceback.format_exc())
+                return e.handler()
         except (TypeError, ValueError) as e:
             e.args += (type(self.left), type(self.right))
             raise
