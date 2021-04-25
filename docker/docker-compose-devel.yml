@@ -10,6 +10,8 @@ services:
     ports:
       - "80:80"
     volumes:
+      - ./settings.py:/home/blog/mysite/mysite/settings.py
+      - ./urls.py:/home/blog/mysite/mysite/urls.py
       - ../jamie_blog:/home/blog/.local/lib/python3.9/site-packages/jamie_blog
       - ../test_articles:/home/blog/articles
       - ../test_wip:/home/blog/wip
