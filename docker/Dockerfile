@@ -19,9 +19,10 @@ ENV PATH="/home/blog/.local/bin:$PATH"
 
 # Install the blog app
 RUN django-admin startproject mysite
-COPY . app/
+COPY jamie_blog app/jamie_blog
+COPY README.md MANIFEST.in pyproject.toml app/
+COPY docker/*py mysite/mysite/
 RUN pip install ./app \
-    && cp app/docker/*.py mysite/mysite \
     && python mysite/manage.py collectstatic
-
-CMD ["uwsgi", "--ini", "app/docker/uwsgi.ini"]
+COPY docker/uwsgi.ini .
+CMD ["uwsgi", "--ini", "uwsgi.ini"]
