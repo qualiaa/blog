@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 import inspect
 import secrets
 from pathlib import Path
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 SECRET_KEY = secrets.token_urlsafe()
-DEBUG = False
+DEBUG = "DJANGO_DEBUG" in os.environ
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
