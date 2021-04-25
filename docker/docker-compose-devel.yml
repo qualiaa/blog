@@ -1,0 +1,19 @@
+version: "3"
+services:
+  blog:
+    environment:
+      DJANGO_DEBUG: ""
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: jamie-blog
+    ports:
+      - "80:80"
+    volumes:
+      - ../jamie_blog:/home/blog/.local/lib/python3.9/site-packages/jamie_blog
+      - ../test_articles:/home/blog/articles
+      - ../test_wip:/home/blog/wip
+    restart: always
+    command: "python mysite/manage.py runserver 0.0.0.0:80"
+volumes:
+  wip: {}
