@@ -128,7 +128,7 @@ def path_from_slug(slug):
         raise FileNotFoundError("No articles found")
 
 
-def get_article_text_path(folder_path):
+def get_text_path(folder_path):
     article_path = folder_path/s.BLOG_ARTICLE_FILENAME
     markdown_path = article_path.with_suffix(".md")
     org_path = article_path.with_suffix(".org")

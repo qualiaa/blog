@@ -11,7 +11,7 @@ from ..article import (
     ArticleError,
     extract_date_and_slug_from_path,
     extract_stub,
-    get_article_text_path
+    get_text_path
 )
 from . import errors as e
 from .base import CheckedPipe
@@ -75,7 +75,7 @@ class MetadataDangerous(CheckedPipe):
 
     def __call__(self, request, context):
         try:
-            text_path = get_article_text_path(context["article"]["path"])
+            text_path = get_text_path(context["article"]["path"])
         except FileNotFoundError as e:
             raise e.NotFound(*e.args)
         context["article"]["text_path"] = text_path

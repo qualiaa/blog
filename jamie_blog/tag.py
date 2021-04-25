@@ -32,7 +32,7 @@ def add_article_to_tag(article_folder, tag):
 
 def tag_article(folder_path):
     try:
-        path = article.get_article_text_path(folder_path)
+        path = article.get_text_path(folder_path)
     except FileNotFoundError as e:
         logging.error("Could not tag article: %s", e.args[0])
         return
