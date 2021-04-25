@@ -144,10 +144,16 @@ def wip_article(request, slug):
 
 
 def wip_index(request):
-    article_paths = [x for x in s.BLOG_WIP_PATH.iterdir()
-            if x.is_dir() and
-            (x/s.BLOG_MARKDOWN_FILENAME).exists()]
-    article_paths.sort(key=lambda x: x.stat().st_mtime,reverse=True)
+    article_paths = []
+    for folder_path in s.BLOG_WIP_PATH.iterdir():
+        try:
+            path = article.get_text_path(folder_path)
+        except FileNotFoundError:
+            pass
+        else:
+            article_paths.append(folder_path)
+
+    article_paths.sort(key=lambda x: x.stat().st_mtime, reverse=True)
     article_names = [x.name for x in article_paths]
 
     return render(request, "jamie_blog/wip/index.html",
