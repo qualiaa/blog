@@ -1,5 +1,4 @@
 import pathlib
-import re
 import subprocess
 
 from django.conf import settings as s
@@ -41,15 +40,40 @@ def _run_cmd(command, stdin):
         check=True).stdout.decode("utf-8")
 
 
+class PandocFilter:
+    def __init__(self, path):
+        self.path = path
+        self.priority = int(path.name[:2])
+        self.lua = path.suffix == ".lua"
+
+    def flag(self):
+        return ["--lua-filter" if self.lua else "--filter", self.path]
+
+
+def _get_filters():
+    filter_paths = (s.BLOG_ROOT_DIR/"pandoc_filters").glob("[0-9][0-9]-*")
+    pre, post = [], []
+    for f in sorted(map(PandocFilter, filter_paths), key=lambda f: f.priority):
+        (pre if f.priority < 50 else post).append(f)
+    return pre, post
+
+
+def _resolve_filters(filters):
+    return sum((f.flag() for f in filters), start=[])
+
+
 def _build_pandoc_cmd(path_or_string, output_format, bib_path=None):
     opts = list(s.BLOG_PANDOC_OPTIONS)
 
+    pre_filters, post_filters = _get_filters()
+    opts += _resolve_filters(pre_filters)
     if bib_path:
         opts += [
             "--citeproc",
             "--csl", s.BLOG_CSL_FILE,
             "--bibliography", str(bib_path)
         ]
+    opts += _resolve_filters(post_filters)
 
     command = [
         s.BLOG_PANDOC_PATH,
