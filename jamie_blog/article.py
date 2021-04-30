@@ -5,7 +5,6 @@ from itertools import takewhile
 import yaml
 from django.conf import settings as s
 
-from . import emoji
 from . import pandoc
 
 
@@ -31,7 +30,6 @@ get_article_paths.paths = None
 def post_processing(html, slug):
     html = re.sub("STATIC", slug, html)
     html = pandoc.pandoc2mathjax(html)
-    html = emoji.slack2unicode(html)
     return html
 
 

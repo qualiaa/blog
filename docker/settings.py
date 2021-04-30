@@ -134,8 +134,6 @@ BLOG_ARTICLES_PER_PAGE = 5
 BLOG_ROOT_DIR = Path(inspect.getfile(jamie_blog)).parent
 BLOG_DATA_DIR = BLOG_ROOT_DIR / "data"
 
-BLOG_EMOJI_JSON_FILE = BLOG_DATA_DIR / "emoji.json"
-BLOG_EMOJI_SHORT_NAMES_FILE = BLOG_DATA_DIR / "short_names.json"
 BLOG_CSL_FILE = BLOG_DATA_DIR / "third_party/ieee.csl"
 
 _blog_path = Path("/home/blog")
@@ -155,7 +153,6 @@ BLOG_PANDOC_MARKDOWN_EXTENSIONS = [
     "space_in_atx_header",
     "implicit_header_references",
     "blank_before_blockquote",
-    "emoji",
     "fenced_code_blocks",
     "fenced_code_attributes",
     "inline_code_attributes",

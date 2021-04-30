@@ -8,7 +8,7 @@ eccentric, but you can use it if you like.
 1. [Install Django](https://docs.djangoproject.com/en/3.2/intro/install/) and
    [set up a Django project](https://docs.djangoproject.com/en/3.2/intro/tutorial01/).
 
-2. Clone this repository with `git clone github.com/qualiaa/blog`.
+2. Clone this repository with `git clone --recursive github.com/qualiaa/blog`.
 
 3. Install the package with `pip install ./blog`.
 
@@ -37,7 +37,7 @@ eccentric, but you can use it if you like.
 
 ## Quick start (Docker Compose)
 
-1. Clone this repository with `git clone github.com/qualiaa/blog`.
+1. Clone this repository with `git clone --recursive github.com/qualiaa/blog`.
 
 2. Configure [`docker/settings.py`](docker/settings.py) to suit your needs.
 
