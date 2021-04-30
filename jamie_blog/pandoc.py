@@ -51,7 +51,7 @@ class PandocFilter:
 
 
 def _get_filters():
-    filter_paths = (s.BLOG_ROOT_DIR/"pandoc_filters").glob("[0-9][0-9]-*")
+    filter_paths = (s.BLOG_ROOT_DIR/"pandoc/filters").glob("[0-9][0-9]-*")
     pre, post = [], []
     for f in sorted(map(PandocFilter, filter_paths), key=lambda f: f.priority):
         (pre if f.priority < 50 else post).append(f)
@@ -63,7 +63,8 @@ def _resolve_filters(filters):
 
 
 def _build_pandoc_cmd(path_or_string, output_format, bib_path=None):
-    opts = list(s.BLOG_PANDOC_OPTIONS)
+    opts = ["--data-dir", s.BLOG_ROOT_DIR/"pandoc"]
+    opts += list(s.BLOG_PANDOC_OPTIONS)
 
     pre_filters, post_filters = _get_filters()
     opts += _resolve_filters(pre_filters)
